@@ -1,1 +1,0 @@
-rsync -zvhr --max-size=100m bpedigo@synaptomes1.neurodata.io:/data/bpedigo/bilateral/bilateral-connectome/results/outputs ./bilateral-connectome/results

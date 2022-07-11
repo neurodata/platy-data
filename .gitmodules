@@ -1,3 +1,6 @@
 [submodule "overleaf"]
 	path = overleaf
 	url = https://git.overleaf.com/61bcd82abbc4c5102f5f90e3
+[submodule "pymaid"]
+	path = pymaid
+	url = https://github.com/navis-org/pymaid.git

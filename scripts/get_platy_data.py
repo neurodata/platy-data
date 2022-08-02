@@ -18,19 +18,22 @@ pymaid.clear_cache()
 # type: ["Sensory neuron", "interneuron", "motorneuron"]
 # segment: ["segment_0", "segment_1", "segment_2", "segment_3"]
 # class: ["celltype1", "celltype2", ... "celltype180"]
-
+# group: ["cellgroup1", "cellgroup2", ... "cellgroup18"]
 # category can be "side" or "type" or "segment"
 def get_labels_from_annotation(annot_list, category="side"):
     all_ids = pymaid.get_skids_by_annotation(annot_list)
     id_annot = []
 
-    if category == "class":
+    if category == "class" or category == "group":
         for annot in annot_list:
             ids = pymaid.get_skids_by_annotation(annot)
             for id in ids:
                 if id in all_ids:
                     all_ids.remove(id)
-                    label = annot.split("celltype")[1]
+                    if category == "class":
+                        label = annot.split("celltype")[1]
+                    else:
+                        label = annot.split("cellgroup")[1]
                     id_annot.append([id, label])
 
     # power set of annot_list reversed: first look at the intersections within annot_list then singular entries
@@ -80,17 +83,21 @@ type_list = ["Sensory neuron", "interneuron", "motorneuron"]
 segment_list = ["segment_0", "segment_1", "segment_2", "segment_3"]
 
 class_list = []
-
 for i in range(1, 181):
     class_list.append("celltype{}".format(i))
+
+group_list = []
+for j in range(1, 18):
+    group_list.append("cellgroup{}".format(j))
+
 
 side_labels = get_labels_from_annotation(side_list, category="side")
 type_labels = get_labels_from_annotation(type_list, category="type")
 segment_labels = get_labels_from_annotation(segment_list, category="segment")
 class_labels = get_labels_from_annotation(class_list, category="class")
-print(class_labels)
+group_labels = get_labels_from_annotation(group_list, category="group")
 
-series_ids = [side_labels, type_labels, segment_labels, class_labels]
+series_ids = [side_labels, type_labels, segment_labels, class_labels, group_labels]
 annotations = pd.concat(series_ids, axis=1, ignore_index=False, names="ID").fillna(
     "N/A"
 )

@@ -2659,6 +2659,18 @@ parametric_umap = ["tensorflow (>=2.1)", "tensorflow-probability (>=0.10)"]
 plot = ["pandas", "matplotlib", "datashader", "bokeh", "holoviews", "colorcet", "seaborn", "scikit-image"]
 
 [[package]]
+name = "upsetplot"
+version = "0.6.1"
+description = "Draw Lex et al.'s UpSet plots with Pandas and Matplotlib"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+matplotlib = ">=2.0"
+pandas = ">=0.23"
+
+[[package]]
 name = "urllib3"
 version = "1.26.9"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
@@ -2775,7 +2787,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.*"
-content-hash = "8581ad8a6209dcf8b7f2530f81f35b330b676057f3cf1af4578074adcea3bcbe"
+content-hash = "f0987f6c2156423fb43d4e8d838bbb1d80818b382cf3d61c4b0dc075d59c35b0"
 
 [metadata.files]
 alabaster = [
@@ -4428,6 +4440,7 @@ uc-micro-py = [
 umap-learn = [
     {file = "umap-learn-0.5.3.tar.gz", hash = "sha256:dbd57cb181c2b66d238acb5635697526bf24c798082daed0cf9b87f6a3a6c0c7"},
 ]
+upsetplot = []
 urllib3 = [
     {file = "urllib3-1.26.9-py2.py3-none-any.whl", hash = "sha256:44ece4d53fb1706f667c9bd1c648f5469a2ec925fcf3a776667042d645472c14"},
     {file = "urllib3-1.26.9.tar.gz", hash = "sha256:aabaf16477806a5e1dd19aa41f8c2b7950dd3c746362d7e3223dbe6de6ac448e"},

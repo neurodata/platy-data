@@ -52,7 +52,6 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <link rel="shortcut icon" href="_static/nd_logo_small.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -91,11 +90,6 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="index.html">
       
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
-        
-      
-      
-      <img src="_static/nd_logo.png" class="logo" alt="logo">
       
       
       <h1 class="site-logo" id="site-title">Platynereis Data</h1>
@@ -408,6 +402,7 @@ title="Print to PDF"
 <span class="p">)</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pymaid&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 <span class="n">pymaid</span><span class="o">.</span><span class="n">clear_cache</span><span class="p">()</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/Users/kareefullah/Desktop/neurodata/neurodata/platy-data/docs/outputs&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -419,41 +414,59 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># category can be &quot;side&quot; or &quot;type&quot; or &quot;segment&quot;</span>
-<span class="k">def</span> <span class="nf">get_labels_from_annotation</span><span class="p">(</span><span class="n">annot_list</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;side&quot;</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_labels_from_annotation</span><span class="p">(</span><span class="n">annot_list</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;side&quot;</span><span class="p">):</span>
     <span class="n">all_ids</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="n">annot_list</span><span class="p">)</span>
-
-    <span class="c1"># power set of annot_list reversed: first look at the intersections within annot_list then singular entries</span>
-    <span class="n">annot_power</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
-        <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span>
-            <span class="n">combinations</span><span class="p">(</span><span class="n">annot_list</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">annot_list</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="p">)</span>
-    <span class="p">)</span>
-    <span class="n">annot_power</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
-
     <span class="n">id_annot</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">annots</span> <span class="ow">in</span> <span class="n">annot_power</span><span class="p">:</span>
 
-        <span class="c1"># skip the empty set in the power set</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">annots</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">ids</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="n">annots</span><span class="p">,</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-            <span class="c1"># assign label to every id</span>
+    <span class="k">if</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;type&quot;</span> <span class="ow">or</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;group&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">annot</span> <span class="ow">in</span> <span class="n">annot_list</span><span class="p">:</span>
+            <span class="n">ids</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="n">annot</span><span class="p">)</span>
             <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">all_ids</span><span class="p">:</span>
-                    <span class="c1"># make sure cannot find id again if it is already added to id_list</span>
                     <span class="n">all_ids</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-                    <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                    <span class="k">for</span> <span class="n">annot</span> <span class="ow">in</span> <span class="n">annots</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;side&quot;</span><span class="p">:</span>
-                            <span class="n">label</span> <span class="o">+=</span> <span class="n">annot</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                        <span class="k">elif</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span>
-                            <span class="n">label</span> <span class="o">+=</span> <span class="n">annot</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-                        <span class="k">elif</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;segment&quot;</span><span class="p">:</span>
-                            <span class="n">label</span> <span class="o">+=</span> <span class="n">annot</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;category is invalid&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span>
+                        <span class="n">label</span> <span class="o">=</span> <span class="n">annot</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;celltype&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">label</span> <span class="o">=</span> <span class="n">annot</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;cellgroup&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
                     <span class="n">id_annot</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">id</span><span class="p">,</span> <span class="n">label</span><span class="p">])</span>
+
+    <span class="c1"># power set of annot_list reversed: first look at the intersections within annot_list then singular entries</span>
+    <span class="k">elif</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;side&quot;</span> <span class="ow">or</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;class&quot;</span> <span class="ow">or</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;segment&quot;</span><span class="p">:</span>
+        <span class="n">annot_power</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span>
+                <span class="n">combinations</span><span class="p">(</span><span class="n">annot_list</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">annot_list</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">annot_power</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">annots</span> <span class="ow">in</span> <span class="n">annot_power</span><span class="p">:</span>
+
+            <span class="c1"># skip the empty set in the power set</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">annots</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ids</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="n">annots</span><span class="p">,</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="c1"># assign label to every id</span>
+                <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">all_ids</span><span class="p">:</span>
+                        <span class="c1"># make sure cannot find id again if it is already added to id_list</span>
+                        <span class="n">all_ids</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+                        <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                        <span class="k">for</span> <span class="n">annot</span> <span class="ow">in</span> <span class="n">annots</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;side&quot;</span><span class="p">:</span>
+                                <span class="n">label</span> <span class="o">+=</span> <span class="n">annot</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="k">elif</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;class&quot;</span><span class="p">:</span>
+                                <span class="n">label</span> <span class="o">+=</span> <span class="n">annot</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                            <span class="k">elif</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;segment&quot;</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">annot</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;s&quot;</span><span class="p">:</span>
+                                    <span class="n">label</span> <span class="o">+=</span> <span class="n">annot</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="n">label</span> <span class="o">+=</span> <span class="n">annot</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;category is invalid&quot;</span><span class="p">)</span>
+                        <span class="n">id_annot</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">id</span><span class="p">,</span> <span class="n">label</span><span class="p">])</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;category is invalid&quot;</span><span class="p">)</span>
 
     <span class="n">id_annot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">id_annot</span><span class="p">)</span>
 
@@ -467,14 +480,14 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">side_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;center&quot;</span><span class="p">]</span>
-<span class="n">type_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Sensory neuron&quot;</span><span class="p">,</span> <span class="s2">&quot;interneuron&quot;</span><span class="p">,</span> <span class="s2">&quot;motorneuron&quot;</span><span class="p">]</span>
-<span class="n">segment_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;segment_0&quot;</span><span class="p">,</span> <span class="s2">&quot;segment_1&quot;</span><span class="p">,</span> <span class="s2">&quot;segment_2&quot;</span><span class="p">,</span> <span class="s2">&quot;segment_3&quot;</span><span class="p">]</span>
+<span class="n">class_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Sensory neuron&quot;</span><span class="p">,</span> <span class="s2">&quot;interneuron&quot;</span><span class="p">,</span> <span class="s2">&quot;motorneuron&quot;</span><span class="p">]</span>
+<span class="n">segment_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;segment_0&quot;</span><span class="p">,</span> <span class="s2">&quot;segment_1&quot;</span><span class="p">,</span> <span class="s2">&quot;segment_2&quot;</span><span class="p">,</span> <span class="s2">&quot;segment_3&quot;</span><span class="p">,</span> <span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">]</span>
 
 <span class="n">side_labels</span> <span class="o">=</span> <span class="n">get_labels_from_annotation</span><span class="p">(</span><span class="n">side_list</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;side&quot;</span><span class="p">)</span>
-<span class="n">type_labels</span> <span class="o">=</span> <span class="n">get_labels_from_annotation</span><span class="p">(</span><span class="n">type_list</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
+<span class="n">class_labels</span> <span class="o">=</span> <span class="n">get_labels_from_annotation</span><span class="p">(</span><span class="n">class_list</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
 <span class="n">segment_labels</span> <span class="o">=</span> <span class="n">get_labels_from_annotation</span><span class="p">(</span><span class="n">segment_list</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;segment&quot;</span><span class="p">)</span>
 
-<span class="n">series_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">side_labels</span><span class="p">,</span> <span class="n">type_labels</span><span class="p">,</span> <span class="n">segment_labels</span><span class="p">]</span>
+<span class="n">series_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">side_labels</span><span class="p">,</span> <span class="n">class_labels</span><span class="p">,</span> <span class="n">segment_labels</span><span class="p">]</span>
 <span class="n">annotations</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">series_ids</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="s2">&quot;ID&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span>
     <span class="s2">&quot;N/A&quot;</span>
 <span class="p">)</span>
@@ -483,11 +496,11 @@ title="Print to PDF"
 </div>
 <div class="cell_output docutils container">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "", "version_major": 2, "version_minor": 0}
+{"model_id": "ec0144d31bdb46698a03f15e923e7b32", "version_major": 2, "version_minor": 0}
 </script><script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "", "version_major": 2, "version_minor": 0}
+{"model_id": "4b693a5c0d944480bea7bf1b1cdd490e", "version_major": 2, "version_minor": 0}
 </script><script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "", "version_major": 2, "version_minor": 0}
+{"model_id": "bebca802f7a44bd08d4bfa7b7dd950f9", "version_major": 2, "version_minor": 0}
 </script></div>
 </div>
 <div class="cell docutils container">
@@ -516,7 +529,7 @@ title="Print to PDF"
     <tr style="text-align: right;">
       <th></th>
       <th>side</th>
-      <th>type</th>
+      <th>class</th>
       <th>segment</th>
     </tr>
   </thead>
@@ -525,13 +538,13 @@ title="Print to PDF"
       <th>1343291</th>
       <td>rc</td>
       <td>N/A</td>
-      <td>N/A</td>
+      <td>head</td>
     </tr>
     <tr>
       <th>1332516</th>
       <td>rc</td>
       <td>s</td>
-      <td>N/A</td>
+      <td>head</td>
     </tr>
     <tr>
       <th>1402724</th>
@@ -549,7 +562,7 @@ title="Print to PDF"
       <th>84457</th>
       <td>rc</td>
       <td>N/A</td>
-      <td>N/A</td>
+      <td>head</td>
     </tr>
     <tr>
       <th>...</th>
@@ -589,7 +602,7 @@ title="Print to PDF"
     </tr>
   </tbody>
 </table>
-<p>9188 rows × 3 columns</p>
+<p>9197 rows × 3 columns</p>
 </div></div></div>
 </div>
 <div class="cell docutils container">
@@ -606,56 +619,45 @@ title="Print to PDF"
     
     <span class="k">else</span><span class="p">:</span>
         <span class="n">hemis</span><span class="p">[</span><span class="n">hemi_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">hemis</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">hemis</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">hemis</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">y</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">hemis</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> 
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Neurons in each Hemisphere&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Hemisphere&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Neurons&quot;</span><span class="p">)</span>
-    
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/neuron_count_hems&quot;</span><span class="p">)</span>    
     
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;rc&#39;, &#39;lc&#39;, &#39;lr&#39;, &#39;c&#39;, &#39;r&#39;, &#39;l&#39;])
-dict_values([11, 10, 5, 2, 4498, 4635])
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;# of Neurons&#39;)
-</pre></div>
-</div>
-<img alt="_images/data_summary_v2_5_2.png" src="_images/data_summary_v2_5_2.png" />
+<img alt="_images/data_summary_v2_5_0.png" src="_images/data_summary_v2_5_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#print number of neurons for different types</span>
-<span class="n">types</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">type_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">])</span>
+<span class="n">classes</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">class_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">])</span>
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">type_list</span><span class="p">)):</span>
-    <span class="k">if</span> <span class="n">type_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;N/A&quot;</span><span class="p">:</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">class_list</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">class_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;N/A&quot;</span><span class="p">:</span>
         <span class="k">continue</span>
     
-    <span class="k">if</span> <span class="n">type_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">types</span><span class="p">:</span>
-        <span class="n">types</span><span class="p">[</span><span class="n">type_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">class_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+        <span class="n">classes</span><span class="p">[</span><span class="n">class_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
     
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">types</span><span class="p">[</span><span class="n">type_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">classes</span><span class="p">[</span><span class="n">class_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
 
-<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">y</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> 
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Neurons for Different Types&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">classes</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">y</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">classes</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Neurons for Different Classes&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Neurons&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/neuron_count_classes&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;# of Neurons&#39;)
-</pre></div>
-</div>
-<img alt="_images/data_summary_v2_6_1.png" src="_images/data_summary_v2_6_1.png" />
+<img alt="_images/data_summary_v2_6_0.png" src="_images/data_summary_v2_6_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -678,14 +680,12 @@ dict_values([11, 10, 5, 2, 4498, 4635])
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Neurons in Each Segment&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Segment&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Neurons&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/neuron_count_segments&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;# of Neurons&#39;)
-</pre></div>
-</div>
-<img alt="_images/data_summary_v2_7_1.png" src="_images/data_summary_v2_7_1.png" />
+<img alt="_images/data_summary_v2_7_0.png" src="_images/data_summary_v2_7_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -694,8 +694,8 @@ dict_values([11, 10, 5, 2, 4498, 4635])
 
 <span class="n">indices</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">segment_sensory</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">type_list</span><span class="p">)):</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">type_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;s&quot;</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">class_list</span><span class="p">)):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">class_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;s&quot;</span><span class="p">):</span>
         <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
@@ -712,14 +712,12 @@ dict_values([11, 10, 5, 2, 4498, 4635])
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Sensory Neurons in Each Segment&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Segment&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Sensory Neurons&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/neuron_count_sensory_in_segments&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;# of Sensory Neurons&#39;)
-</pre></div>
-</div>
-<img alt="_images/data_summary_v2_8_1.png" src="_images/data_summary_v2_8_1.png" />
+<img alt="_images/data_summary_v2_8_0.png" src="_images/data_summary_v2_8_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -728,8 +726,8 @@ dict_values([11, 10, 5, 2, 4498, 4635])
 
 <span class="n">indices</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">segment_inter</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">type_list</span><span class="p">)):</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">type_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;i&quot;</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">class_list</span><span class="p">)):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">class_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;i&quot;</span><span class="p">):</span>
         <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
@@ -746,14 +744,12 @@ dict_values([11, 10, 5, 2, 4498, 4635])
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Interneurons in Each Segment&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Segment&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Interneurons&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/neuron_count_inter_in_segments&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;# of Interneurons&#39;)
-</pre></div>
-</div>
-<img alt="_images/data_summary_v2_9_1.png" src="_images/data_summary_v2_9_1.png" />
+<img alt="_images/data_summary_v2_9_0.png" src="_images/data_summary_v2_9_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -762,8 +758,8 @@ dict_values([11, 10, 5, 2, 4498, 4635])
 
 <span class="n">indices</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">segment_motor</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">type_list</span><span class="p">)):</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">type_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;m&quot;</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">class_list</span><span class="p">)):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">class_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;m&quot;</span><span class="p">):</span>
         <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
@@ -780,14 +776,12 @@ dict_values([11, 10, 5, 2, 4498, 4635])
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Motorneurons in Each Segment&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Segment&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Motorneurons&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/neuron_count_motor_in_segments&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;# of Motorneurons&#39;)
-</pre></div>
-</div>
-<img alt="_images/data_summary_v2_10_1.png" src="_images/data_summary_v2_10_1.png" />
+<img alt="_images/data_summary_v2_10_0.png" src="_images/data_summary_v2_10_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -800,25 +794,27 @@ dict_values([11, 10, 5, 2, 4498, 4635])
    <span class="n">num_neurons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="n">celltypes</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
    <span class="n">celltypes_count</span><span class="p">[</span><span class="n">celltypes</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">num_neurons</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">celltypes_count</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;# of neurons&quot;</span><span class="p">])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">celltypes_count</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/neuron_count_neuronal_types.csv&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>              celltype1  celltype2  celltype3  celltype4  celltype5  \
-# of neurons         24         11          4          2          4   
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>             count
+celltype1       24
+celltype2       11
+celltype3        4
+celltype4        2
+celltype5        4
+...            ...
+celltype176      2
+celltype177      2
+celltype178      4
+celltype179      1
+celltype180      2
 
-              celltype6  celltype7  celltype8  celltype9  celltype10  ...  \
-# of neurons          4          4          2          1           1  ...   
-
-              celltype171  celltype172  celltype173  celltype174  celltype175  \
-# of neurons            4            2            4            2            2   
-
-              celltype176  celltype177  celltype178  celltype179  celltype180  
-# of neurons            2            2            4            1            2  
-
-[1 rows x 180 columns]
+[180 rows x 1 columns]
 </pre></div>
 </div>
 </div>
@@ -833,23 +829,32 @@ dict_values([11, 10, 5, 2, 4498, 4635])
    <span class="n">num_neurons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="n">cellgroups</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
    <span class="n">cellgroups_count</span><span class="p">[</span><span class="n">cellgroups</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">num_neurons</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cellgroups_count</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;# of neurons&quot;</span><span class="p">])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">cellgroups_count</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/neuron_count_groups.csv&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>              cellgroup1  cellgroup2  cellgroup3  cellgroup4  cellgroup5  \
-# of neurons         111          55         114          37          55   
-
-              cellgroup6  cellgroup7  cellgroup8  cellgroup9  cellgroup10  \
-# of neurons          25         114          27          76           66   
-
-              cellgroup11  cellgroup12  cellgroup13  cellgroup14  cellgroup15  \
-# of neurons           12           68           32            6           88   
-
-              cellgroup16  cellgroup17  cellgroup18  
-# of neurons           61           52           15  
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>             count
+cellgroup1     111
+cellgroup2      55
+cellgroup3     114
+cellgroup4      37
+cellgroup5      55
+cellgroup6      25
+cellgroup7     114
+cellgroup8      27
+cellgroup9      76
+cellgroup10     66
+cellgroup11     12
+cellgroup12     68
+cellgroup13     32
+cellgroup14      6
+cellgroup15     88
+cellgroup16     61
+cellgroup17     52
+cellgroup18     15
 </pre></div>
 </div>
 </div>
@@ -864,43 +869,27 @@ dict_values([11, 10, 5, 2, 4498, 4635])
    <span class="n">num_neurons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="n">celltypes_non_neuronal</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
    <span class="n">celltypes_non_neuronal_count</span><span class="p">[</span><span class="n">celltypes_non_neuronal</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">num_neurons</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">celltypes_non_neuronal_count</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;# of neurons&quot;</span><span class="p">])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">celltypes_non_neuronal_count</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/neuron_count_non_neuronal_types&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>              celltype_non_neuronal1  celltype_non_neuronal2  \
-# of neurons                       8                       1   
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                         count
+celltype_non_neuronal1       8
+celltype_non_neuronal2       1
+celltype_non_neuronal3      23
+celltype_non_neuronal4       6
+celltype_non_neuronal5       8
+...                        ...
+celltype_non_neuronal86      1
+celltype_non_neuronal87      1
+celltype_non_neuronal88      2
+celltype_non_neuronal89      2
+celltype_non_neuronal90   1079
 
-              celltype_non_neuronal3  celltype_non_neuronal4  \
-# of neurons                      23                       6   
-
-              celltype_non_neuronal5  celltype_non_neuronal6  \
-# of neurons                       8                      34   
-
-              celltype_non_neuronal7  celltype_non_neuronal8  \
-# of neurons                       4                      16   
-
-              celltype_non_neuronal9  celltype_non_neuronal10  ...  \
-# of neurons                      24                        2  ...   
-
-              celltype_non_neuronal81  celltype_non_neuronal82  \
-# of neurons                        8                        6   
-
-              celltype_non_neuronal83  celltype_non_neuronal84  \
-# of neurons                        4                        4   
-
-              celltype_non_neuronal85  celltype_non_neuronal86  \
-# of neurons                        6                        1   
-
-              celltype_non_neuronal87  celltype_non_neuronal88  \
-# of neurons                        1                        2   
-
-              celltype_non_neuronal89  celltype_non_neuronal90  
-# of neurons                        2                     1079  
-
-[1 rows x 90 columns]
+[90 rows x 1 columns]
 </pre></div>
 </div>
 </div>

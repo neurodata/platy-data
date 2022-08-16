@@ -6,6 +6,7 @@ from itertools import chain, combinations
 from upsetplot import plot
 from matplotlib import pyplot as plt
 
+
 rm = pymaid.CatmaidInstance(
     server="https://catmaid.jekelylab.ex.ac.uk/#",
     project_id=11,
@@ -16,12 +17,29 @@ rm = pymaid.CatmaidInstance(
 logging.getLogger("pymaid").setLevel(logging.WARNING)
 pymaid.clear_cache()
 
+path = "/Users/kareefullah/Desktop/neurodata/neurodata/platy-data"
+
 # side: ["left", "right", "center"]
 # class: ["Sensory neuron", "interneuron", "motorneuron"]
-# segment: ["segment_0", "segment_1", "segment_2", "segment_3"]
+# segment: ["segment_0", "segment_1", "segment_2", "segment_3", "head", "pygidium"]
 # type: ["celltype1", "celltype2", ... "celltype180"]
 # group: ["cellgroup1", "cellgroup2", ... "cellgroup18"]
-# category can be "side" or "type" or "segment" or "class" or "group"
+# category can be "side" or "class" or "segment" or "type" or "group"
+
+# store metadata - connectivity as weighted edgelist - node ids are skids, node data as csv (df_to_csv)
+# print out # nodes, # edges, density, modularity, avg degree
+# replicate figure 1
+# graph matching (predict neuron pairs then look at morphologies), symmetry (cell type grouping/segments), sbm testing, clustering
+# check for head/trunk/pygidium label (add to segment)
+# add all figs to jupyter notebook
+
+# save data (weighted edgelist and all the figs)
+# clean up upsetplot stuff
+# clean up fig 1
+# density of left vs density of right/other density tests (tell Ben that I am at this point and I should talk to Jeremy)
+# SBM test notebook
+
+
 def get_labels_from_annotation(annot_list, category="side"):
     all_ids = pymaid.get_skids_by_annotation(annot_list)
     id_annot = []
@@ -65,7 +83,10 @@ def get_labels_from_annotation(annot_list, category="side"):
                             elif category == "class":
                                 label += annot[0].lower()
                             elif category == "segment":
-                                label += annot[-1]
+                                if annot[0] == "s":
+                                    label += annot[-1]
+                                else:
+                                    label += annot
                             else:
                                 raise ValueError("category is invalid")
                         id_annot.append([id, label])
@@ -91,9 +112,27 @@ def has_category(annotations, category="side"):
     return pd.Series(index=annotations.index, data=has_list, name=series_name)
 
 
+def has_element(annotations, category="side", name="l"):
+    has_element = []
+    series_name = "{}_{}".format(category, name)
+    for val in annotations[category]:
+        if val == name:
+            has_element.append(True)
+        else:
+            has_element.append(False)
+    return pd.Series(index=annotations.index, data=has_element, name=series_name)
+
+
 side_list = ["left", "right", "center"]
 class_list = ["Sensory neuron", "interneuron", "motorneuron"]
-segment_list = ["segment_0", "segment_1", "segment_2", "segment_3"]
+segment_list = [
+    "segment_0",
+    "segment_1",
+    "segment_2",
+    "segment_3",
+    "head",
+    "pygidium",
+]
 
 type_list = []
 for i in range(1, 181):
@@ -114,6 +153,8 @@ series_ids = [side_labels, class_labels, segment_labels, type_labels, group_labe
 annotations = pd.concat(series_ids, axis=1, ignore_index=False, names="ID").fillna(
     "N/A"
 )
+print(annotations)
+
 
 has_side = has_category(annotations, category="side")
 has_class = has_category(annotations, category="class")
@@ -125,10 +166,49 @@ bool_ids = [has_side, has_class, has_segment, has_type, has_group]
 annotations_bool = pd.concat(bool_ids, axis=1, ignore_index=False, names="ID").fillna(
     "N/A"
 )
-
-bool_counts = annotations_bool.groupby(
-    [has_side, has_type, has_segment, has_class, has_group]
-).size()
+bool_counts = annotations_bool.groupby(bool_ids).size()
 
 plot(bool_counts)
+plt.savefig(path + "/docs/outputs/broad_categs_upsetplot.png")
+plt.show()
+
+
+has_left = has_element(annotations, category="side", name="l")
+has_right = has_element(annotations, category="side", name="r")
+has_center = has_element(annotations, category="side", name="c")
+
+has_sensory = has_element(annotations, category="class", name="s")
+has_inter = has_element(annotations, category="class", name="i")
+has_motor = has_element(annotations, category="class", name="m")
+
+has_seg0 = has_element(annotations, category="segment", name="0")
+has_seg1 = has_element(annotations, category="segment", name="1")
+has_seg2 = has_element(annotations, category="segment", name="2")
+has_seg3 = has_element(annotations, category="segment", name="3")
+has_head = has_element(annotations, category="segment", name="head")
+has_pyg = has_element(annotations, category="segment", name="pygidium")
+
+bool_ids = [
+    has_left,
+    has_right,
+    has_center,
+    has_sensory,
+    has_inter,
+    has_motor,
+    has_seg0,
+    has_seg1,
+    has_seg2,
+    has_seg3,
+    has_head,
+    has_pyg,
+]
+
+annotations_bool = pd.concat(bool_ids, axis=1, ignore_index=False, names="ID").fillna(
+    "N/A"
+)
+
+bool_counts = annotations_bool.groupby(bool_ids).size()
+
+plot(bool_counts)
+plt.savefig(path + "/docs/outputs/sub_categs_upsetplot.png")
 plt.show()

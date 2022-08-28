@@ -4,6 +4,8 @@ parts:
   - caption: Preliminaries
     chapters:
     - file: introduction
+    - file: data_summary_v2
+    - file: density_plots
   - caption: References
     chapters: 
     - file: references

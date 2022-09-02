@@ -8,7 +8,7 @@ from itertools import chain, combinations
 from upsetplot import plot
 from matplotlib import pyplot as plt
 
-DATA_PATH = Path(__file__).parent.parent
+DATA_PATH = Path(__file__).parent.parent.parent.parent
 DATA_PATH = DATA_PATH / "docs" / "outputs"
 
 
@@ -22,4 +22,8 @@ def _get_folder(path=None):
 def load_annotations():
     dir = DATA_PATH / "annotations.csv"
     annotations = pd.read_csv(dir, index_col=False)
+    annotations = annotations.fillna("N/A", inplace=True)
     return annotations
+
+
+print(load_annotations())

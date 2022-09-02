@@ -101,114 +101,34 @@ def get_labels_from_annotation(annot_list, category="side"):
     return pd.Series(index=ids, data=annots, name=category)
 
 
-def has_category(annotations, category="side"):
-    has_list = []
-    series_name = "has_{}".format(category)
-    for val in annotations[category]:
-        if val != "N/A":
-            has_list.append(True)
-        else:
-            has_list.append(False)
-    return pd.Series(index=annotations.index, data=has_list, name=series_name)
+def gen_annotations():
+    side_list = ["left", "right", "center"]
+    class_list = ["Sensory neuron", "interneuron", "motorneuron"]
+    segment_list = [
+        "segment_0",
+        "segment_1",
+        "segment_2",
+        "segment_3",
+        "head",
+        "pygidium",
+    ]
 
+    type_list = []
+    for i in range(1, 181):
+        type_list.append("celltype{}".format(i))
 
-def has_element(annotations, category="side", name="l"):
-    has_element = []
-    series_name = "{}_{}".format(category, name)
-    for val in annotations[category]:
-        if val == name:
-            has_element.append(True)
-        else:
-            has_element.append(False)
-    return pd.Series(index=annotations.index, data=has_element, name=series_name)
+    group_list = []
+    for j in range(1, 19):
+        group_list.append("cellgroup{}".format(j))
 
+    side_labels = get_labels_from_annotation(side_list, category="side")
+    class_labels = get_labels_from_annotation(class_list, category="class")
+    segment_labels = get_labels_from_annotation(segment_list, category="segment")
+    type_labels = get_labels_from_annotation(type_list, category="type")
+    group_labels = get_labels_from_annotation(group_list, category="group")
 
-side_list = ["left", "right", "center"]
-class_list = ["Sensory neuron", "interneuron", "motorneuron"]
-segment_list = [
-    "segment_0",
-    "segment_1",
-    "segment_2",
-    "segment_3",
-    "head",
-    "pygidium",
-]
-
-type_list = []
-for i in range(1, 181):
-    type_list.append("celltype{}".format(i))
-
-group_list = []
-for j in range(1, 18):
-    group_list.append("cellgroup{}".format(j))
-
-
-side_labels = get_labels_from_annotation(side_list, category="side")
-class_labels = get_labels_from_annotation(class_list, category="class")
-segment_labels = get_labels_from_annotation(segment_list, category="segment")
-type_labels = get_labels_from_annotation(type_list, category="type")
-group_labels = get_labels_from_annotation(group_list, category="group")
-
-series_ids = [side_labels, class_labels, segment_labels, type_labels, group_labels]
-annotations = pd.concat(series_ids, axis=1, ignore_index=False, names="ID").fillna(
-    "N/A"
-)
-print(annotations)
-
-
-has_side = has_category(annotations, category="side")
-has_class = has_category(annotations, category="class")
-has_segment = has_category(annotations, category="segment")
-has_type = has_category(annotations, category="type")
-has_group = has_category(annotations, category="group")
-
-bool_ids = [has_side, has_class, has_segment, has_type, has_group]
-annotations_bool = pd.concat(bool_ids, axis=1, ignore_index=False, names="ID").fillna(
-    "N/A"
-)
-bool_counts = annotations_bool.groupby(bool_ids).size()
-
-plot(bool_counts)
-plt.savefig(path + "/docs/outputs/broad_categs_upsetplot.png")
-plt.show()
-
-
-has_left = has_element(annotations, category="side", name="l")
-has_right = has_element(annotations, category="side", name="r")
-has_center = has_element(annotations, category="side", name="c")
-
-has_sensory = has_element(annotations, category="class", name="s")
-has_inter = has_element(annotations, category="class", name="i")
-has_motor = has_element(annotations, category="class", name="m")
-
-has_seg0 = has_element(annotations, category="segment", name="0")
-has_seg1 = has_element(annotations, category="segment", name="1")
-has_seg2 = has_element(annotations, category="segment", name="2")
-has_seg3 = has_element(annotations, category="segment", name="3")
-has_head = has_element(annotations, category="segment", name="head")
-has_pyg = has_element(annotations, category="segment", name="pygidium")
-
-bool_ids = [
-    has_left,
-    has_right,
-    has_center,
-    has_sensory,
-    has_inter,
-    has_motor,
-    has_seg0,
-    has_seg1,
-    has_seg2,
-    has_seg3,
-    has_head,
-    has_pyg,
-]
-
-annotations_bool = pd.concat(bool_ids, axis=1, ignore_index=False, names="ID").fillna(
-    "N/A"
-)
-
-bool_counts = annotations_bool.groupby(bool_ids).size()
-
-plot(bool_counts)
-plt.savefig(path + "/docs/outputs/sub_categs_upsetplot.png")
-plt.show()
+    series_ids = [side_labels, class_labels, segment_labels, type_labels, group_labels]
+    annotations = pd.concat(series_ids, axis=1, ignore_index=False, names="ID").fillna(
+        "N/A"
+    )
+    return annotations

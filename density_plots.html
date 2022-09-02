@@ -422,46 +422,7 @@ title="Print to PDF"
 <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pymaid&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 <span class="n">pymaid</span><span class="o">.</span><span class="n">clear_cache</span><span class="p">()</span>
 
-<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/Users/kareefullah/Desktop/neurodata/neurodata/platy-data/docs/outputs&quot;</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO  : Global CATMAID instance set. Caching is ON. (pymaid)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">skids</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;connectome&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">skids</span><span class="p">))</span>
-<span class="n">adj</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">(</span><span class="n">skids</span><span class="p">)</span>
-<span class="n">adj</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_adjacency</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">adj</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2728
-0.0015527090343442945
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">skids</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">([</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;connectome&quot;</span><span class="p">],</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">skids</span><span class="p">))</span>
-<span class="n">adj</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">(</span><span class="n">skids</span><span class="p">)</span>
-<span class="n">adj</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_adjacency</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">adj</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1357
-0.0019335989722253017
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/Users/kareefullah/Desktop/neurodata/neurodata/platy-data/docs/outputs/density_plots&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -708,7 +669,6 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_dicts</span> <span class="o">=</span> <span class="n">dens_hemis</span> <span class="o">|</span> <span class="n">dens_segments</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">all_dicts</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -750,7 +710,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/density_plots_24_0.png" src="_images/density_plots_24_0.png" />
+<img alt="_images/density_plots_23_0.png" src="_images/density_plots_23_0.png" />
 </div>
 </div>
 <p>Now we are interested in running the erdos-renyi test on left and right adjacency matrices, as well as on all the pairwise combinations of the adjs of the sections. To do this, we must first convert all of our adjs to numpy</p>
@@ -863,13 +823,19 @@ title="Print to PDF"
         <span class="n">yticks</span><span class="o">=</span><span class="n">yticks</span><span class="p">,</span>
         <span class="c1"># ylim=(0, max(right_upper, left_upper) * 1.05),</span>
         <span class="n">ylabel</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;Estimated density ($\hat</span><span class="si">{p}</span><span class="s2">$)&quot;</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> vs </span><span class="si">{}</span><span class="s2">; pval: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">,</span> <span class="n">pvalue</span><span class="p">)</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> vs </span><span class="si">{}</span><span class="s2">; pval: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">,</span> <span class="n">pval</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="c1">#hard</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">label1</span><span class="p">,</span> <span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">,</span> <span class="n">label2</span><span class="p">],</span> <span class="p">[</span><span class="n">second_upper</span><span class="o">+</span><span class="mf">0.000005</span><span class="p">,</span> <span class="mf">0.0002</span><span class="p">,</span> <span class="mf">0.0002</span><span class="p">,</span> <span class="n">second_upper</span><span class="o">+</span><span class="mf">0.000005</span><span class="p">])</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">convert_pvalue_to_asterisks</span><span class="p">(</span><span class="n">pvalue</span><span class="p">)</span>
-    <span class="c1">#hard</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0002</span><span class="o">+</span><span class="mf">0.0000000001</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="mf">0.04</span>
+    <span class="n">line_shift</span> <span class="o">=</span> <span class="mf">0.000005</span>
+    <span class="n">max_upper</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">first_upper</span><span class="p">,</span> <span class="n">second_upper</span><span class="p">)</span>
+    <span class="n">line_start</span> <span class="o">=</span> <span class="n">max_upper</span> <span class="o">+</span> <span class="n">line_shift</span>
+    <span class="n">y_shift</span> <span class="o">=</span> <span class="n">max_upper</span> <span class="o">*</span> <span class="n">scale</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">label1</span><span class="p">,</span> <span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">,</span> <span class="n">label2</span><span class="p">],</span> <span class="p">[</span><span class="n">max_upper</span><span class="o">+</span><span class="n">line_shift</span><span class="p">,</span> <span class="n">max_upper</span><span class="o">+</span><span class="n">y_shift</span><span class="p">,</span> <span class="n">max_upper</span><span class="o">+</span><span class="n">y_shift</span><span class="p">,</span> <span class="n">max_upper</span><span class="o">+</span><span class="n">line_shift</span><span class="p">])</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">convert_pvalue_to_asterisks</span><span class="p">(</span><span class="n">pval</span><span class="p">)</span>
+    
+    <span class="n">x_text</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">y_text</span> <span class="o">=</span> <span class="n">max_upper</span><span class="o">+</span><span class="n">y_shift</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_text</span><span class="p">,</span> <span class="n">y_text</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
     <span class="n">labels</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
         <span class="n">text_string</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
@@ -882,15 +848,50 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_density</span><span class="p">(</span><span class="n">pvalue</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">np_hemis</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">np_hemis</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">1</span><span class="p">],</span> <span class="n">misc</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/</span><span class="si">{}</span><span class="s2"> vs </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">),</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 400x600 with 1 Axes&gt;,
- &lt;AxesSubplot:title={&#39;center&#39;:&#39;l vs r; pval: 1.124861758642002e-06&#39;}, xlabel=&#39;Section&#39;, ylabel=&#39;Estimated density ($\\hat{p}$)&#39;&gt;)
+<img alt="_images/density_plots_33_0.png" src="_images/density_plots_33_0.png" />
+</div>
+</div>
+<p>To make comparisons for the segments, we will make two lists: one that has every pairwise combination of the segment names and the other of the pairwise combination of the respective adjs</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np_segments</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">)</span>
+<span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="_images/density_plots_34_1.png" src="_images/density_plots_34_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">pair_key</span><span class="p">,</span> <span class="n">pair_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
+    <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">misc</span> <span class="o">=</span> <span class="n">erdos_renyi_test</span><span class="p">(</span><span class="n">pair_val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair_val</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">plot_density</span><span class="p">(</span><span class="n">pval</span><span class="p">,</span> <span class="n">pair_key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair_key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">misc</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/</span><span class="si">{}</span><span class="s2"> vs </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pair_key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair_key</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/density_plots_36_0.png" src="_images/density_plots_36_0.png" />
+<img alt="_images/density_plots_36_1.png" src="_images/density_plots_36_1.png" />
+<img alt="_images/density_plots_36_2.png" src="_images/density_plots_36_2.png" />
+<img alt="_images/density_plots_36_3.png" src="_images/density_plots_36_3.png" />
+<img alt="_images/density_plots_36_4.png" src="_images/density_plots_36_4.png" />
+<img alt="_images/density_plots_36_5.png" src="_images/density_plots_36_5.png" />
+<img alt="_images/density_plots_36_6.png" src="_images/density_plots_36_6.png" />
+<img alt="_images/density_plots_36_7.png" src="_images/density_plots_36_7.png" />
+<img alt="_images/density_plots_36_8.png" src="_images/density_plots_36_8.png" />
+<img alt="_images/density_plots_36_9.png" src="_images/density_plots_36_9.png" />
+<img alt="_images/density_plots_36_10.png" src="_images/density_plots_36_10.png" />
+<img alt="_images/density_plots_36_11.png" src="_images/density_plots_36_11.png" />
+<img alt="_images/density_plots_36_12.png" src="_images/density_plots_36_12.png" />
+<img alt="_images/density_plots_36_13.png" src="_images/density_plots_36_13.png" />
+<img alt="_images/density_plots_36_14.png" src="_images/density_plots_36_14.png" />
 </div>
 </div>
 

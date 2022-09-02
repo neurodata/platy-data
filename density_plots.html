@@ -432,6 +432,40 @@ title="Print to PDF"
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">skids</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;connectome&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">skids</span><span class="p">))</span>
+<span class="n">adj</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">(</span><span class="n">skids</span><span class="p">)</span>
+<span class="n">adj</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_adjacency</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">adj</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2728
+0.0015527090343442945
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">skids</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">([</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;connectome&quot;</span><span class="p">],</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">skids</span><span class="p">))</span>
+<span class="n">adj</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">(</span><span class="n">skids</span><span class="p">)</span>
+<span class="n">adj</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_adjacency</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">adj</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1357
+0.0019335989722253017
+</pre></div>
+</div>
+</div>
+</div>
 <p>Let us first import the annotations table that we made in the <code class="docutils literal notranslate"><span class="pre">data_summary_v2.ipynb</span></code> file</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -716,7 +750,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/density_plots_22_0.png" src="_images/density_plots_22_0.png" />
+<img alt="_images/density_plots_24_0.png" src="_images/density_plots_24_0.png" />
 </div>
 </div>
 <p>Now we are interested in running the erdos-renyi test on left and right adjacency matrices, as well as on all the pairwise combinations of the adjs of the sections. To do this, we must first convert all of our adjs to numpy</p>
@@ -856,7 +890,7 @@ title="Print to PDF"
  &lt;AxesSubplot:title={&#39;center&#39;:&#39;l vs r; pval: 1.124861758642002e-06&#39;}, xlabel=&#39;Section&#39;, ylabel=&#39;Estimated density ($\\hat{p}$)&#39;&gt;)
 </pre></div>
 </div>
-<img alt="_images/density_plots_32_1.png" src="_images/density_plots_32_1.png" />
+<img alt="_images/density_plots_34_1.png" src="_images/density_plots_34_1.png" />
 </div>
 </div>
 

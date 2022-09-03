@@ -54,6 +54,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="density_plots.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -113,10 +115,15 @@ const thebe_selector_output = ".output, .cell_output"
   Preliminaries
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="introduction.html">
    Introduction
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Data Summary Notebook
   </a>
  </li>
 </ul>
@@ -385,22 +392,11 @@ title="Print to PDF"
 </div>
 </div>
 </div>
+<p>We retrieve the table of annotations, where the indices are the skids and the columns are the types of annotations associated with these skids</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folder</span> <span class="o">=</span> <span class="n">_get_folder</span><span class="p">()</span>
-<span class="n">folder</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PosixPath(&#39;/Users/kareefullah/Desktop/NeuroData/neurodata/platy-data/docs/outputs&#39;)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">annotations</span> <span class="o">=</span> <span class="n">load_annotations</span><span class="p">()</span>
+<span class="n">annotations</span> <span class="o">=</span> <span class="n">load_annotations</span><span class="p">()</span>
 <span class="n">annotations</span> <span class="o">=</span> <span class="n">annotations</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;N/A&quot;</span><span class="p">)</span>
 <span class="n">annotations</span>
 </pre></div>
@@ -996,6 +992,20 @@ celltype_non_neuronal90   1079
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="introduction.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Introduction</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="density_plots.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
             </footer>
         </div>

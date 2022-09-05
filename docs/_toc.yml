@@ -4,7 +4,9 @@ parts:
   - caption: Preliminaries
     chapters:
     - file: introduction
+    - file: make_fig1
     - file: data_summary_v3
+    - file: gen_upsetplots
     - file: density_plots
   - caption: References
     chapters: 

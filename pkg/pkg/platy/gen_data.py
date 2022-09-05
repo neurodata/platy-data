@@ -17,7 +17,7 @@ rm = pymaid.CatmaidInstance(
 logging.getLogger("pymaid").setLevel(logging.WARNING)
 pymaid.clear_cache()
 
-path = "/Users/kareefullah/Desktop/neurodata/neurodata/platy-data"
+path = "/Users/kareefullah/Desktop/neurodata/neurodata/platy-data/docs/outputs"
 
 # side: ["left", "right", "center"]
 # class: ["Sensory neuron", "interneuron", "motorneuron"]
@@ -131,4 +131,12 @@ def gen_annotations():
     annotations = pd.concat(series_ids, axis=1, ignore_index=False, names="ID").fillna(
         "N/A"
     )
+    annotations.to_csv(path + "/annotations.csv")
     return annotations
+
+
+def get_connectome_skids():
+    skids_connec = pymaid.get_skids_by_annotation("connectome")
+    adj_pandas = pymaid.adjacency_matrix(skids_connec)
+    adj_pandas.to_csv(path + "/adj_connectome.csv", index=skids_connec)
+    return adj_pandas

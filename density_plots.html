@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>&lt;no title&gt; &#8212; Platynereis Data</title>
+    <title>Density Tests &#8212; Platynereis Data</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -55,7 +55,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="References" href="references.html" />
-    <link rel="prev" title="Data Summary Notebook" href="data_summary_v3.html" />
+    <link rel="prev" title="Generate Upsetplots" href="gen_upsetplots.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -115,15 +115,30 @@ const thebe_selector_output = ".output, .cell_output"
   Preliminaries
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="introduction.html">
    Introduction
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="make_fig1.html">
+   Replicate Fig 1
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="data_summary_v3.html">
    Data Summary Notebook
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gen_upsetplots.html">
+   Generate Upsetplots
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Density Tests
   </a>
  </li>
 </ul>
@@ -334,50 +349,23 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-    </nav>
 </div>
     </div>
     <div class="article row">
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1><no title></h1>
+                <h1>Density Tests</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
@@ -385,7 +373,9 @@ title="Print to PDF"
                 
               <div>
                 
-  <p>In this notebook we will be getting densities of the adjacency matrices representing the neurons in different sections of the larva (hemispheres and segments). We will then test if there is any statistical significance between the densities across hemispheres/segments.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="density-tests">
+<h1>Density Tests<a class="headerlink" href="#density-tests" title="Permalink to this headline">#</a></h1>
+<p>In this notebook we will be getting densities of the adjacency matrices representing the neurons in different sections of the larva (hemispheres and segments). We will then test if there is any statistical significance between the densities across hemispheres/segments.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -562,7 +552,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/density_plots_22_0.png" src="_images/density_plots_22_0.png" />
+<img alt="_images/density_plots_23_0.png" src="_images/density_plots_23_0.png" />
 </div>
 </div>
 <p>Now we are interested in running the erdos-renyi test on left and right adjacency matrices, as well as on all the pairwise combinations of the adjs of the sections. To do this, we must first convert all of our adjs to numpy</p>
@@ -706,7 +696,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/density_plots_33_0.png" src="_images/density_plots_33_0.png" />
+<img alt="_images/density_plots_34_0.png" src="_images/density_plots_34_0.png" />
 </div>
 </div>
 <p>To make comparisons for the segments, we will make two lists: one that has every pairwise combination of the segment names and the other of the pairwise combination of the respective adjs</p>
@@ -731,23 +721,24 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/density_plots_37_0.png" src="_images/density_plots_37_0.png" />
-<img alt="_images/density_plots_37_1.png" src="_images/density_plots_37_1.png" />
-<img alt="_images/density_plots_37_2.png" src="_images/density_plots_37_2.png" />
-<img alt="_images/density_plots_37_3.png" src="_images/density_plots_37_3.png" />
-<img alt="_images/density_plots_37_4.png" src="_images/density_plots_37_4.png" />
-<img alt="_images/density_plots_37_5.png" src="_images/density_plots_37_5.png" />
-<img alt="_images/density_plots_37_6.png" src="_images/density_plots_37_6.png" />
-<img alt="_images/density_plots_37_7.png" src="_images/density_plots_37_7.png" />
-<img alt="_images/density_plots_37_8.png" src="_images/density_plots_37_8.png" />
-<img alt="_images/density_plots_37_9.png" src="_images/density_plots_37_9.png" />
-<img alt="_images/density_plots_37_10.png" src="_images/density_plots_37_10.png" />
-<img alt="_images/density_plots_37_11.png" src="_images/density_plots_37_11.png" />
-<img alt="_images/density_plots_37_12.png" src="_images/density_plots_37_12.png" />
-<img alt="_images/density_plots_37_13.png" src="_images/density_plots_37_13.png" />
-<img alt="_images/density_plots_37_14.png" src="_images/density_plots_37_14.png" />
+<img alt="_images/density_plots_38_0.png" src="_images/density_plots_38_0.png" />
+<img alt="_images/density_plots_38_1.png" src="_images/density_plots_38_1.png" />
+<img alt="_images/density_plots_38_2.png" src="_images/density_plots_38_2.png" />
+<img alt="_images/density_plots_38_3.png" src="_images/density_plots_38_3.png" />
+<img alt="_images/density_plots_38_4.png" src="_images/density_plots_38_4.png" />
+<img alt="_images/density_plots_38_5.png" src="_images/density_plots_38_5.png" />
+<img alt="_images/density_plots_38_6.png" src="_images/density_plots_38_6.png" />
+<img alt="_images/density_plots_38_7.png" src="_images/density_plots_38_7.png" />
+<img alt="_images/density_plots_38_8.png" src="_images/density_plots_38_8.png" />
+<img alt="_images/density_plots_38_9.png" src="_images/density_plots_38_9.png" />
+<img alt="_images/density_plots_38_10.png" src="_images/density_plots_38_10.png" />
+<img alt="_images/density_plots_38_11.png" src="_images/density_plots_38_11.png" />
+<img alt="_images/density_plots_38_12.png" src="_images/density_plots_38_12.png" />
+<img alt="_images/density_plots_38_13.png" src="_images/density_plots_38_13.png" />
+<img alt="_images/density_plots_38_14.png" src="_images/density_plots_38_14.png" />
 </div>
 </div>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -776,11 +767,11 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="data_summary_v3.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="gen_upsetplots.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Data Summary Notebook</p>
+            <p class="prev-next-title">Generate Upsetplots</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="references.html" title="next page">

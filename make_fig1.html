@@ -1,0 +1,767 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Replicate Fig 1 &#8212; Platynereis Data</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script async="async" kind="hypothesis" src="https://hypothes.is/embed.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Data Summary Notebook" href="data_summary_v3.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Platynereis Data</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="abstract.html">
+                    Abstract
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Preliminaries
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="introduction.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Replicate Fig 1
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="data_summary_v3.html">
+   Data Summary Notebook
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gen_upsetplots.html">
+   Generate Upsetplots
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="density_plots.html">
+   Density Tests
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="references.html">
+   References
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Slides
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference external" href="https://docs.neurodata.io/platy-data/example.pdf">
+   Example
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/neurodata/platy-data/main?urlpath=tree/platy-data/make_fig1.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neurodata/platy-data"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neurodata/platy-data/issues/new?title=Issue%20on%20page%20%2Fmake_fig1.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/make_fig1.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Replicate Fig 1</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="replicate-fig-1">
+<h1>Replicate Fig 1<a class="headerlink" href="#replicate-fig-1" title="Permalink to this headline">#</a></h1>
+<p>In this notebook we will be replicating figure 1 of the paper <em>Whole-animal connectome and cell-type complement of the three-segmented Platynereis dumerilii larva</em>, which is a network plot of the neurons in the larva’s connectome</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pymaid</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">upsetplot</span> <span class="kn">import</span> <span class="n">plot</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">networkx</span> <span class="kn">import</span> <span class="n">from_numpy_array</span><span class="p">,</span> <span class="n">number_of_nodes</span><span class="p">,</span> <span class="n">number_of_edges</span><span class="p">,</span> <span class="n">density</span>
+<span class="kn">from</span> <span class="nn">graspologic.embed</span> <span class="kn">import</span> <span class="n">AdjacencySpectralEmbed</span>
+<span class="kn">from</span> <span class="nn">graspologic.layouts</span> <span class="kn">import</span> <span class="n">layout_tsne</span><span class="p">,</span> <span class="n">layout_umap</span>
+<span class="kn">from</span> <span class="nn">graspologic.plot.plot</span> <span class="kn">import</span> <span class="n">networkplot</span>
+<span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">is_fully_connected</span><span class="p">,</span> <span class="n">largest_connected_component</span><span class="p">,</span> <span class="n">is_symmetric</span><span class="p">,</span> <span class="n">symmetrize</span>
+<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">load_connectome_adj</span><span class="p">,</span> <span class="n">_get_folder</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rm</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">CatmaidInstance</span><span class="p">(</span>
+    <span class="n">server</span><span class="o">=</span><span class="s2">&quot;https://catmaid.jekelylab.ex.ac.uk/#&quot;</span><span class="p">,</span>
+    <span class="n">project_id</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+    <span class="n">api_token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">http_user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">http_password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pymaid&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+<span class="n">pymaid</span><span class="o">.</span><span class="n">clear_cache</span><span class="p">()</span>
+
+<span class="n">folder</span> <span class="o">=</span> <span class="n">_get_folder</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We import the adjacency matrix for the connection of connectome neurons and save its edgelist (note: we are working with a directed graph)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adj</span> <span class="o">=</span> <span class="n">load_connectome_adj</span><span class="p">()</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_adjacency</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
+<span class="n">nx</span><span class="o">.</span><span class="n">write_edgelist</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;weighted_edgelist.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To be able to make a network plot of the connectome neurons, we need to extract the largest connected component of the neurons, as there are a few neurons that have a degree of 0 (no incident edges), which we cannot plot</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#numpy representation of original graph</span>
+<span class="n">adj_numpy_orig</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+<span class="c1">#numpy largest connected component</span>
+<span class="n">adj_numpy_lcc</span><span class="p">,</span> <span class="n">new_inds</span> <span class="o">=</span> <span class="n">largest_connected_component</span><span class="p">(</span><span class="n">adj_numpy_orig</span><span class="p">,</span> <span class="n">return_inds</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#symmetrized version of numpy_lcc</span>
+<span class="n">adj_numpy_sym_lcc</span> <span class="o">=</span> <span class="n">symmetrize</span><span class="p">(</span><span class="n">adj_numpy_lcc</span><span class="p">)</span>
+
+<span class="c1">#networkx representation of symmetrized lcc graph</span>
+<span class="n">adj_nx_sym_lcc</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">adj_numpy_sym_lcc</span><span class="p">,</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">adj_nx_sym_lcc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DiGraph with 2723 nodes and 21691 edges
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#use layout_tsne to get 2d representation of graph</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">node_pos</span> <span class="o">=</span> <span class="n">layout_tsne</span><span class="p">(</span><span class="n">adj_nx_sym_lcc</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="n">x_pos</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">y_pos</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">node_comms</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">node_pos</span><span class="p">:</span>
+
+    <span class="c1">#save the assigned community of the node</span>
+    <span class="n">node_comms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+    <span class="n">x_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">y_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="n">node_comms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_comms</span><span class="p">)</span>
+<span class="n">x_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_pos</span><span class="p">)</span>
+<span class="n">y_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_pos</span><span class="p">)</span>
+<span class="n">degrees</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">adj_numpy_sym_lcc</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:graspologic.layouts.auto:Directed graph converted to undirected graph for community detection
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span> <span class="o">=</span> <span class="n">networkplot</span><span class="p">(</span>
+    <span class="n">adjacency</span><span class="o">=</span><span class="n">adj_numpy_sym_lcc</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">x_pos</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y_pos</span><span class="p">,</span>
+    <span class="n">node_hue</span><span class="o">=</span><span class="n">node_comms</span><span class="p">,</span>
+    <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;tab20&quot;</span><span class="p">,</span>
+    <span class="n">node_size</span><span class="o">=</span><span class="n">degrees</span><span class="p">,</span>
+    <span class="n">node_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span>
+    <span class="n">edge_hue</span><span class="o">=</span><span class="s2">&quot;source&quot;</span><span class="p">,</span>
+    <span class="n">edge_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">edge_linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;tsne_connectome.png&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/make_fig1_10_0.png" src="_images/make_fig1_10_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#use layout_tsne to get 2d representation of graph</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">node_pos</span> <span class="o">=</span> <span class="n">layout_umap</span><span class="p">(</span><span class="n">adj_nx_sym_lcc</span><span class="p">)</span>
+<span class="n">x_pos</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">y_pos</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">node_comms</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">node_pos</span><span class="p">:</span>
+    <span class="n">node_comms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+    <span class="n">x_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">y_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="n">node_comms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_comms</span><span class="p">)</span>
+<span class="n">x_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_pos</span><span class="p">)</span>
+<span class="n">y_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_pos</span><span class="p">)</span>
+<span class="n">degrees</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">adj_numpy_sym_lcc</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:graspologic.layouts.auto:Directed graph converted to undirected graph for community detection
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span> <span class="o">=</span> <span class="n">networkplot</span><span class="p">(</span>
+    <span class="n">adjacency</span><span class="o">=</span><span class="n">adj_numpy_sym_lcc</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">x_pos</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y_pos</span><span class="p">,</span>
+    <span class="n">node_hue</span><span class="o">=</span><span class="n">node_comms</span><span class="p">,</span>
+    <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;tab20&quot;</span><span class="p">,</span>
+    <span class="n">node_size</span><span class="o">=</span><span class="n">degrees</span><span class="p">,</span>
+    <span class="n">node_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span>
+    <span class="n">edge_hue</span><span class="o">=</span><span class="s2">&quot;source&quot;</span><span class="p">,</span>
+    <span class="n">edge_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">edge_linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;umap_connectome.png&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/make_fig1_12_0.png" src="_images/make_fig1_12_0.png" />
+</div>
+</div>
+<p>We are now interested in displaying the statistics from the graph we generated to that of the statistics given in table 1 of the paper, and we wish to make sure that our numbers are approximately the same</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#given the adjacency matrix and a partition of the nodes return the modularity score</span>
+<span class="k">def</span> <span class="nf">modularity_from_adjacency</span><span class="p">(</span><span class="n">sym_adj</span><span class="p">,</span> <span class="n">partition</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">partition</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">partition_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">partition</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">)(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">sym_adj</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">partition_labels</span> <span class="o">=</span> <span class="n">partition</span>
+    <span class="n">partition_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">partition_labels</span><span class="p">)</span>
+    <span class="n">in_comm_mask</span> <span class="o">=</span> <span class="n">partition_labels</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">==</span> <span class="n">partition_labels</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">degrees</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">sym_adj</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+    <span class="n">degree_prod_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">degrees</span><span class="p">,</span> <span class="n">degrees</span><span class="p">)</span> <span class="o">/</span> <span class="n">sym_adj</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">mod_mat</span> <span class="o">=</span> <span class="n">sym_adj</span> <span class="o">-</span> <span class="n">resolution</span> <span class="o">*</span> <span class="n">degree_prod_mat</span>
+    <span class="k">return</span> <span class="n">mod_mat</span><span class="p">[</span><span class="n">in_comm_mask</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">sym_adj</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#get original networkx graph (not lcc)</span>
+<span class="n">adj_nx_orig</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">adj_numpy_orig</span><span class="p">,</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
+
+<span class="c1">#stats on original graph</span>
+<span class="n">n_nodes_orig</span> <span class="o">=</span> <span class="n">adj_nx_orig</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
+<span class="n">n_edges_orig</span> <span class="o">=</span> <span class="n">adj_nx_orig</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span>
+<span class="n">dens_orig</span> <span class="o">=</span> <span class="n">density</span><span class="p">(</span><span class="n">adj_nx_orig</span><span class="p">)</span>
+
+<span class="c1">#cannot calc modularity because there are isolate nodes</span>
+<span class="n">mod_score_orig</span> <span class="o">=</span> <span class="s2">&quot;N/A&quot;</span>
+
+<span class="n">avg_degree_orig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">adj_numpy_orig</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">avg_degree_orig</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.234237536656892
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#get non-symmetrized lcc networkx graph</span>
+<span class="n">adj_nx_lcc</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">adj_numpy_lcc</span><span class="p">,</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
+
+<span class="c1">#stats on lcc adj</span>
+<span class="n">n_nodes_lcc</span> <span class="o">=</span> <span class="n">adj_nx_lcc</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
+<span class="n">n_edges_lcc</span> <span class="o">=</span> <span class="n">adj_nx_lcc</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span>
+<span class="n">dens_lcc</span> <span class="o">=</span> <span class="n">density</span><span class="p">(</span><span class="n">adj_nx_lcc</span><span class="p">)</span>
+
+<span class="c1">#make symmetric when calc mod</span>
+<span class="n">sym_adj_lcc</span> <span class="o">=</span> <span class="n">symmetrize</span><span class="p">(</span><span class="n">adj_numpy_lcc</span><span class="p">)</span>
+<span class="n">mod_score_lcc</span> <span class="o">=</span> <span class="n">modularity_from_adjacency</span><span class="p">(</span><span class="n">sym_adj_lcc</span><span class="p">,</span> <span class="n">node_comms</span><span class="p">)</span>
+
+<span class="n">avg_degree_lcc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">adj_numpy_lcc</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#paper stats</span>
+<span class="n">n_nodes_paper</span> <span class="o">=</span> <span class="mi">2728</span>
+<span class="n">n_edges_paper</span> <span class="o">=</span> <span class="mi">11437</span>
+<span class="n">dens_paper</span> <span class="o">=</span> <span class="mf">0.0015</span>
+<span class="n">mod_score_paper</span> <span class="o">=</span> <span class="mf">0.62</span>
+<span class="n">avg_degree_paper</span> <span class="o">=</span> <span class="mf">4.1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Number of nodes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">n_nodes_orig</span><span class="p">,</span> <span class="n">n_nodes_lcc</span><span class="p">,</span> <span class="n">n_nodes_paper</span><span class="p">],</span> <span class="s2">&quot;Number of edges&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">n_edges_orig</span><span class="p">,</span> <span class="n">n_edges_lcc</span><span class="p">,</span> <span class="n">n_edges_paper</span><span class="p">],</span> <span class="s2">&quot;Graph density&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">dens_orig</span><span class="p">,</span> <span class="n">dens_lcc</span><span class="p">,</span> <span class="n">dens_paper</span><span class="p">],</span> <span class="s2">&quot;Modularity&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">mod_score_orig</span><span class="p">,</span> <span class="n">mod_score_lcc</span><span class="p">,</span> <span class="n">mod_score_paper</span><span class="p">],</span> <span class="s2">&quot;Avg. degree&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">avg_degree_orig</span><span class="p">,</span> <span class="n">avg_degree_lcc</span><span class="p">,</span> <span class="n">avg_degree_paper</span><span class="p">]}</span>
+<span class="n">stats_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Orig adj&quot;</span><span class="p">,</span> <span class="s2">&quot;LCC adj&quot;</span><span class="p">,</span> <span class="s2">&quot;Paper&quot;</span><span class="p">])</span>
+<span class="n">stats_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;fig_1_stats.csv&quot;</span><span class="p">)</span>
+<span class="n">stats_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Orig adj</th>
+      <th>LCC adj</th>
+      <th>Paper</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Number of nodes</th>
+      <td>2728</td>
+      <td>2723.000000</td>
+      <td>2728.0000</td>
+    </tr>
+    <tr>
+      <th>Number of edges</th>
+      <td>11551</td>
+      <td>11551.000000</td>
+      <td>11437.0000</td>
+    </tr>
+    <tr>
+      <th>Graph density</th>
+      <td>0.001553</td>
+      <td>0.001558</td>
+      <td>0.0015</td>
+    </tr>
+    <tr>
+      <th>Modularity</th>
+      <td>N/A</td>
+      <td>0.646555</td>
+      <td>0.6200</td>
+    </tr>
+    <tr>
+      <th>Avg. degree</th>
+      <td>4.234238</td>
+      <td>4.242012</td>
+      <td>4.1000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Looks like the values of our statistics very closely match those of the paper!</p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="introduction.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Introduction</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="data_summary_v3.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Data Summary Notebook</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Kareef Ullah<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

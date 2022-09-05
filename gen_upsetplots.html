@@ -1,0 +1,848 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Generate Upsetplots &#8212; Platynereis Data</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script async="async" kind="hypothesis" src="https://hypothes.is/embed.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Density Tests" href="density_plots.html" />
+    <link rel="prev" title="Data Summary Notebook" href="data_summary_v3.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Platynereis Data</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="abstract.html">
+                    Abstract
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Preliminaries
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="introduction.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="make_fig1.html">
+   Replicate Fig 1
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="data_summary_v3.html">
+   Data Summary Notebook
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Generate Upsetplots
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="density_plots.html">
+   Density Tests
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="references.html">
+   References
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Slides
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference external" href="https://docs.neurodata.io/platy-data/example.pdf">
+   Example
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/neurodata/platy-data/main?urlpath=tree/platy-data/gen_upsetplots.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neurodata/platy-data"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neurodata/platy-data/issues/new?title=Issue%20on%20page%20%2Fgen_upsetplots.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/gen_upsetplots.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Generate Upsetplots</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="generate-upsetplots">
+<h1>Generate Upsetplots<a class="headerlink" href="#generate-upsetplots" title="Permalink to this headline">#</a></h1>
+<p>In this notebook we will be generating two upsetplots: the first will plot counts of cells based on if they have an entry for the associated annotations, and the second will plot counts of cells based on their values for the associated annotations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymaid</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">upsetplot</span> <span class="kn">import</span> <span class="n">plot</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_annotations</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rm</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">CatmaidInstance</span><span class="p">(</span>
+    <span class="n">server</span><span class="o">=</span><span class="s2">&quot;https://catmaid.jekelylab.ex.ac.uk/#&quot;</span><span class="p">,</span>
+    <span class="n">project_id</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+    <span class="n">api_token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">http_user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">http_password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pymaid&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+<span class="n">pymaid</span><span class="o">.</span><span class="n">clear_cache</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We import the folder to save our upsetplots and the table of annotations which will help us make our upsetplots</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folder</span> <span class="o">=</span> <span class="n">_get_folder</span><span class="p">()</span>
+<span class="n">annotations</span> <span class="o">=</span> <span class="n">load_annotations</span><span class="p">()</span>
+<span class="n">annotations</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;N/A&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">annotations</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>skids</th>
+      <th>side</th>
+      <th>class</th>
+      <th>segment</th>
+      <th>type</th>
+      <th>group</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1343291</td>
+      <td>rc</td>
+      <td>N/A</td>
+      <td>head</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1332516</td>
+      <td>rc</td>
+      <td>s</td>
+      <td>head</td>
+      <td>49.0</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1402724</td>
+      <td>rc</td>
+      <td>N/A</td>
+      <td>3</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1462664</td>
+      <td>rc</td>
+      <td>N/A</td>
+      <td>2</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>84457</td>
+      <td>rc</td>
+      <td>N/A</td>
+      <td>head</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>9192</th>
+      <td>2256298</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>1</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <th>9193</th>
+      <td>2256326</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>1</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <th>9194</th>
+      <td>2256339</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>1</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <th>9195</th>
+      <td>1602239</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>1</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <th>9196</th>
+      <td>2256258</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>0</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+  </tbody>
+</table>
+<p>9197 rows × 6 columns</p>
+</div></div></div>
+</div>
+<p>The following function returns a series where the indices are all the skids in the annotations table and the values are if they have a value for the category passed in</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#returns boolean pandas series: False if element is &quot;N/A&quot;, else True</span>
+<span class="k">def</span> <span class="nf">has_category</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;side&quot;</span><span class="p">):</span>
+    <span class="n">has_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">series_name</span> <span class="o">=</span> <span class="s2">&quot;has_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">category</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">[</span><span class="n">category</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">!=</span> <span class="s2">&quot;N/A&quot;</span><span class="p">:</span>
+            <span class="n">has_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">has_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">has_list</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">series_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#generate boolean pandas series for the different categories</span>
+<span class="n">has_categs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;has_side&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_class&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_segment&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_type&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_group&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">has_categs</span><span class="p">:</span>
+    <span class="n">has_categs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">has_category</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;has_side&#39;: skids
+ 1343291     True
+ 1332516     True
+ 1402724     True
+ 1462664     True
+ 84457       True
+            ...  
+ 2256298    False
+ 2256326    False
+ 2256339    False
+ 1602239    False
+ 2256258    False
+ Name: has_side, Length: 9197, dtype: bool,
+ &#39;has_class&#39;: skids
+ 1343291    False
+ 1332516     True
+ 1402724    False
+ 1462664    False
+ 84457      False
+            ...  
+ 2256298    False
+ 2256326    False
+ 2256339    False
+ 1602239    False
+ 2256258    False
+ Name: has_class, Length: 9197, dtype: bool,
+ &#39;has_segment&#39;: skids
+ 1343291    True
+ 1332516    True
+ 1402724    True
+ 1462664    True
+ 84457      True
+            ... 
+ 2256298    True
+ 2256326    True
+ 2256339    True
+ 1602239    True
+ 2256258    True
+ Name: has_segment, Length: 9197, dtype: bool,
+ &#39;has_type&#39;: skids
+ 1343291    False
+ 1332516     True
+ 1402724    False
+ 1462664    False
+ 84457      False
+            ...  
+ 2256298    False
+ 2256326    False
+ 2256339    False
+ 1602239    False
+ 2256258    False
+ Name: has_type, Length: 9197, dtype: bool,
+ &#39;has_group&#39;: skids
+ 1343291    False
+ 1332516    False
+ 1402724    False
+ 1462664    False
+ 84457      False
+            ...  
+ 2256298    False
+ 2256326    False
+ 2256339    False
+ 1602239    False
+ 2256258    False
+ Name: has_group, Length: 9197, dtype: bool}
+</pre></div>
+</div>
+</div>
+</div>
+<p>With series of booleans for all our categories, we can concatenate our series to make a dataframe, and call <code class="docutils literal notranslate"><span class="pre">groupby</span></code> which will group the dataframe based on the number of cells for each subset of category values (ex: how many cells that have [“has_side”=False, “has_class”=False, “has_segment”=False, “has_type”=False, “has_group”=False] and so on).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bool_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">has_categs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+<span class="c1">#boolean dataframe from concatenating the boolean series</span>
+<span class="n">annotations_bool</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">bool_ids</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="s2">&quot;ID&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span>
+    <span class="s2">&quot;N/A&quot;</span>
+<span class="p">)</span>
+<span class="c1">#group the annotations dataframe by the categories and get the number of cells for each subset of category values</span>
+<span class="n">bool_counts</span> <span class="o">=</span> <span class="n">annotations_bool</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">bool_ids</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">annotations_bool</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bool_counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         has_side  has_class  has_segment  has_type  has_group
+skids                                                         
+1343291      True      False         True     False      False
+1332516      True       True         True      True      False
+1402724      True      False         True     False      False
+1462664      True      False         True     False      False
+84457        True      False         True     False      False
+...           ...        ...          ...       ...        ...
+2256298     False      False         True     False      False
+2256326     False      False         True     False      False
+2256339     False      False         True     False      False
+1602239     False      False         True     False      False
+2256258     False      False         True     False      False
+
+[9197 rows x 5 columns]
+has_side  has_class  has_segment  has_type  has_group
+False     False      True         False     False          25
+          True       False        False     False           4
+                     True         False     False           3
+                                  True      False           4
+True      False      False        False     False         992
+                                            True           47
+                     True         False     False        5447
+                                            True           53
+                                  True      False           7
+                                            True            2
+          True       False        False     True            5
+                     True         False     False        1045
+                                            True          676
+                                  True      False         673
+                                            True          214
+dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#generate the upsetplot of the grouped dataframe and save it</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">bool_counts</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;broad_categs_upsetplot.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/gen_upsetplots_11_0.png" src="_images/gen_upsetplots_11_0.png" />
+</div>
+</div>
+<p>We start generating the second upsetplot by using the following function, which determines if all the skids have the particular <code class="docutils literal notranslate"><span class="pre">name</span></code> within the particular <code class="docutils literal notranslate"><span class="pre">category</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#returns boolean pandas series: True if element=name, else False</span>
+<span class="k">def</span> <span class="nf">has_element</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;side&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;l&quot;</span><span class="p">):</span>
+    <span class="n">has_element</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">series_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">category</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">[</span><span class="n">category</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">has_element</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">has_element</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">has_element</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">series_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>For this upsetplot, we just consider the values that can be passed by the categories <code class="docutils literal notranslate"><span class="pre">side</span></code>, <code class="docutils literal notranslate"><span class="pre">class</span></code> and <code class="docutils literal notranslate"><span class="pre">segment</span></code>, and splice the keys based on the category so we can retrieve the values we want to pass in</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#generate boolean pandas series for the different names within their respective category</span>
+
+<span class="n">has_sides</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;has_left&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_right&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_center&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">has_sides</span><span class="p">:</span>
+    <span class="n">has_sides</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">has_element</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;side&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">has_classes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;has_sensory&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_inter&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_motor&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">has_classes</span><span class="p">:</span>
+    <span class="n">has_classes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">has_element</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">has_segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;has_seg0&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_seg1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_seg2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_seg3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">has_segments</span><span class="p">:</span>
+    <span class="n">has_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">has_element</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;segment&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">has_hp</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;has_head&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_pygidium&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">has_hp</span><span class="p">:</span>
+    <span class="n">has_hp</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span> <span class="n">has_element</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;segment&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">has_all</span> <span class="o">=</span> <span class="n">has_sides</span> <span class="o">|</span> <span class="n">has_classes</span> <span class="o">|</span> <span class="n">has_segments</span> <span class="o">|</span> <span class="n">has_hp</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bool_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">has_all</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+<span class="c1">#boolean dataframe from concatenating the boolean series</span>
+<span class="n">annotations_bool</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">bool_ids</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="s2">&quot;ID&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span>
+    <span class="s2">&quot;N/A&quot;</span>
+<span class="p">)</span>
+
+<span class="c1">#group the annotations dataframe by the names and get the number of cells for each subset of names</span>
+<span class="n">bool_counts</span> <span class="o">=</span> <span class="n">annotations_bool</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">bool_ids</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#generate the upsetplot of the grouped dataframe</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">bool_counts</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;sub_categs_upsetplot.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/gen_upsetplots_17_0.png" src="_images/gen_upsetplots_17_0.png" />
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="data_summary_v3.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Data Summary Notebook</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="density_plots.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Density Tests</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Kareef Ullah<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

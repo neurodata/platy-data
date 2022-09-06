@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>&lt;no title&gt; &#8212; Platynereis Data</title>
+    <title>Group Connection Testing &#8212; Platynereis Data</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -54,6 +54,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="References" href="references.html" />
+    <link rel="prev" title="Density Tests" href="density_plots.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -113,7 +115,7 @@ const thebe_selector_output = ".output, .cell_output"
   Preliminaries
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="introduction.html">
    Introduction
@@ -137,6 +139,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="density_plots.html">
    Density Tests
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Group Connection Testing
   </a>
  </li>
 </ul>
@@ -347,50 +354,23 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-    </nav>
 </div>
     </div>
     <div class="article row">
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1><no title></h1>
+                <h1>Group Connection Testing</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
@@ -398,7 +378,9 @@ title="Print to PDF"
                 
               <div>
                 
-  <div class="cell docutils container">
+  <section class="tex2jax_ignore mathjax_ignore" id="group-connection-testing">
+<h1>Group Connection Testing<a class="headerlink" href="#group-connection-testing" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymaid</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -407,11 +389,13 @@ title="Print to PDF"
 <span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">from</span> <span class="nn">networkx</span> <span class="kn">import</span> <span class="n">from_pandas_adjacency</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">combinations</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
-<span class="kn">import</span> <span class="nn">graspologic</span> 
+<span class="kn">from</span> <span class="nn">graspologic.inference</span> <span class="kn">import</span> <span class="n">group_connection_test</span>
+<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_annotations</span>
 </pre></div>
 </div>
 </div>
@@ -427,8 +411,6 @@ title="Print to PDF"
 <span class="p">)</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pymaid&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 <span class="n">pymaid</span><span class="o">.</span><span class="n">clear_cache</span><span class="p">()</span>
-
-<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/Users/kareefullah/Desktop/neurodata/neurodata/platy-data/docs/outputs&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -440,7 +422,8 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">annotations</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/annotations.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folder</span> <span class="o">=</span> <span class="n">_get_folder</span><span class="p">()</span>
+<span class="n">annotations</span> <span class="o">=</span> <span class="n">load_annotations</span><span class="p">()</span>
 <span class="n">annotations</span>
 </pre></div>
 </div>
@@ -579,6 +562,143 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#get skids for l, r, head, pygidium, 0, 1, 2, 3</span>
+
+<span class="n">skids_hemis</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+<span class="n">skids_segs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+<span class="n">labels_hemis</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+<span class="n">labels_segs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+<span class="n">poss_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">]</span>
+
+<span class="c1">#add skids and labels for hemis</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">skids_hemis</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">])):</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;side&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">key</span> <span class="ow">and</span> <span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">poss_labels</span><span class="p">):</span>
+            <span class="n">skids_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">labels_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+
+<span class="c1">#add skids and labels for segments</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">skids_segs</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">])):</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;segment&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">key</span> <span class="ow">and</span> <span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">poss_labels</span><span class="p">):</span>
+            <span class="n">skids_segs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">labels_segs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#comparison for hemis</span>
+<span class="n">count_hemis</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}}</span>
+
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">count_hemis</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">labels_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">])):</span>
+        <span class="n">count_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">labels_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1"># get the lists of number of skids for y values, x values are the keys</span>
+<span class="n">keys</span> <span class="o">=</span> <span class="n">poss_labels</span> <span class="c1"># &quot;s&quot;, &quot;i&quot;, &quot;m&quot;</span>
+<span class="n">list_counts</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">class_label</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">hemi_label</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">count_hemis</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">inner_key</span> <span class="ow">in</span> <span class="n">count_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+        <span class="n">class_label</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inner_key</span><span class="p">)</span>
+        <span class="n">list_counts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">count_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">inner_key</span><span class="p">])</span>
+        <span class="n">hemi_label</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+
+<span class="n">label_counts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">class_label</span><span class="p">,</span> <span class="n">list_counts</span><span class="p">,</span> <span class="n">hemi_label</span><span class="p">))</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">label_counts</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="s2">&quot;side&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;s&#39;, &#39;i&#39;, &#39;m&#39;, &#39;s&#39;, &#39;i&#39;, &#39;m&#39;]
+[506, 669, 115, 468, 704, 127]
+[&#39;l&#39;, &#39;l&#39;, &#39;l&#39;, &#39;r&#39;, &#39;r&#39;, &#39;r&#39;]
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>class</th>
+      <th>count</th>
+      <th>side</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>s</td>
+      <td>506</td>
+      <td>l</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>i</td>
+      <td>669</td>
+      <td>l</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>m</td>
+      <td>115</td>
+      <td>l</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>s</td>
+      <td>468</td>
+      <td>r</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>i</td>
+      <td>704</td>
+      <td>r</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>m</td>
+      <td>127</td>
+      <td>r</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;side&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;class&#39;, ylabel=&#39;count&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/sbm_tests_6_1.png" src="_images/sbm_tests_6_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">skids_left</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
 <span class="n">skids_right</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
 <span class="n">skids_head</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;head&quot;</span><span class="p">)</span>
@@ -711,6 +831,7 @@ title="Print to PDF"
 </div>
 </div>
 </div>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -739,6 +860,20 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="density_plots.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Density Tests</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="references.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">References</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
             </footer>
         </div>

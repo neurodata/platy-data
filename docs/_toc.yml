@@ -8,6 +8,7 @@ parts:
     - file: data_summary_v3
     - file: gen_upsetplots
     - file: density_plots
+    - file: sbm_tests
   - caption: References
     chapters: 
     - file: references

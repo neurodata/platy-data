@@ -21,7 +21,7 @@ def _get_folder(path=None):
 
 def load_annotations():
     dir = DATA_PATH / "annotations.csv"
-    annotations = pd.read_csv(dir, index_col=False)
+    annotations = pd.read_csv(dir)
     return annotations
 
 
@@ -30,3 +30,13 @@ def load_connectome_adj():
     adj_connec = pd.read_csv(dir)
     adj_connec = adj_connec.set_axis(list(adj_connec), axis="index")
     return adj_connec
+
+
+def load_full_adj():
+    dir = DATA_PATH / "full_adj.csv"
+    full_adj = pd.read_csv(dir)
+    full_adj = full_adj.set_axis(list(full_adj), axis="index")
+    return full_adj
+
+
+print(load_annotations())

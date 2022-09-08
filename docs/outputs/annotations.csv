@@ -3200,7 +3200,7 @@ skids,side,class,segment,type,group
 1717844,r,N/A,head,N/A,N/A
 1381977,r,N/A,2,N/A,N/A
 1398361,r,N/A,head,N/A,N/A
-1422939,r,s,0,N/A,N/A
+1422939,r,s,0,N/A,18
 1992455,r,N/A,3,N/A,N/A
 1758813,r,N/A,N/A,N/A,N/A
 1840735,r,N/A,2,N/A,N/A
@@ -3888,7 +3888,7 @@ skids,side,class,segment,type,group
 1407854,r,i,3,N/A,1
 1334130,r,N/A,head,N/A,N/A
 1473394,r,N/A,head,N/A,N/A
-1399669,r,s,0,N/A,N/A
+1399669,r,s,0,N/A,18
 1817462,r,s,2,80,N/A
 1334138,r,i,head,N/A,N/A
 1432443,r,i,3,N/A,N/A
@@ -4178,7 +4178,7 @@ skids,side,class,segment,type,group
 1990036,r,N/A,2,N/A,N/A
 802199,r,i,1,N/A,N/A
 1432984,r,N/A,3,N/A,N/A
-1097119,r,s,0,N/A,N/A
+1097119,r,s,0,N/A,18
 1301923,r,i,head,N/A,N/A
 1392036,r,N/A,3,N/A,N/A
 1981861,r,N/A,3,N/A,N/A
@@ -4279,7 +4279,7 @@ skids,side,class,segment,type,group
 1318466,r,s,head,N/A,N/A
 1703492,r,N/A,1,N/A,N/A
 1621573,r,N/A,2,N/A,N/A
-1785412,r,s,0,N/A,N/A
+1785412,r,s,0,N/A,18
 1531464,r,N/A,2,N/A,N/A
 1834570,r,N/A,1,N/A,N/A
 1990218,r,N/A,2,N/A,N/A
@@ -4326,7 +4326,7 @@ skids,side,class,segment,type,group
 1449610,r,s,3,N/A,N/A
 1744515,r,N/A,head,N/A,N/A
 1400463,r,N/A,3,N/A,N/A
-1785489,r,s,0,N/A,N/A
+1785489,r,s,0,N/A,18
 958099,r,i,2,N/A,5
 1400469,r,N/A,3,N/A,N/A
 1703574,r,N/A,1,N/A,N/A
@@ -4877,7 +4877,7 @@ skids,side,class,segment,type,group
 1647303,l,N/A,2,N/A,N/A
 1696456,l,i,2,155,3
 1352396,l,N/A,0,N/A,N/A
-1639124,l,s,0,N/A,N/A
+1639124,l,s,0,N/A,18
 1688277,l,N/A,1,N/A,N/A
 2015966,l,i,1,N/A,7
 1278688,l,s,pygidium,101,9
@@ -5245,7 +5245,7 @@ skids,side,class,segment,type,group
 1517020,l,N/A,2,N/A,N/A
 1623519,l,N/A,pygidium,N/A,N/A
 1312224,l,i,head,N/A,N/A
-738786,l,s,0,N/A,N/A
+738786,l,s,0,N/A,18
 1918439,l,N/A,1,N/A,N/A
 525800,l,i,3,79,7
 1746412,l,N/A,N/A,N/A,N/A
@@ -6307,7 +6307,7 @@ skids,side,class,segment,type,group
 1281424,l,i,pygidium,146,3
 1502608,l,N/A,head,N/A,N/A
 1469842,l,N/A,head,N/A,N/A
-1797521,l,s,0,N/A,N/A
+1797521,l,s,0,N/A,18
 2100626,l,N/A,3,N/A,N/A
 1813909,l,N/A,N/A,N/A,N/A
 1281433,l,i,3,N/A,3
@@ -6379,7 +6379,7 @@ skids,side,class,segment,type,group
 1322514,l,i,head,N/A,N/A
 1969684,l,N/A,head,N/A,N/A
 1994262,l,N/A,3,N/A,N/A
-1781271,l,s,0,N/A,N/A
+1781271,l,s,0,N/A,18
 85530,l,i,head,10,N/A
 1822236,l,N/A,1,N/A,N/A
 1322525,l,i,head,N/A,N/A
@@ -6416,7 +6416,7 @@ skids,side,class,segment,type,group
 1486416,l,N/A,3,N/A,N/A
 1683027,l,N/A,2,N/A,N/A
 1445460,l,N/A,3,N/A,N/A
-1781331,l,s,0,N/A,N/A
+1781331,l,s,0,N/A,18
 1379931,l,s,head,N/A,N/A
 1617504,l,N/A,3,N/A,N/A
 1633890,l,N/A,2,N/A,N/A
@@ -6812,14 +6812,14 @@ skids,side,class,segment,type,group
 94374,l,N/A,head,N/A,N/A
 1757352,l,N/A,N/A,N/A,N/A
 1151145,l,N/A,3,N/A,N/A
-1765546,l,s,0,N/A,N/A
+1765546,l,s,0,N/A,18
 1314988,l,N/A,3,N/A,N/A
 1323181,l,N/A,head,N/A,N/A
 1405106,l,N/A,N/A,N/A,N/A
 1527987,l,N/A,head,N/A,N/A
 1945780,l,N/A,2,N/A,N/A
 1503413,l,i,1,N/A,4
-1765565,l,s,0,N/A,N/A
+1765565,l,s,0,N/A,18
 1364158,l,i,3,79,7
 1315007,l,N/A,3,N/A,N/A
 1470654,l,i,head,140,13
@@ -8217,7 +8217,7 @@ skids,side,class,segment,type,group
 1046988,l,N/A,3,N/A,N/A
 1530315,l,N/A,2,N/A,N/A
 1677775,l,m,2,N/A,N/A
-1309139,l,s,0,N/A,N/A
+1309139,l,s,0,N/A,18
 1841620,l,N/A,N/A,N/A,N/A
 1743317,l,N/A,3,N/A,N/A
 1472982,l,N/A,2,N/A,N/A
@@ -8229,14 +8229,14 @@ skids,side,class,segment,type,group
 1620444,l,N/A,3,N/A,N/A
 1653210,l,N/A,N/A,N/A,N/A
 1325534,l,N/A,head,N/A,N/A
-1309151,l,s,0,N/A,N/A
+1309151,l,s,0,N/A,18
 1743328,l,N/A,3,N/A,N/A
 1276385,l,s,head,13,N/A
 1841629,l,N/A,0,N/A,N/A
 1415651,l,N/A,3,N/A,N/A
 1366501,l,i,2,79,7
 1980902,l,N/A,1,N/A,N/A
-1309159,l,s,0,N/A,N/A
+1309159,l,s,0,N/A,18
 1989095,l,N/A,2,N/A,N/A
 1595882,l,N/A,0,N/A,N/A
 1849836,l,N/A,2,N/A,N/A

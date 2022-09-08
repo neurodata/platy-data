@@ -131,7 +131,8 @@ def gen_annotations():
     annotations = pd.concat(series_ids, axis=1, ignore_index=False, names="ID").fillna(
         "N/A"
     )
-    annotations.to_csv(path + "/annotations.csv")
+    annotations.to_csv(path + "/annotations.csv", index_label="skids")
+    # annotations.rename_axis("skids", inplace=True)
     return annotations
 
 
@@ -140,3 +141,13 @@ def get_connectome_skids():
     adj_pandas = pymaid.adjacency_matrix(skids_connec)
     adj_pandas.to_csv(path + "/adj_connectome.csv", index=skids_connec)
     return adj_pandas
+
+
+def get_full_adj():
+    all_skids = list(gen_annotations().index)
+    full_adj = pymaid.adjacency_matrix(all_skids)
+    full_adj.to_csv(path + "/full_adj.csv", index=False)
+    return full_adj
+
+
+print(gen_annotations())

@@ -1,3 +1,4 @@
+from operator import index
 import pymaid
 import logging
 import pandas as pd
@@ -101,7 +102,7 @@ def get_labels_from_annotation(annot_list, category="side"):
     return pd.Series(index=ids, data=annots, name=category)
 
 
-def gen_annotations():
+def gen_all_annotations():
     side_list = ["left", "right", "center"]
     class_list = ["Sensory neuron", "interneuron", "motorneuron"]
     segment_list = [
@@ -131,23 +132,50 @@ def gen_annotations():
     annotations = pd.concat(series_ids, axis=1, ignore_index=False, names="ID").fillna(
         "N/A"
     )
-    annotations.to_csv(path + "/annotations.csv", index_label="skids")
-    # annotations.rename_axis("skids", inplace=True)
+    annotations.to_csv(path + "/all_annotations.csv", index_label="skids")
     return annotations
 
 
-def get_connectome_skids():
+def gen_connectome_annotations():
+    all_annotations = gen_all_annotations()
+    skids_connec = pymaid.get_skids_by_annotation("connectome")
+    skids_connec = [str(skid) for skid in skids_connec]
+    skids_extra = []
+    count = 0
+    for skid in skids_connec:
+        if skid not in all_annotations.index:
+            skids_extra.append(skid)
+
+    for skid in skids_extra:
+        all_annotations.loc[skid] = [
+            "N/A",
+            "N/A",
+            "N/A",
+            "N/A",
+            "N/A",
+        ]
+    count = 0
+    for skid in skids_connec:
+        if skid not in all_annotations.index:
+            count += 1
+    connec_annots = all_annotations.loc[skids_connec]
+    connec_annots.to_csv(path + "/connec_annotations.csv", index_label="skids")
+    return connec_annots
+
+
+def gen_connectome_adj():
     skids_connec = pymaid.get_skids_by_annotation("connectome")
     adj_pandas = pymaid.adjacency_matrix(skids_connec)
-    adj_pandas.to_csv(path + "/adj_connectome.csv", index=skids_connec)
+    adj_pandas.to_csv(path + "/adj_connectome.csv", index=False)
     return adj_pandas
 
 
-def get_full_adj():
-    all_skids = list(gen_annotations().index)
+def gen_full_adj():
+    all_skids = list(gen_all_annotations().index)
     full_adj = pymaid.adjacency_matrix(all_skids)
     full_adj.to_csv(path + "/full_adj.csv", index=False)
     return full_adj
 
 
-print(gen_annotations())
+print(gen_all_annotations())
+print(gen_connectome_annotations())

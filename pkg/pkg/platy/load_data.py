@@ -19,10 +19,16 @@ def _get_folder(path=None):
     return folder
 
 
-def load_annotations():
-    dir = DATA_PATH / "annotations.csv"
+def load_all_annotations():
+    dir = DATA_PATH / "all_annotations.csv"
     annotations = pd.read_csv(dir)
     return annotations
+
+
+def load_connectome_annotations():
+    dir = DATA_PATH / "connec_annotations.csv"
+    connec_annots = pd.read_csv(dir)
+    return connec_annots
 
 
 def load_connectome_adj():
@@ -37,6 +43,3 @@ def load_full_adj():
     full_adj = pd.read_csv(dir)
     full_adj = full_adj.set_axis(list(full_adj), axis="index")
     return full_adj
-
-
-print(load_annotations())

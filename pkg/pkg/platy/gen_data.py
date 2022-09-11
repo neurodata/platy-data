@@ -6,6 +6,7 @@ import numpy as np
 from itertools import chain, combinations
 from upsetplot import plot
 from matplotlib import pyplot as plt
+from graspologic.utils import largest_connected_component
 
 
 rm = pymaid.CatmaidInstance(
@@ -44,7 +45,6 @@ path = "/Users/kareefullah/Desktop/neurodata/neurodata/platy-data/docs/outputs"
 def get_labels_from_annotation(annot_list, category="side"):
     all_ids = pymaid.get_skids_by_annotation(annot_list)
     id_annot = []
-
     if category == "type" or category == "group":
         for annot in annot_list:
             ids = pymaid.get_skids_by_annotation(annot)
@@ -128,7 +128,13 @@ def gen_all_annotations():
     type_labels = get_labels_from_annotation(type_list, category="type")
     group_labels = get_labels_from_annotation(group_list, category="group")
 
-    series_ids = [side_labels, class_labels, segment_labels, type_labels, group_labels]
+    series_ids = [
+        side_labels,
+        class_labels,
+        segment_labels,
+        type_labels,
+        group_labels,
+    ]
     annotations = pd.concat(series_ids, axis=1, ignore_index=False, names="ID").fillna(
         "N/A"
     )
@@ -154,13 +160,18 @@ def gen_connectome_annotations():
             "N/A",
             "N/A",
         ]
-    count = 0
-    for skid in skids_connec:
-        if skid not in all_annotations.index:
-            count += 1
     connec_annots = all_annotations.loc[skids_connec]
-    connec_annots.to_csv(path + "/connec_annotations.csv", index_label="skids")
+    # connec_annots.to_csv(path + "/connec_annotations.csv", index_label="skids")
     return connec_annots
+
+
+def gen_connectome_lcc_annotations():
+    connec_annots = gen_connectome_annotations()
+    inds = gen_connectome_lcc_adj().index
+    inds = [str(skid) for skid in inds]
+    connec_lcc_annots = connec_annots.loc[inds]
+    connec_lcc_annots.to_csv(path + "/connec_lcc_annotations.csv", index_label="skids")
+    return connec_lcc_annots
 
 
 def gen_connectome_adj():
@@ -170,6 +181,21 @@ def gen_connectome_adj():
     return adj_pandas
 
 
+def gen_connectome_lcc_adj():
+    adj_connec = gen_connectome_adj()
+    all_skids = adj_connec.index
+    adj_connec_np = adj_connec.to_numpy()
+    adj_lcc, kept_inds = largest_connected_component(adj_connec_np, return_inds=True)
+
+    kept_skids = np.ndarray(kept_inds.shape)
+    for i, ind in enumerate(kept_inds):
+        kept_skids[i] = all_skids[ind]
+    kept_skids = [int(i) for i in kept_skids]
+    adj_lcc_pandas = pd.DataFrame(adj_lcc, columns=kept_skids, index=kept_skids)
+    adj_lcc_pandas.to_csv(path + "/adj_connectome_lcc.csv", index=False)
+    return adj_lcc_pandas
+
+
 def gen_full_adj():
     all_skids = list(gen_all_annotations().index)
     full_adj = pymaid.adjacency_matrix(all_skids)
@@ -177,5 +203,15 @@ def gen_full_adj():
     return full_adj
 
 
-print(gen_all_annotations())
-print(gen_connectome_annotations())
+def gen_weird_neurons_annots():
+    connec_lcc_annots = gen_connectome_lcc_annotations()
+    # check lr, lc, rc, im, sm
+    weird_annots = connec_lcc_annots.loc[
+        (connec_lcc_annots["side"] == "lr")
+        | (connec_lcc_annots["side"] == "lc")
+        | (connec_lcc_annots["side"] == "rc")
+        | (connec_lcc_annots["class"] == "im")
+        | (connec_lcc_annots["class"] == "sm")
+    ]
+    weird_annots.to_csv(path + "/weird_annotations.csv", index_label="skids")
+    return weird_annots

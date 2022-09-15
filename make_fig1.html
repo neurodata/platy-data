@@ -141,11 +141,6 @@ const thebe_selector_output = ".output, .cell_output"
    Density Tests
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="sbm_tests.html">
-   Group Connection Testing
-  </a>
- </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -384,7 +379,6 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">pymaid</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -397,24 +391,14 @@ title="Print to PDF"
 <span class="kn">from</span> <span class="nn">graspologic.layouts</span> <span class="kn">import</span> <span class="n">layout_tsne</span><span class="p">,</span> <span class="n">layout_umap</span>
 <span class="kn">from</span> <span class="nn">graspologic.plot.plot</span> <span class="kn">import</span> <span class="n">networkplot</span>
 <span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">is_fully_connected</span><span class="p">,</span> <span class="n">largest_connected_component</span><span class="p">,</span> <span class="n">is_symmetric</span><span class="p">,</span> <span class="n">symmetrize</span>
-<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">load_connectome_adj</span><span class="p">,</span> <span class="n">_get_folder</span>
+<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">load_connectome_adj</span><span class="p">,</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_connectome_adj</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rm</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">CatmaidInstance</span><span class="p">(</span>
-    <span class="n">server</span><span class="o">=</span><span class="s2">&quot;https://catmaid.jekelylab.ex.ac.uk/#&quot;</span><span class="p">,</span>
-    <span class="n">project_id</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
-    <span class="n">api_token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">http_user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">http_password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pymaid&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
-<span class="n">pymaid</span><span class="o">.</span><span class="n">clear_cache</span><span class="p">()</span>
-
-<span class="n">folder</span> <span class="o">=</span> <span class="n">_get_folder</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folder</span> <span class="o">=</span> <span class="n">_get_folder</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -596,7 +580,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.234237536656892
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.2420124862284245
 </pre></div>
 </div>
 </div>
@@ -668,7 +652,7 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>Number of nodes</th>
-      <td>2728</td>
+      <td>2723</td>
       <td>2723.000000</td>
       <td>2728.0000</td>
     </tr>
@@ -680,19 +664,19 @@ title="Print to PDF"
     </tr>
     <tr>
       <th>Graph density</th>
-      <td>0.001553</td>
+      <td>0.001558</td>
       <td>0.001558</td>
       <td>0.0015</td>
     </tr>
     <tr>
       <th>Modularity</th>
       <td>N/A</td>
-      <td>0.646555</td>
+      <td>0.649407</td>
       <td>0.6200</td>
     </tr>
     <tr>
       <th>Avg. degree</th>
-      <td>4.234238</td>
+      <td>4.242012</td>
       <td>4.242012</td>
       <td>4.1000</td>
     </tr>

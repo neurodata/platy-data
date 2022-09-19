@@ -3,8 +3,10 @@ from .load_data import (
     load_all_annotations,
     load_connectome_adj,
     load_connectome_lcc_adj,
+    load_connectome_lcc_normal_adj,
     load_connectome_annotations,
     load_connectome_lcc_annotations,
+    load_connectome_normal_lcc_annotations,
     load_weird_annotations,
 )
 
@@ -13,7 +15,8 @@ __all__ = [
     "load_all_annotations",
     "load_connectome_adj",
     "load_connectome_lcc_adj",
-    "load_connectome_annotations",
+    "load_connectome_lcc_normal_adj" "load_connectome_annotations",
     "load_connectome_lcc_annotations",
+    "load_connectome_normal_lcc_annotations",
     "load_weird_annotations",
 ]

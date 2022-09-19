@@ -37,6 +37,12 @@ def load_connectome_lcc_annotations():
     return connec_lcc_annots
 
 
+def load_connectome_normal_lcc_annotations():
+    dir = DATA_PATH / "connec_lcc_normal_annotations.csv"
+    connec_lcc_normal_annots = pd.read_csv(dir)
+    return connec_lcc_normal_annots
+
+
 def load_connectome_adj():
     dir = DATA_PATH / "adj_connectome.csv"
     adj_connec = pd.read_csv(dir)
@@ -49,6 +55,15 @@ def load_connectome_lcc_adj():
     adj_connec_lcc = pd.read_csv(dir)
     adj_connec_lcc = adj_connec_lcc.set_axis(list(adj_connec_lcc), axis="index")
     return adj_connec_lcc
+
+
+def load_connectome_lcc_normal_adj():
+    dir = DATA_PATH / "adj_connectome_normal_lcc.csv"
+    adj_connec_normal_lcc = pd.read_csv(dir)
+    adj_connec_normal_lcc = adj_connec_normal_lcc.set_axis(
+        list(adj_connec_normal_lcc), axis="index"
+    )
+    return adj_connec_normal_lcc
 
 
 def load_full_adj():
@@ -64,4 +79,5 @@ def load_weird_annotations():
     return weird_annotations
 
 
+print(load_connectome_normal_lcc_annotations())
 print(load_weird_annotations())

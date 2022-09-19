@@ -174,6 +174,21 @@ def gen_connectome_lcc_annotations():
     return connec_lcc_annots
 
 
+def gen_normal_connectome_lcc_annotations():
+    connec_lcc_annots = gen_connectome_lcc_annotations()
+    print(connec_lcc_annots)
+    inds = gen_weird_neurons_annots().index
+    connec_lcc_normal_annots = connec_lcc_annots.loc[
+        [i for i in connec_lcc_annots.index if i not in inds]
+    ]
+    connec_lcc_normal_annots.to_csv(
+        path + "/connec_lcc_normal_annotations.csv", index_label="skids"
+    )
+    print(connec_lcc_normal_annots)
+    return gen_normal_connectome_lcc_annotations
+    
+
+
 def gen_connectome_adj():
     skids_connec = pymaid.get_skids_by_annotation("connectome")
     adj_pandas = pymaid.adjacency_matrix(skids_connec)
@@ -196,6 +211,17 @@ def gen_connectome_lcc_adj():
     return adj_lcc_pandas
 
 
+def gen_connectome_normal_lcc_adj():
+    adj_lcc = gen_connectome_lcc_adj()
+    adj_lcc_skids = adj_lcc.index
+    adj_lcc_skids = [str(skid) for skid in adj_lcc_skids]
+    inds = gen_weird_neurons_annots().index
+    normal_skids = [int(i) for i in adj_lcc_skids if i not in inds]
+    connec_normal_lcc_adj = adj_lcc.loc[normal_skids, normal_skids]
+    connec_normal_lcc_adj.to_csv(path + "/adj_connectome_normal_lcc.csv", index=False)
+    return connec_normal_lcc_adj
+
+
 def gen_full_adj():
     all_skids = list(gen_all_annotations().index)
     full_adj = pymaid.adjacency_matrix(all_skids)
@@ -215,3 +241,6 @@ def gen_weird_neurons_annots():
     ]
     weird_annots.to_csv(path + "/weird_annotations.csv", index_label="skids")
     return weird_annots
+
+
+gen_normal_connectome_lcc_annotations()

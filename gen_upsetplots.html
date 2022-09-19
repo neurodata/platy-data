@@ -141,6 +141,11 @@ const thebe_selector_output = ".output, .cell_output"
    Density Tests
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="sbm_tests.html">
+   Group Connection Testing
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -384,7 +389,7 @@ title="Print to PDF"
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">combinations</span>
 <span class="kn">from</span> <span class="nn">upsetplot</span> <span class="kn">import</span> <span class="n">plot</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_connectome_lcc_annotations</span>
+<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_connectome_normal_lcc_annotations</span>
 </pre></div>
 </div>
 </div>
@@ -393,7 +398,7 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folder</span> <span class="o">=</span> <span class="n">_get_folder</span><span class="p">()</span>
-<span class="n">annotations</span> <span class="o">=</span> <span class="n">load_connectome_lcc_annotations</span><span class="p">()</span>
+<span class="n">annotations</span> <span class="o">=</span> <span class="n">load_connectome_normal_lcc_annotations</span><span class="p">()</span>
 <span class="n">annotations</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;N/A&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">annotations</span>
 </pre></div>
@@ -482,7 +487,7 @@ title="Print to PDF"
       <td>...</td>
     </tr>
     <tr>
-      <th>2718</th>
+      <th>2696</th>
       <td>1302513</td>
       <td>l</td>
       <td>s</td>
@@ -491,7 +496,7 @@ title="Print to PDF"
       <td>N/A</td>
     </tr>
     <tr>
-      <th>2719</th>
+      <th>2697</th>
       <td>1630186</td>
       <td>l</td>
       <td>N/A</td>
@@ -500,7 +505,7 @@ title="Print to PDF"
       <td>N/A</td>
     </tr>
     <tr>
-      <th>2720</th>
+      <th>2698</th>
       <td>1441779</td>
       <td>r</td>
       <td>N/A</td>
@@ -509,7 +514,7 @@ title="Print to PDF"
       <td>N/A</td>
     </tr>
     <tr>
-      <th>2721</th>
+      <th>2699</th>
       <td>1671147</td>
       <td>r</td>
       <td>m</td>
@@ -518,7 +523,7 @@ title="Print to PDF"
       <td>N/A</td>
     </tr>
     <tr>
-      <th>2722</th>
+      <th>2700</th>
       <td>1048573</td>
       <td>l</td>
       <td>i</td>
@@ -528,7 +533,7 @@ title="Print to PDF"
     </tr>
   </tbody>
 </table>
-<p>2723 rows × 6 columns</p>
+<p>2701 rows × 6 columns</p>
 </div></div></div>
 </div>
 <p>The following function returns a series where the indices are all the skids in the annotations table and the values are if they have a value for the category passed in</p>
@@ -589,21 +594,21 @@ skids
 1671147      True       True         True      True      False
 1048573      True       True         True     False      False
 
-[2723 rows x 5 columns]
+[2701 rows x 5 columns]
 has_side  has_class  has_segment  has_type  has_group
 False     False      False        False     False          2
                      True         False     False          1
           True       True         False     False          1
                                   True      False          1
 True      False      False        False     False          3
-                     True         False     False        911
+                     True         False     False        908
                                             True          18
                                   True      False          6
                                             True           2
-          True       True         False     False        539
-                                            True         438
-                                  True      False        605
-                                            True         196
+          True       True         False     False        533
+                                            True         437
+                                  True      False        595
+                                            True         194
 dtype: int64
 </pre></div>
 </div>

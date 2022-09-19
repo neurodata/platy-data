@@ -141,6 +141,11 @@ const thebe_selector_output = ".output, .cell_output"
    Density Tests
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="sbm_tests.html">
+   Group Connection Testing
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -391,7 +396,52 @@ title="Print to PDF"
 <span class="kn">from</span> <span class="nn">graspologic.layouts</span> <span class="kn">import</span> <span class="n">layout_tsne</span><span class="p">,</span> <span class="n">layout_umap</span>
 <span class="kn">from</span> <span class="nn">graspologic.plot.plot</span> <span class="kn">import</span> <span class="n">networkplot</span>
 <span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">is_fully_connected</span><span class="p">,</span> <span class="n">largest_connected_component</span><span class="p">,</span> <span class="n">is_symmetric</span><span class="p">,</span> <span class="n">symmetrize</span>
-<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">load_connectome_adj</span><span class="p">,</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_connectome_adj</span>
+<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">load_connectome_adj</span><span class="p">,</span> <span class="n">_get_folder</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>        skids side class segment   type  group
+0     2015233    l     s    head  100.0    NaN
+1     1548290    l   NaN       1    NaN    NaN
+2     1318919    l     s    head   88.0   15.0
+3     2015241    l     s    head  100.0    NaN
+4     1646603    r   NaN       3    NaN    NaN
+...       ...  ...   ...     ...    ...    ...
+2696  1302513    l     s    head    NaN    NaN
+2697  1630186    l   NaN       2    NaN    NaN
+2698  1441779    r   NaN    head    NaN    NaN
+2699  1671147    r     m       1  165.0    NaN
+2700  1048573    l     i       3    NaN    NaN
+
+[2701 rows x 6 columns]
+      skids side class   segment   type  group
+0   2007060   lr     i      head    NaN    NaN
+1    139303   lr     s         1  102.0    NaN
+2   2007344    l    im      head  166.0    NaN
+3   1016172    l    im         1    NaN    NaN
+4   1999932    r    sm         1   95.0    NaN
+5   1320159   rc     i      head    NaN    NaN
+6   1631592   lc   NaN  pygidium    NaN    NaN
+7   1418928   lc     s      head  132.0    NaN
+8   1320798   lc     s      head    NaN    NaN
+9    370978    r    sm  pygidium   54.0    9.0
+10    84457   rc   NaN      head    NaN    NaN
+11  1462145    l    im         1    NaN    NaN
+12   307194   rc     s      head  135.0    NaN
+13  1462664   rc   NaN         2    NaN    NaN
+14  1594313    r    sm  pygidium   93.0    9.0
+15  1332516   rc     s      head   49.0    NaN
+16  1366160   rc     i  pygidium    NaN    1.0
+17    64258   lr     s         1   36.0    NaN
+18  1276971    l    sm         2   80.0    NaN
+19    81251   lc     s      head   43.0    NaN
+20  1302189    r    im      head   11.0    NaN
+21  1294206   lc     i      head    NaN    NaN
 </pre></div>
 </div>
 </div>
@@ -464,7 +514,11 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:graspologic.layouts.auto:Directed graph converted to undirected graph for community detection
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:800: FutureWarning: The default initialization in TSNE will change from &#39;random&#39; to &#39;pca&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:810: FutureWarning: The default learning rate in TSNE will change from 200.0 to &#39;auto&#39; in 1.2.
+  warnings.warn(
+WARNING:graspologic.layouts.auto:Directed graph converted to undirected graph for community detection
 </pre></div>
 </div>
 </div>
@@ -580,7 +634,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.2420124862284245
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.234237536656892
 </pre></div>
 </div>
 </div>
@@ -652,7 +706,7 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>Number of nodes</th>
-      <td>2723</td>
+      <td>2728</td>
       <td>2723.000000</td>
       <td>2728.0000</td>
     </tr>
@@ -664,19 +718,19 @@ title="Print to PDF"
     </tr>
     <tr>
       <th>Graph density</th>
-      <td>0.001558</td>
+      <td>0.001553</td>
       <td>0.001558</td>
       <td>0.0015</td>
     </tr>
     <tr>
       <th>Modularity</th>
       <td>N/A</td>
-      <td>0.649407</td>
+      <td>0.647185</td>
       <td>0.6200</td>
     </tr>
     <tr>
       <th>Avg. degree</th>
-      <td>4.242012</td>
+      <td>4.234238</td>
       <td>4.242012</td>
       <td>4.1000</td>
     </tr>

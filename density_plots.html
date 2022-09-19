@@ -54,7 +54,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="References" href="references.html" />
+    <link rel="next" title="Group Connection Testing" href="sbm_tests.html" />
     <link rel="prev" title="Generate Upsetplots" href="gen_upsetplots.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
@@ -139,6 +139,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Density Tests
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="sbm_tests.html">
+   Group Connection Testing
   </a>
  </li>
 </ul>
@@ -378,8 +383,7 @@ title="Print to PDF"
 <p>In this notebook we will be getting densities of the adjacency matrices representing the neurons in different sections of the larva (hemispheres and segments). We will then test if there is any statistical significance between the densities across hemispheres/segments.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymaid</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -396,7 +400,7 @@ title="Print to PDF"
 <span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">is_fully_connected</span><span class="p">,</span> <span class="n">largest_connected_component</span><span class="p">,</span> <span class="n">is_symmetric</span><span class="p">,</span> <span class="n">symmetrize</span>
 <span class="kn">from</span> <span class="nn">graspologic.inference</span> <span class="kn">import</span> <span class="n">erdos_renyi_test</span>
 <span class="kn">from</span> <span class="nn">statsmodels.stats.proportion</span> <span class="kn">import</span> <span class="n">proportion_confint</span>
-<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_connectome_lcc_annotations</span><span class="p">,</span> <span class="n">load_connectome_lcc_adj</span>
+<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_connectome_normal_lcc_annotations</span><span class="p">,</span> <span class="n">load_connectome_lcc_normal_adj</span>
 </pre></div>
 </div>
 </div>
@@ -405,10 +409,10 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folder</span> <span class="o">=</span> <span class="n">_get_folder</span><span class="p">()</span>
-<span class="n">annotations</span> <span class="o">=</span> <span class="n">load_connectome_lcc_annotations</span><span class="p">()</span>
+<span class="n">annotations</span> <span class="o">=</span> <span class="n">load_connectome_normal_lcc_annotations</span><span class="p">()</span>
 <span class="n">annotations</span> <span class="o">=</span> <span class="n">annotations</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;N/A&quot;</span><span class="p">)</span>
 
-<span class="n">connec_lcc_adj</span> <span class="o">=</span> <span class="n">load_connectome_lcc_adj</span><span class="p">()</span>
+<span class="n">connec_lcc_adj</span> <span class="o">=</span> <span class="n">load_connectome_lcc_normal_adj</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -458,7 +462,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RangeIndex(start=0, stop=2723, step=1)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RangeIndex(start=0, stop=2701, step=1)
 </pre></div>
 </div>
 </div>
@@ -643,7 +647,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.00013761343409455663
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.005929779366970326
 </pre></div>
 </div>
 </div>
@@ -672,6 +676,8 @@ title="Print to PDF"
     <span class="n">pval_df</span><span class="p">[</span><span class="n">label</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pval</span>
 <span class="n">pval_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;er_pvals_segments.csv&quot;</span><span class="p">)</span>
 <span class="n">pval_df</span>
+<span class="c1">#make heatmap (p vals for sbm test as example in bilat symmetry)</span>
+<span class="c1">#use upper triangle</span>
 </pre></div>
 </div>
 </div>
@@ -706,55 +712,55 @@ title="Print to PDF"
     <tr>
       <th>head</th>
       <td>0.000000e+00</td>
-      <td>9.649905e-40</td>
-      <td>1.200484e-03</td>
-      <td>5.160869e-13</td>
-      <td>7.972045e-05</td>
-      <td>3.456650e-06</td>
+      <td>1.029170e-29</td>
+      <td>1.571274e-03</td>
+      <td>1.510355e-11</td>
+      <td>9.314309e-04</td>
+      <td>3.182693e-05</td>
     </tr>
     <tr>
       <th>pygidium</th>
-      <td>9.649905e-40</td>
+      <td>1.029170e-29</td>
       <td>0.000000e+00</td>
-      <td>4.823020e-19</td>
-      <td>1.519026e-51</td>
-      <td>6.562790e-45</td>
-      <td>3.239173e-46</td>
+      <td>2.242307e-16</td>
+      <td>4.610634e-39</td>
+      <td>2.737831e-33</td>
+      <td>1.294301e-34</td>
     </tr>
     <tr>
       <th>0</th>
-      <td>1.200484e-03</td>
-      <td>4.823020e-19</td>
+      <td>1.571274e-03</td>
+      <td>2.242307e-16</td>
       <td>0.000000e+00</td>
-      <td>3.894585e-02</td>
-      <td>7.133094e-03</td>
+      <td>3.870680e-02</td>
+      <td>7.185830e-03</td>
       <td>1.145437e-02</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>5.160869e-13</td>
-      <td>1.519026e-51</td>
-      <td>3.894585e-02</td>
+      <td>1.510355e-11</td>
+      <td>4.610634e-39</td>
+      <td>3.870680e-02</td>
       <td>0.000000e+00</td>
-      <td>8.803506e-04</td>
-      <td>2.711660e-02</td>
+      <td>6.316228e-04</td>
+      <td>2.462645e-02</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>7.972045e-05</td>
-      <td>6.562790e-45</td>
-      <td>7.133094e-03</td>
-      <td>8.803506e-04</td>
+      <td>9.314309e-04</td>
+      <td>2.737831e-33</td>
+      <td>7.185830e-03</td>
+      <td>6.316228e-04</td>
       <td>0.000000e+00</td>
-      <td>3.224518e-01</td>
+      <td>3.009934e-01</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>3.456650e-06</td>
-      <td>3.239173e-46</td>
+      <td>3.182693e-05</td>
+      <td>1.294301e-34</td>
       <td>1.145437e-02</td>
-      <td>2.711660e-02</td>
-      <td>3.224518e-01</td>
+      <td>2.462645e-02</td>
+      <td>3.009934e-01</td>
       <td>0.000000e+00</td>
     </tr>
   </tbody>
@@ -944,10 +950,10 @@ title="Print to PDF"
             <p class="prev-next-title">Generate Upsetplots</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="references.html" title="next page">
+    <a class='right-next' id="next-link" href="sbm_tests.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">References</p>
+        <p class="prev-next-title">Group Connection Testing</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

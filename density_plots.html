@@ -404,6 +404,51 @@ title="Print to PDF"
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>        skids side class segment   type  group
+0     2015233    l     s    head  100.0    NaN
+1     1548290    l   NaN       1    NaN    NaN
+2     1318919    l     s    head   88.0   15.0
+3     2015241    l     s    head  100.0    NaN
+4     1646603    r   NaN       3    NaN    NaN
+...       ...  ...   ...     ...    ...    ...
+2696  1302513    l     s    head    NaN    NaN
+2697  1630186    l   NaN       2    NaN    NaN
+2698  1441779    r   NaN    head    NaN    NaN
+2699  1671147    r     m       1  165.0    NaN
+2700  1048573    l     i       3    NaN    NaN
+
+[2701 rows x 6 columns]
+      skids side class   segment   type  group
+0   2007060   lr     i      head    NaN    NaN
+1    139303   lr     s         1  102.0    NaN
+2   2007344    l    im      head  166.0    NaN
+3   1016172    l    im         1    NaN    NaN
+4   1999932    r    sm         1   95.0    NaN
+5   1320159   rc     i      head    NaN    NaN
+6   1631592   lc   NaN  pygidium    NaN    NaN
+7   1418928   lc     s      head  132.0    NaN
+8   1320798   lc     s      head    NaN    NaN
+9    370978    r    sm  pygidium   54.0    9.0
+10    84457   rc   NaN      head    NaN    NaN
+11  1462145    l    im         1    NaN    NaN
+12   307194   rc     s      head  135.0    NaN
+13  1462664   rc   NaN         2    NaN    NaN
+14  1594313    r    sm  pygidium   93.0    9.0
+15  1332516   rc     s      head   49.0    NaN
+16  1366160   rc     i  pygidium    NaN    1.0
+17    64258   lr     s         1   36.0    NaN
+18  1276971    l    sm         2   80.0    NaN
+19    81251   lc     s      head   43.0    NaN
+20  1302189    r    im      head   11.0    NaN
+21  1294206   lc     i      head    NaN    NaN
+</pre></div>
+</div>
+</div>
 </div>
 <p>Let us first import the annotations table that we made in the <code class="docutils literal notranslate"><span class="pre">data_summary_v2.ipynb</span></code> file</p>
 <div class="cell docutils container">
@@ -767,6 +812,50 @@ title="Print to PDF"
 </table>
 </div></div></div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#heatmap of pvals</span>
+<span class="n">bool_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">pval_df</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">pval_df</span><span class="p">),</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">pval_df</span><span class="p">)]</span>
+<span class="c1">#mask upper triangle + diagonal</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pval_df</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu&quot;</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">bool_mat</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Heatmap of uncorrected log pvals of ER tests across segments&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;uncorrected_ER_test_heatmap.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/pandas/core/internals/blocks.py:352: RuntimeWarning: divide by zero encountered in log10
+  result = func(self.values, **kwargs)
+</pre></div>
+</div>
+<img alt="_images/density_plots_30_1.png" src="_images/density_plots_30_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#bonferroni correction for pvals</span>
+<span class="kn">from</span> <span class="nn">statsmodels.stats.multitest</span> <span class="kn">import</span> <span class="n">multipletests</span>
+<span class="n">np_pvals</span> <span class="o">=</span> <span class="n">pval_df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">corrected_pvals</span> <span class="o">=</span> <span class="n">multipletests</span><span class="p">(</span><span class="n">np_pvals</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)))</span>
+<span class="n">corrected_pvals_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">corrected_pvals</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+<span class="n">corrected_pvals_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;er_corrected_pvals_segments.csv&quot;</span><span class="p">)</span>
+
+<span class="c1">#heatmap of corrected pvals</span>
+<span class="n">bool_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">corrected_pvals_df</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">corrected_pvals_df</span><span class="p">),</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">corrected_pvals_df</span><span class="p">)]</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">corrected_pvals_df</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu&quot;</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">bool_mat</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Heatmap of corrected log pvals of ER tests across segments&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;corrected_ER_test_heatmap.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/pandas/core/internals/blocks.py:352: RuntimeWarning: divide by zero encountered in log10
+  result = func(self.values, **kwargs)
+</pre></div>
+</div>
+<img alt="_images/density_plots_31_1.png" src="_images/density_plots_31_1.png" />
+</div>
+</div>
 <p>The following methods will allow us to plot the density of the sections that we are interested in, as well as the pvalue after running the <code class="docutils literal notranslate"><span class="pre">erdos_renyi_test</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -872,7 +961,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/density_plots_34_0.png" src="_images/density_plots_34_0.png" />
+<img alt="_images/density_plots_36_0.png" src="_images/density_plots_36_0.png" />
 </div>
 </div>
 <p>To make comparisons for the segments, we will make two lists: one that has every pairwise combination of the segment names and the other of the pairwise combination of the respective adjs</p>
@@ -897,21 +986,21 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/density_plots_38_0.png" src="_images/density_plots_38_0.png" />
-<img alt="_images/density_plots_38_1.png" src="_images/density_plots_38_1.png" />
-<img alt="_images/density_plots_38_2.png" src="_images/density_plots_38_2.png" />
-<img alt="_images/density_plots_38_3.png" src="_images/density_plots_38_3.png" />
-<img alt="_images/density_plots_38_4.png" src="_images/density_plots_38_4.png" />
-<img alt="_images/density_plots_38_5.png" src="_images/density_plots_38_5.png" />
-<img alt="_images/density_plots_38_6.png" src="_images/density_plots_38_6.png" />
-<img alt="_images/density_plots_38_7.png" src="_images/density_plots_38_7.png" />
-<img alt="_images/density_plots_38_8.png" src="_images/density_plots_38_8.png" />
-<img alt="_images/density_plots_38_9.png" src="_images/density_plots_38_9.png" />
-<img alt="_images/density_plots_38_10.png" src="_images/density_plots_38_10.png" />
-<img alt="_images/density_plots_38_11.png" src="_images/density_plots_38_11.png" />
-<img alt="_images/density_plots_38_12.png" src="_images/density_plots_38_12.png" />
-<img alt="_images/density_plots_38_13.png" src="_images/density_plots_38_13.png" />
-<img alt="_images/density_plots_38_14.png" src="_images/density_plots_38_14.png" />
+<img alt="_images/density_plots_40_0.png" src="_images/density_plots_40_0.png" />
+<img alt="_images/density_plots_40_1.png" src="_images/density_plots_40_1.png" />
+<img alt="_images/density_plots_40_2.png" src="_images/density_plots_40_2.png" />
+<img alt="_images/density_plots_40_3.png" src="_images/density_plots_40_3.png" />
+<img alt="_images/density_plots_40_4.png" src="_images/density_plots_40_4.png" />
+<img alt="_images/density_plots_40_5.png" src="_images/density_plots_40_5.png" />
+<img alt="_images/density_plots_40_6.png" src="_images/density_plots_40_6.png" />
+<img alt="_images/density_plots_40_7.png" src="_images/density_plots_40_7.png" />
+<img alt="_images/density_plots_40_8.png" src="_images/density_plots_40_8.png" />
+<img alt="_images/density_plots_40_9.png" src="_images/density_plots_40_9.png" />
+<img alt="_images/density_plots_40_10.png" src="_images/density_plots_40_10.png" />
+<img alt="_images/density_plots_40_11.png" src="_images/density_plots_40_11.png" />
+<img alt="_images/density_plots_40_12.png" src="_images/density_plots_40_12.png" />
+<img alt="_images/density_plots_40_13.png" src="_images/density_plots_40_13.png" />
+<img alt="_images/density_plots_40_14.png" src="_images/density_plots_40_14.png" />
 </div>
 </div>
 </section>

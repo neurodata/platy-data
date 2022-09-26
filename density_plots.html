@@ -399,53 +399,9 @@ title="Print to PDF"
 <span class="kn">from</span> <span class="nn">graspologic.plot.plot</span> <span class="kn">import</span> <span class="n">networkplot</span>
 <span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">is_fully_connected</span><span class="p">,</span> <span class="n">largest_connected_component</span><span class="p">,</span> <span class="n">is_symmetric</span><span class="p">,</span> <span class="n">symmetrize</span>
 <span class="kn">from</span> <span class="nn">graspologic.inference</span> <span class="kn">import</span> <span class="n">erdos_renyi_test</span>
-<span class="kn">from</span> <span class="nn">statsmodels.stats.proportion</span> <span class="kn">import</span> <span class="n">proportion_confint</span>
+<span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">adjplot</span><span class="p">,</span> <span class="n">matrixplot</span>
+<span class="kn">from</span> <span class="nn">statsmodels.stats.proportion</span> <span class="kn">import</span> <span class="n">proportion_confint</span><span class="p">,</span> <span class="n">multinomial_proportions_confint</span>
 <span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_connectome_normal_lcc_annotations</span><span class="p">,</span> <span class="n">load_connectome_lcc_normal_adj</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
-  from .autonotebook import tqdm as notebook_tqdm
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>        skids side class segment   type  group
-0     2015233    l     s    head  100.0    NaN
-1     1548290    l   NaN       1    NaN    NaN
-2     1318919    l     s    head   88.0   15.0
-3     2015241    l     s    head  100.0    NaN
-4     1646603    r   NaN       3    NaN    NaN
-...       ...  ...   ...     ...    ...    ...
-2696  1302513    l     s    head    NaN    NaN
-2697  1630186    l   NaN       2    NaN    NaN
-2698  1441779    r   NaN    head    NaN    NaN
-2699  1671147    r     m       1  165.0    NaN
-2700  1048573    l     i       3    NaN    NaN
-
-[2701 rows x 6 columns]
-      skids side class   segment   type  group
-0   2007060   lr     i      head    NaN    NaN
-1    139303   lr     s         1  102.0    NaN
-2   2007344    l    im      head  166.0    NaN
-3   1016172    l    im         1    NaN    NaN
-4   1999932    r    sm         1   95.0    NaN
-5   1320159   rc     i      head    NaN    NaN
-6   1631592   lc   NaN  pygidium    NaN    NaN
-7   1418928   lc     s      head  132.0    NaN
-8   1320798   lc     s      head    NaN    NaN
-9    370978    r    sm  pygidium   54.0    9.0
-10    84457   rc   NaN      head    NaN    NaN
-11  1462145    l    im         1    NaN    NaN
-12   307194   rc     s      head  135.0    NaN
-13  1462664   rc   NaN         2    NaN    NaN
-14  1594313    r    sm  pygidium   93.0    9.0
-15  1332516   rc     s      head   49.0    NaN
-16  1366160   rc     i  pygidium    NaN    1.0
-17    64258   lr     s         1   36.0    NaN
-18  1276971    l    sm         2   80.0    NaN
-19    81251   lc     s      head   43.0    NaN
-20  1302189    r    im      head   11.0    NaN
-21  1294206   lc     i      head    NaN    NaN
 </pre></div>
 </div>
 </div>
@@ -703,12 +659,10 @@ title="Print to PDF"
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#6 by 6 df of pvals of the segments</span>
 <span class="n">labels_segments</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dens_segments</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 <span class="n">adj_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np_segments</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-<span class="c1">#densities_segments = list(dens_segments.values())</span>
 
 <span class="c1">#make pairwise combination list of all elements in list </span>
 <span class="n">pairwise_labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">labels_segments</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="n">pairwise_adjs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">adj_list</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="c1">#pairwise_dens = list(itertools.combinations(densities_segments, 2))</span>
 
 <span class="c1">#initialize dataframe</span>
 <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">]</span>
@@ -814,21 +768,60 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#plot pvals for pairwise er tests between segments</span>
+<span class="k">def</span> <span class="nf">plot_pvals</span><span class="p">(</span><span class="n">pval_df</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="c1">#make upper triangle and diag vals 0</span>
+    <span class="n">pval_lt</span> <span class="o">=</span> <span class="n">pval_df</span><span class="o">.</span><span class="n">mask</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">pval_df</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">)))</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">bool_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">pval_df</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">pval_df</span><span class="p">),</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">pval_df</span><span class="p">)]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pval_lt</span><span class="p">))</span>
+    <span class="n">segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;segment&quot;</span><span class="p">:</span> <span class="n">names</span><span class="p">}</span>
+    <span class="n">segments_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">segments_df</span><span class="p">)</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">adjplot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pval_lt</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">meta</span><span class="o">=</span><span class="n">segments_df</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;segment&quot;</span><span class="p">)</span>
+    <span class="n">im2</span> <span class="o">=</span> <span class="n">adjplot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pval_lt</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">meta</span><span class="o">=</span><span class="n">segments_df</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;segment&quot;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;segment&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+    <span class="c1">#im = matrixplot(np.log10(pval_lt).to_numpy(), ax=ax, col_meta=names, row_meta=names, row_color=names, col_color=names)</span>
+    <span class="k">return</span> <span class="n">ax</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#heatmap of pvals</span>
-<span class="n">bool_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">pval_df</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">pval_df</span><span class="p">),</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">pval_df</span><span class="p">)]</span>
-<span class="c1">#mask upper triangle + diagonal</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pval_df</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu&quot;</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">bool_mat</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Heatmap of uncorrected log pvals of ER tests across segments&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;uncorrected_ER_test_heatmap.png&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="n">names_mod</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+<span class="n">names_mod</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;pyg&quot;</span>
+<span class="n">plot_pvals</span><span class="p">(</span><span class="n">pval_df</span><span class="p">,</span> <span class="n">names_mod</span><span class="p">)</span>
+<span class="c1">#plt.savefig(folder / &quot;uncorrected_ER_test_heatmap.png&quot;)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/pandas/core/internals/blocks.py:352: RuntimeWarning: divide by zero encountered in log10
-  result = func(self.values, **kwargs)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>               head   pygidium         0         1         2    3
+head       0.000000   0.000000  0.000000  0.000000  0.000000  0.0
+pygidium -28.987513   0.000000  0.000000  0.000000  0.000000  0.0
+0         -2.803748 -15.649305  0.000000  0.000000  0.000000  0.0
+1        -10.820921 -38.336239 -1.412213  0.000000  0.000000  0.0
+2         -3.030849 -32.562593 -2.143523 -3.199542  0.000000  0.0
+3         -4.497205 -33.887965 -1.941029 -1.608598 -0.521443  0.0
+  segment
+0    head
+1     pyg
+2       0
+3       1
+4       2
+5       3
 </pre></div>
 </div>
-<img alt="_images/density_plots_30_1.png" src="_images/density_plots_30_1.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&lt;AxesSubplot:xlabel=&quot;[&#39;head&#39;, &#39;pyg&#39;, &#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;]&quot;, ylabel=&quot;[&#39;head&#39;, &#39;pyg&#39;, &#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;]&quot;&gt;,
+       &lt;AxesSubplot:&gt;], dtype=object)
+</pre></div>
+</div>
+<img alt="_images/density_plots_31_2.png" src="_images/density_plots_31_2.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -840,9 +833,9 @@ title="Print to PDF"
 <span class="n">corrected_pvals_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">corrected_pvals</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
 <span class="n">corrected_pvals_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;er_corrected_pvals_segments.csv&quot;</span><span class="p">)</span>
 
-<span class="c1">#heatmap of corrected pvals</span>
+<span class="c1">#heatmap of corrected pvals (use rest of code)</span>
 <span class="n">bool_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">corrected_pvals_df</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">corrected_pvals_df</span><span class="p">),</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">corrected_pvals_df</span><span class="p">)]</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">corrected_pvals_df</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu&quot;</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">bool_mat</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">corrected_pvals_df</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu&quot;</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">bool_mat</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Heatmap of corrected log pvals of ER tests across segments&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;corrected_ER_test_heatmap.png&quot;</span><span class="p">)</span>
 </pre></div>
@@ -853,8 +846,209 @@ title="Print to PDF"
   result = func(self.values, **kwargs)
 </pre></div>
 </div>
-<img alt="_images/density_plots_31_1.png" src="_images/density_plots_31_1.png" />
+<img alt="_images/density_plots_32_1.png" src="_images/density_plots_32_1.png" />
 </div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N</span><span class="o">=</span><span class="mi">50</span>
+<span class="n">meta</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;hemisphere&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">),</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+        <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+        <span class="s1">&#39;cell_size&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">N</span><span class="p">)},</span>
+<span class="p">)</span>
+<span class="n">meta</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>hemisphere</th>
+      <th>region</th>
+      <th>cell_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>195</th>
+      <td>1</td>
+      <td>1</td>
+      <td>195</td>
+    </tr>
+    <tr>
+      <th>196</th>
+      <td>1</td>
+      <td>1</td>
+      <td>196</td>
+    </tr>
+    <tr>
+      <th>197</th>
+      <td>1</td>
+      <td>1</td>
+      <td>197</td>
+    </tr>
+    <tr>
+      <th>198</th>
+      <td>1</td>
+      <td>1</td>
+      <td>198</td>
+    </tr>
+    <tr>
+      <th>199</th>
+      <td>1</td>
+      <td>1</td>
+      <td>199</td>
+    </tr>
+  </tbody>
+</table>
+<p>200 rows × 3 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corrected_pvals_df</span> <span class="o">&lt;</span> <span class="mf">0.05</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>head</th>
+      <th>pygidium</th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>head</th>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>pygidium</th>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <p>The following methods will allow us to plot the density of the sections that we are interested in, as well as the pvalue after running the <code class="docutils literal notranslate"><span class="pre">erdos_renyi_test</span></code></p>
 <div class="cell docutils container">
@@ -875,7 +1069,7 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_density</span><span class="p">(</span><span class="n">pval</span><span class="p">,</span> <span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">,</span> <span class="n">misc</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coverage</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_density_bin</span><span class="p">(</span><span class="n">pval</span><span class="p">,</span> <span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">,</span> <span class="n">misc</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coverage</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
@@ -889,11 +1083,12 @@ title="Print to PDF"
     <span class="n">n_edges_second</span> <span class="o">=</span> <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;observed2&quot;</span><span class="p">]</span>
 
     <span class="n">first_lower</span><span class="p">,</span> <span class="n">first_upper</span> <span class="o">=</span> <span class="n">proportion_confint</span><span class="p">(</span>
-        <span class="n">n_edges_first</span><span class="p">,</span> <span class="n">n_possible_first</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="n">coverage</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;beta&quot;</span>
+        <span class="n">n_edges_first</span><span class="p">,</span> <span class="n">n_possible_first</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="n">coverage</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span>
     <span class="p">)</span>
     <span class="n">second_lower</span><span class="p">,</span> <span class="n">second_upper</span> <span class="o">=</span> <span class="n">proportion_confint</span><span class="p">(</span>
-        <span class="n">n_edges_second</span><span class="p">,</span> <span class="n">n_possible_second</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="n">coverage</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;beta&quot;</span>
+        <span class="n">n_edges_second</span><span class="p">,</span> <span class="n">n_possible_second</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="n">coverage</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span>
     <span class="p">)</span>
+    
 
     <span class="n">halfwidth</span> <span class="o">=</span> <span class="mf">0.1</span>
     <span class="n">linewidth</span> <span class="o">=</span> <span class="mi">4</span>
@@ -930,7 +1125,7 @@ title="Print to PDF"
         <span class="n">yticks</span><span class="o">=</span><span class="n">yticks</span><span class="p">,</span>
         <span class="c1"># ylim=(0, max(right_upper, left_upper) * 1.05),</span>
         <span class="n">ylabel</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;Estimated density ($\hat</span><span class="si">{p}</span><span class="s2">$)&quot;</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> vs </span><span class="si">{}</span><span class="s2">; pval: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">,</span> <span class="n">pval</span><span class="p">)</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> vs </span><span class="si">{}</span><span class="s2">; pval: </span><span class="si">{}</span><span class="s2">, method: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="n">scale</span> <span class="o">=</span> <span class="mf">0.04</span>
     <span class="n">line_shift</span> <span class="o">=</span> <span class="mf">0.000005</span>
@@ -955,13 +1150,20 @@ title="Print to PDF"
 <p>We plot the densities for adjs of the left and right hemisphere</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_density</span><span class="p">(</span><span class="n">pval_hemis</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">np_hemis</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">np_hemis</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">1</span><span class="p">],</span> <span class="n">misc</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_density_bin</span><span class="p">(</span><span class="n">pval_hemis</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">np_hemis</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">np_hemis</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">1</span><span class="p">],</span> <span class="n">misc_hemis</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;beta&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;density_plots/</span><span class="si">{}</span><span class="s2"> vs </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">),</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/density_plots_36_0.png" src="_images/density_plots_36_0.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.001708424262795441 0.0018305779447240762 0.001829632006604465 0.001957388868456069
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 400x600 with 1 Axes&gt;,
+ &lt;AxesSubplot:title={&#39;center&#39;:&#39;l vs r; pval: 0.005929779366970326, method: beta&#39;}, xlabel=&#39;Section&#39;, ylabel=&#39;Estimated density ($\\hat{p}$)&#39;&gt;)
+</pre></div>
+</div>
+<img alt="_images/density_plots_39_2.png" src="_images/density_plots_39_2.png" />
 </div>
 </div>
 <p>To make comparisons for the segments, we will make two lists: one that has every pairwise combination of the segment names and the other of the pairwise combination of the respective adjs</p>
@@ -980,27 +1182,27 @@ title="Print to PDF"
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">pair_key</span><span class="p">,</span> <span class="n">pair_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
     <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">misc</span> <span class="o">=</span> <span class="n">erdos_renyi_test</span><span class="p">(</span><span class="n">pair_val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair_val</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">plot_density</span><span class="p">(</span><span class="n">pval</span><span class="p">,</span> <span class="n">pair_key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair_key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">misc</span><span class="p">)</span>
+    <span class="n">plot_density_bin</span><span class="p">(</span><span class="n">pval</span><span class="p">,</span> <span class="n">pair_key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair_key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">misc</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;density_plots&quot;</span> <span class="o">/</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> vs </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pair_key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair_key</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/density_plots_40_0.png" src="_images/density_plots_40_0.png" />
-<img alt="_images/density_plots_40_1.png" src="_images/density_plots_40_1.png" />
-<img alt="_images/density_plots_40_2.png" src="_images/density_plots_40_2.png" />
-<img alt="_images/density_plots_40_3.png" src="_images/density_plots_40_3.png" />
-<img alt="_images/density_plots_40_4.png" src="_images/density_plots_40_4.png" />
-<img alt="_images/density_plots_40_5.png" src="_images/density_plots_40_5.png" />
-<img alt="_images/density_plots_40_6.png" src="_images/density_plots_40_6.png" />
-<img alt="_images/density_plots_40_7.png" src="_images/density_plots_40_7.png" />
-<img alt="_images/density_plots_40_8.png" src="_images/density_plots_40_8.png" />
-<img alt="_images/density_plots_40_9.png" src="_images/density_plots_40_9.png" />
-<img alt="_images/density_plots_40_10.png" src="_images/density_plots_40_10.png" />
-<img alt="_images/density_plots_40_11.png" src="_images/density_plots_40_11.png" />
-<img alt="_images/density_plots_40_12.png" src="_images/density_plots_40_12.png" />
-<img alt="_images/density_plots_40_13.png" src="_images/density_plots_40_13.png" />
-<img alt="_images/density_plots_40_14.png" src="_images/density_plots_40_14.png" />
+<img alt="_images/density_plots_43_0.png" src="_images/density_plots_43_0.png" />
+<img alt="_images/density_plots_43_1.png" src="_images/density_plots_43_1.png" />
+<img alt="_images/density_plots_43_2.png" src="_images/density_plots_43_2.png" />
+<img alt="_images/density_plots_43_3.png" src="_images/density_plots_43_3.png" />
+<img alt="_images/density_plots_43_4.png" src="_images/density_plots_43_4.png" />
+<img alt="_images/density_plots_43_5.png" src="_images/density_plots_43_5.png" />
+<img alt="_images/density_plots_43_6.png" src="_images/density_plots_43_6.png" />
+<img alt="_images/density_plots_43_7.png" src="_images/density_plots_43_7.png" />
+<img alt="_images/density_plots_43_8.png" src="_images/density_plots_43_8.png" />
+<img alt="_images/density_plots_43_9.png" src="_images/density_plots_43_9.png" />
+<img alt="_images/density_plots_43_10.png" src="_images/density_plots_43_10.png" />
+<img alt="_images/density_plots_43_11.png" src="_images/density_plots_43_11.png" />
+<img alt="_images/density_plots_43_12.png" src="_images/density_plots_43_12.png" />
+<img alt="_images/density_plots_43_13.png" src="_images/density_plots_43_13.png" />
+<img alt="_images/density_plots_43_14.png" src="_images/density_plots_43_14.png" />
 </div>
 </div>
 </section>

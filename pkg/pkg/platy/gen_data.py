@@ -242,5 +242,83 @@ def gen_weird_neurons_annots():
     weird_annots.to_csv(path + "/weird_annotations.csv", index_label="skids")
     return weird_annots
 
+def gen_left_adj():
+    skids_hemis = pd.read_csv(path + "/skids_hemi_classes.csv")
+    skids_left = skids_hemis["l"]
+    skids_left = [int(x) for x in skids_left if str(x) != "nan"]
 
-gen_normal_connectome_lcc_annotations()
+    adj_left = pymaid.adjacency_matrix(skids_left)
+    adj_left.to_csv(path + "/adj_left.csv")
+    return adj_left
+
+def gen_right_adj():
+    skids_hemis = pd.read_csv(path + "/skids_hemi_classes.csv")
+    skids_right = skids_hemis["r"]
+    skids_right = [int(x) for x in skids_right if str(x) != "nan"]
+
+    adj_right = pymaid.adjacency_matrix(skids_right)
+    adj_right.to_csv(path + "/adj_right.csv")
+
+    return adj_right
+
+def gen_head_adj():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes.csv")
+    skids_head = skids_segs["head"]
+    skids_head = [int(x) for x in skids_head if str(x) != "nan"]
+
+    adj_head = pymaid.adjacency_matrix(skids_head)
+    adj_head.to_csv(path + "/adj_head.csv")
+
+    return adj_head
+
+def gen_pygidium_adj():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes.csv")
+    skids_pyg = skids_segs["pygidium"]
+    skids_pyg = [int(x) for x in skids_pyg if str(x) != "nan"]
+
+    adj_pyg = pymaid.adjacency_matrix(skids_pyg)
+    adj_pyg.to_csv(path + "/adj_pygidium.csv")
+
+    return adj_pyg
+
+def gen_0_adj():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes.csv")
+    skids_0 = skids_segs["0"]
+    skids_0 = [int(x) for x in skids_0 if str(x) != "nan"]
+
+    adj_0 = pymaid.adjacency_matrix(skids_0)
+    adj_0.to_csv(path + "/adj_0.csv")
+
+    return adj_0
+
+def gen_1_adj():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes.csv")
+    skids_1 = skids_segs["1"]
+    skids_1 = [int(x) for x in skids_1 if str(x) != "nan"]
+
+    adj_1 = pymaid.adjacency_matrix(skids_1)
+    adj_1.to_csv(path + "/adj_1.csv")
+
+    return adj_1
+
+def gen_2_adj():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes.csv")
+    skids_2 = skids_segs["2"]
+    skids_2 = [int(x) for x in skids_2 if str(x) != "nan"]
+
+    adj_2 = pymaid.adjacency_matrix(skids_2)
+    adj_2.to_csv(path + "/adj_2.csv")
+
+    return adj_2
+
+def gen_3_adj():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes.csv")
+    skids_3 = skids_segs["3"]
+    skids_3 = [int(x) for x in skids_3 if str(x) != "nan"]
+
+    adj_3 = pymaid.adjacency_matrix(skids_3)
+    adj_3.to_csv(path + "/adj_3.csv")
+
+    return adj_3
+
+print(gen_3_adj())

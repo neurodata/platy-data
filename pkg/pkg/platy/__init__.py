@@ -8,7 +8,14 @@ from .load_data import (
     load_connectome_lcc_annotations,
     load_connectome_normal_lcc_annotations,
     load_weird_annotations,
+    load_left_adj_labels,
+    load_right_adj_labels,
+    load_0_adj_labels,
+    load_1_adj_labels,
+    load_2_adj_labels,
+    load_3_adj_labels,
 )
+
 
 __all__ = [
     "_get_folder",
@@ -19,4 +26,10 @@ __all__ = [
     "load_connectome_lcc_annotations",
     "load_connectome_normal_lcc_annotations",
     "load_weird_annotations",
+    "load_left_adj_labels",
+    "load_right_adj_labels",
+    "load_0_adj_labels",
+    "load_1_adj_labels",
+    "load_2_adj_labels",
+    "load_3_adj_labels",
 ]

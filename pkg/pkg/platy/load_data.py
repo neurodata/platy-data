@@ -82,6 +82,7 @@ def load_weird_annotations():
 def load_left_adj_labels():
     dir1 = DATA_PATH / "adj_left.csv"
     left_adj = pd.read_csv(dir1)
+    left_adj = left_adj.set_axis(list(left_adj), axis="index")
 
     dir2 = DATA_PATH / "labels_hemi_classes.csv"
     hemi_labels = pd.read_csv(dir2)
@@ -94,19 +95,20 @@ def load_left_adj_labels():
 def load_right_adj_labels():
     dir1 = DATA_PATH / "adj_right.csv"
     right_adj = pd.read_csv(dir1)
+    right_adj = right_adj.set_axis(list(right_adj), axis="index")
 
     dir2 = DATA_PATH / "labels_hemi_classes.csv"
     hemi_labels = pd.read_csv(dir2)
     right_labels = hemi_labels["r"]
     right_labels = [x for x in right_labels if str(x) != "nan"]
 
-    print(len(right_labels))
     return right_adj, right_labels
 
 
 def load_head_adj_labels():
     dir1 = DATA_PATH / "adj_head.csv"
     head_adj = pd.read_csv(dir1)
+    head_adj = head_adj.set_axis(list(head_adj), axis="index")
 
     dir2 = DATA_PATH / "labels_segs_classes.csv"
     segs_labels = pd.read_csv(dir2)
@@ -119,6 +121,7 @@ def load_head_adj_labels():
 def load_pygidium_adj_labels():
     dir1 = DATA_PATH / "adj_pygidium.csv"
     pyg_adj = pd.read_csv(dir1)
+    pyg_adj = pyg_adj.set_axis(list(pyg_adj), axis="index")
 
     dir2 = DATA_PATH / "labels_segs_classes.csv"
     segs_labels = pd.read_csv(dir2)
@@ -131,6 +134,7 @@ def load_pygidium_adj_labels():
 def load_0_adj_labels():
     dir1 = DATA_PATH / "adj_0.csv"
     adj_0 = pd.read_csv(dir1)
+    adj_0 = adj_0.set_axis(list(adj_0), axis="index")
 
     dir2 = DATA_PATH / "labels_segs_classes.csv"
     segs_labels = pd.read_csv(dir2)
@@ -143,6 +147,7 @@ def load_0_adj_labels():
 def load_1_adj_labels():
     dir1 = DATA_PATH / "adj_1.csv"
     adj_1 = pd.read_csv(dir1)
+    adj_1 = adj_1.set_axis(list(adj_1), axis="index")
 
     dir2 = DATA_PATH / "labels_segs_classes.csv"
     segs_labels = pd.read_csv(dir2)
@@ -155,6 +160,7 @@ def load_1_adj_labels():
 def load_2_adj_labels():
     dir1 = DATA_PATH / "adj_2.csv"
     adj_2 = pd.read_csv(dir1)
+    adj_2 = adj_2.set_axis(list(adj_2), axis="index")
 
     dir2 = DATA_PATH / "labels_segs_classes.csv"
     segs_labels = pd.read_csv(dir2)
@@ -167,6 +173,7 @@ def load_2_adj_labels():
 def load_3_adj_labels():
     dir1 = DATA_PATH / "adj_3.csv"
     adj_3 = pd.read_csv(dir1)
+    adj_3 = adj_3.set_axis(list(adj_3), axis="index")
 
     dir2 = DATA_PATH / "labels_segs_classes.csv"
     segs_labels = pd.read_csv(dir2)
@@ -174,3 +181,7 @@ def load_3_adj_labels():
     labels_3 = [x for x in labels_3 if str(x) != "nan"]
 
     return adj_3, labels_3
+
+
+left_adj, left_labels = load_left_adj_labels()
+print(left_adj)

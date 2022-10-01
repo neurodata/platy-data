@@ -248,7 +248,7 @@ def gen_left_adj():
     skids_left = [int(x) for x in skids_left if str(x) != "nan"]
 
     adj_left = pymaid.adjacency_matrix(skids_left)
-    adj_left.to_csv(path + "/adj_left.csv")
+    adj_left.to_csv(path + "/adj_left.csv", index=False)
     return adj_left
 
 def gen_right_adj():
@@ -257,7 +257,7 @@ def gen_right_adj():
     skids_right = [int(x) for x in skids_right if str(x) != "nan"]
 
     adj_right = pymaid.adjacency_matrix(skids_right)
-    adj_right.to_csv(path + "/adj_right.csv")
+    adj_right.to_csv(path + "/adj_right.csv", index=False)
 
     return adj_right
 
@@ -267,7 +267,7 @@ def gen_head_adj():
     skids_head = [int(x) for x in skids_head if str(x) != "nan"]
 
     adj_head = pymaid.adjacency_matrix(skids_head)
-    adj_head.to_csv(path + "/adj_head.csv")
+    adj_head.to_csv(path + "/adj_head.csv", index=False)
 
     return adj_head
 
@@ -277,7 +277,7 @@ def gen_pygidium_adj():
     skids_pyg = [int(x) for x in skids_pyg if str(x) != "nan"]
 
     adj_pyg = pymaid.adjacency_matrix(skids_pyg)
-    adj_pyg.to_csv(path + "/adj_pygidium.csv")
+    adj_pyg.to_csv(path + "/adj_pygidium.csv", index=False)
 
     return adj_pyg
 
@@ -287,7 +287,7 @@ def gen_0_adj():
     skids_0 = [int(x) for x in skids_0 if str(x) != "nan"]
 
     adj_0 = pymaid.adjacency_matrix(skids_0)
-    adj_0.to_csv(path + "/adj_0.csv")
+    adj_0.to_csv(path + "/adj_0.csv", index=False)
 
     return adj_0
 
@@ -297,7 +297,7 @@ def gen_1_adj():
     skids_1 = [int(x) for x in skids_1 if str(x) != "nan"]
 
     adj_1 = pymaid.adjacency_matrix(skids_1)
-    adj_1.to_csv(path + "/adj_1.csv")
+    adj_1.to_csv(path + "/adj_1.csv", index=False)
 
     return adj_1
 
@@ -307,7 +307,7 @@ def gen_2_adj():
     skids_2 = [int(x) for x in skids_2 if str(x) != "nan"]
 
     adj_2 = pymaid.adjacency_matrix(skids_2)
-    adj_2.to_csv(path + "/adj_2.csv")
+    adj_2.to_csv(path + "/adj_2.csv", index=False)
 
     return adj_2
 
@@ -317,8 +317,8 @@ def gen_3_adj():
     skids_3 = [int(x) for x in skids_3 if str(x) != "nan"]
 
     adj_3 = pymaid.adjacency_matrix(skids_3)
-    adj_3.to_csv(path + "/adj_3.csv")
+    adj_3.to_csv(path + "/adj_3.csv", index=False)
 
     return adj_3
 
-print(gen_3_adj())
+print(gen_left_adj())

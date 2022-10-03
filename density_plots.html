@@ -769,20 +769,25 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#plot pvals for pairwise er tests between segments</span>
-<span class="k">def</span> <span class="nf">plot_pvals</span><span class="p">(</span><span class="n">pval_df</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">plot_pvals</span><span class="p">(</span><span class="n">pval_df</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+    <span class="c1">#if ax == None:</span>
+    <span class="c1">#    fig, ax = plt.subplots(1, 2, figsize=(10, 10))</span>
     <span class="c1">#make upper triangle and diag vals 0</span>
     <span class="n">pval_lt</span> <span class="o">=</span> <span class="n">pval_df</span><span class="o">.</span><span class="n">mask</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">pval_df</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">)))</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">bool_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">pval_df</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">pval_df</span><span class="p">),</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">pval_df</span><span class="p">)]</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pval_lt</span><span class="p">))</span>
     <span class="n">segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;segment&quot;</span><span class="p">:</span> <span class="n">names</span><span class="p">}</span>
     <span class="n">segments_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">segments_df</span><span class="p">)</span>
-    <span class="n">im</span> <span class="o">=</span> <span class="n">adjplot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pval_lt</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">meta</span><span class="o">=</span><span class="n">segments_df</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;segment&quot;</span><span class="p">)</span>
-    <span class="n">im2</span> <span class="o">=</span> <span class="n">adjplot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pval_lt</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">meta</span><span class="o">=</span><span class="n">segments_df</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;segment&quot;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;segment&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
-    <span class="c1">#im = matrixplot(np.log10(pval_lt).to_numpy(), ax=ax, col_meta=names, row_meta=names, row_color=names, col_color=names)</span>
+    <span class="n">ax</span><span class="p">,</span> <span class="n">divider</span> <span class="o">=</span> <span class="n">adjplot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pval_lt</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">meta</span><span class="o">=</span><span class="n">segments_df</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;segment&quot;</span><span class="p">])</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
+    <span class="n">test_ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">test_ax_2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">test_ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">xmargin</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="c1">#print(segments_df)</span>
+    <span class="c1">#im = adjplot(np.log10(pval_lt).to_numpy(), ax=ax[0], meta=segments_df, color=[&quot;segment&quot;])</span>
+    <span class="c1">#im2 = adjplot(np.log10(pval_lt).to_numpy(), ax=ax[1], meta=segments_df, color=[&quot;segment&quot;], group=[&quot;segment&quot;])</span>
+    <span class="c1">#ax[0].set(ylabel=names, xlabel=names)</span>
+    <span class="c1">#im = matrixplot(np.log10(pval_lt).to_numpy(), ax=ax[0], col_meta=segments, row_meta=segments, row_color=names, col_color=names)</span>
     <span class="k">return</span> <span class="n">ax</span>
 </pre></div>
 </div>
@@ -808,17 +813,9 @@ pygidium -28.987513   0.000000  0.000000  0.000000  0.000000  0.0
 1        -10.820921 -38.336239 -1.412213  0.000000  0.000000  0.0
 2         -3.030849 -32.562593 -2.143523 -3.199542  0.000000  0.0
 3         -4.497205 -33.887965 -1.941029 -1.608598 -0.521443  0.0
-  segment
-0    head
-1     pyg
-2       0
-3       1
-4       2
-5       3
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&lt;AxesSubplot:xlabel=&quot;[&#39;head&#39;, &#39;pyg&#39;, &#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;]&quot;, ylabel=&quot;[&#39;head&#39;, &#39;pyg&#39;, &#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;]&quot;&gt;,
-       &lt;AxesSubplot:&gt;], dtype=object)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:&gt;
 </pre></div>
 </div>
 <img alt="_images/density_plots_31_2.png" src="_images/density_plots_31_2.png" />

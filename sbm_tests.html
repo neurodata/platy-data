@@ -954,39 +954,10 @@ title="Print to PDF"
 <img alt="_images/sbm_tests_10_7.png" src="_images/sbm_tests_10_7.png" />
 </div>
 </div>
+<p>Group Connection Test for Left and Right Hemispheres</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#heatmaps</span>
-<span class="n">np_left</span> <span class="o">=</span> <span class="n">left_adj</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-<span class="n">np_right</span> <span class="o">=</span> <span class="n">right_adj</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-<span class="n">heatmap</span><span class="p">(</span><span class="n">np_left</span><span class="p">,</span> <span class="n">inner_hier_labels</span><span class="o">=</span><span class="n">left_labels</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">np_left</span><span class="p">)</span>
-<span class="nb">max</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">np_left</span><span class="p">)):</span>
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">np_left</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">np_left</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">):</span>
-            <span class="nb">max</span> <span class="o">=</span> <span class="n">np_left</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">max</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[0. 1. 0. ... 0. 0. 0.]
- [0. 0. 0. ... 0. 0. 0.]
- [0. 0. 0. ... 0. 0. 0.]
- ...
- [0. 0. 0. ... 0. 0. 0.]
- [0. 0. 0. ... 0. 0. 0.]
- [0. 0. 0. ... 0. 0. 0.]]
-36.0
-</pre></div>
-</div>
-<img alt="_images/sbm_tests_11_1.png" src="_images/sbm_tests_11_1.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">misc</span> <span class="o">=</span> <span class="n">group_connection_test</span><span class="p">(</span><span class="n">np_left</span><span class="p">,</span> <span class="n">np_right</span><span class="p">,</span> <span class="n">left_labels</span><span class="p">,</span> <span class="n">right_labels</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">misc</span> <span class="o">=</span> <span class="n">group_connection_test</span><span class="p">(</span><span class="n">hemi_adjs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hemi_adjs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hemi_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hemi_labels</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">pval</span>
 </pre></div>
 </div>
@@ -996,6 +967,111 @@ title="Print to PDF"
 </pre></div>
 </div>
 </div>
+</div>
+<p>We do the same for all the pairwise combinations of segments</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">segment_labels</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">pairwise_adjs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">segment_adjs</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">pairwise_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">segment_names</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="c1">#initialize dataframe</span>
+<span class="n">zero_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">segment_names</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment_names</span><span class="p">)))</span>
+<span class="n">pval_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">zero_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">segment_names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">segment_names</span><span class="p">)</span>
+<span class="n">pval_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">adjs</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pairwise_labels</span><span class="p">,</span> <span class="n">pairwise_adjs</span><span class="p">,</span> <span class="n">pairwise_names</span><span class="p">):</span>
+    <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">misc</span> <span class="o">=</span> <span class="n">group_connection_test</span><span class="p">(</span><span class="n">adjs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">adjs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">pval_df</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pval</span>
+    <span class="n">pval_df</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pval</span>
+<span class="n">pval_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;group_connection_plots&quot;</span> <span class="o">/</span> <span class="s2">&quot;group_connection_test_pvals_segments.csv&quot;</span><span class="p">)</span>
+<span class="n">pval_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>head</th>
+      <th>pygidium</th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>head</th>
+      <td>0.000000e+00</td>
+      <td>5.320368e-41</td>
+      <td>0.016646</td>
+      <td>1.369996e-07</td>
+      <td>6.508011e-11</td>
+      <td>1.951325e-24</td>
+    </tr>
+    <tr>
+      <th>pygidium</th>
+      <td>5.320368e-41</td>
+      <td>0.000000e+00</td>
+      <td>0.058935</td>
+      <td>1.811977e-06</td>
+      <td>6.861601e-08</td>
+      <td>1.372898e-02</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>1.664612e-02</td>
+      <td>5.893519e-02</td>
+      <td>0.000000</td>
+      <td>1.203334e-01</td>
+      <td>1.407701e-01</td>
+      <td>1.599203e-01</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.369996e-07</td>
+      <td>1.811977e-06</td>
+      <td>0.120333</td>
+      <td>0.000000e+00</td>
+      <td>5.014156e-01</td>
+      <td>9.994344e-04</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>6.508011e-11</td>
+      <td>6.861601e-08</td>
+      <td>0.140770</td>
+      <td>5.014156e-01</td>
+      <td>0.000000e+00</td>
+      <td>1.748496e-04</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.951325e-24</td>
+      <td>1.372898e-02</td>
+      <td>0.159920</td>
+      <td>9.994344e-04</td>
+      <td>1.748496e-04</td>
+      <td>0.000000e+00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">

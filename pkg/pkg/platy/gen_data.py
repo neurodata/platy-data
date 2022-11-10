@@ -6,7 +6,7 @@ import numpy as np
 from itertools import chain, combinations
 from upsetplot import plot
 from matplotlib import pyplot as plt
-from graspologic.utils import largest_connected_component
+from graspologic.utils import largest_connected_component, is_fully_connected
 
 
 rm = pymaid.CatmaidInstance(
@@ -147,7 +147,7 @@ def gen_connectome_annotations():
     skids_connec = pymaid.get_skids_by_annotation("connectome")
     skids_connec = [str(skid) for skid in skids_connec]
     skids_extra = []
-    count = 0
+
     for skid in skids_connec:
         if skid not in all_annotations.index:
             skids_extra.append(skid)
@@ -321,4 +321,218 @@ def gen_3_adj():
 
     return adj_3
 
-print(gen_left_adj())
+def gen_left_normal_lcc_adj():
+    skids_hemis = pd.read_csv(path + "/skids_hemi_classes.csv")
+    skids_left = list(skids_hemis["l"])
+    skids_left = [x for x in skids_left if str(x) != 'nan']
+    skids_left = [int(i) for i in skids_left]
+
+    left_connec_normal_adj = pymaid.adjacency_matrix(skids_left)
+    left_connec_normal_adj_np = left_connec_normal_adj.to_numpy()
+    left_connec_lcc_normal_adj, kept_inds = largest_connected_component(left_connec_normal_adj_np, return_inds=True)
+
+    kept_skids = np.ndarray(kept_inds.shape)
+    for i, ind in enumerate(kept_inds):
+        kept_skids[i] = skids_left[ind]
+
+    kept_skids = [int(i) for i in kept_skids]
+    left_connec_lcc_normal_adj_pd = pd.DataFrame(left_connec_lcc_normal_adj, columns=kept_skids, index=kept_skids)
+    
+    left_connec_lcc_normal_adj_pd.to_csv(path + "/adj_left_normal_lcc.csv", index=False)
+    return left_connec_lcc_normal_adj_pd
+
+def gen_right_normal_lcc_adj():
+    skids_hemis = pd.read_csv(path + "/skids_hemi_classes.csv")
+    skids_right = list(skids_hemis["r"])
+    skids_right = [x for x in skids_right if str(x) != 'nan']
+    skids_right = [int(i) for i in skids_right]
+
+    right_connec_normal_adj = pymaid.adjacency_matrix(skids_right)
+    right_connec_normal_adj_np = right_connec_normal_adj.to_numpy()
+    right_connec_lcc_normal_adj, kept_inds = largest_connected_component(right_connec_normal_adj_np, return_inds=True)
+
+    kept_skids = np.ndarray(kept_inds.shape)
+    for i, ind in enumerate(kept_inds):
+        kept_skids[i] = skids_right[ind]
+
+    kept_skids = [int(i) for i in kept_skids]
+    right_connec_lcc_normal_adj_pd = pd.DataFrame(right_connec_lcc_normal_adj, columns=kept_skids, index=kept_skids)
+    
+    right_connec_lcc_normal_adj_pd.to_csv(path + "/adj_right_normal_lcc.csv", index=False)
+    return right_connec_lcc_normal_adj_pd
+
+def gen_head_normal_lcc_adj():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes.csv")
+    skids_head = list(skids_segs["head"])
+    skids_head = [x for x in skids_head if str(x) != 'nan']
+    skids_head = [int(i) for i in skids_head]
+
+    head_connec_normal_adj = pymaid.adjacency_matrix(skids_head)
+    head_connec_normal_adj_np = head_connec_normal_adj.to_numpy()
+    head_connec_lcc_normal_adj, kept_inds = largest_connected_component(head_connec_normal_adj_np, return_inds=True)
+
+    kept_skids = np.ndarray(kept_inds.shape)
+    for i, ind in enumerate(kept_inds):
+        kept_skids[i] = skids_head[ind]
+
+    kept_skids = [int(i) for i in kept_skids]
+    head_connec_lcc_normal_adj_pd = pd.DataFrame(head_connec_lcc_normal_adj, columns=kept_skids, index=kept_skids)
+    
+    head_connec_lcc_normal_adj_pd.to_csv(path + "/adj_head_normal_lcc.csv", index=False)
+    return head_connec_lcc_normal_adj_pd
+
+def gen_pygidium_normal_lcc_adj():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes.csv")
+    skids_pyg = list(skids_segs["pygidium"])
+    skids_pyg = [x for x in skids_pyg if str(x) != 'nan']
+    skids_pyg = [int(i) for i in skids_pyg]
+
+    pyg_connec_normal_adj = pymaid.adjacency_matrix(skids_pyg)
+    pyg_connec_normal_adj_np = pyg_connec_normal_adj.to_numpy()
+    pyg_connec_lcc_normal_adj, kept_inds = largest_connected_component(pyg_connec_normal_adj_np, return_inds=True)
+
+    kept_skids = np.ndarray(kept_inds.shape)
+    for i, ind in enumerate(kept_inds):
+        kept_skids[i] = skids_pyg[ind]
+
+    kept_skids = [int(i) for i in kept_skids]
+    pyg_connec_lcc_normal_adj_pd = pd.DataFrame(pyg_connec_lcc_normal_adj, columns=kept_skids, index=kept_skids)
+    
+    pyg_connec_lcc_normal_adj_pd.to_csv(path + "/adj_pygidium_normal_lcc.csv", index=False)
+    return pyg_connec_lcc_normal_adj_pd
+
+def gen_0_normal_lcc_adj():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes.csv")
+    skids_0 = list(skids_segs["0"])
+    skids_0 = [x for x in skids_0 if str(x) != 'nan']
+    skids_0 = [int(i) for i in skids_0]
+
+    connec_0_normal_adj = pymaid.adjacency_matrix(skids_0)
+    connec_0_normal_adj_np = connec_0_normal_adj.to_numpy()
+    connec_0_normal_adj_adj, kept_inds = largest_connected_component(connec_0_normal_adj_np, return_inds=True)
+
+    kept_skids = np.ndarray(kept_inds.shape)
+    for i, ind in enumerate(kept_inds):
+        kept_skids[i] = skids_0[ind]
+
+    kept_skids = [int(i) for i in kept_skids]
+    connec_0_lcc_normal_adj_pd = pd.DataFrame(connec_0_normal_adj_adj, columns=kept_skids, index=kept_skids)
+    
+    connec_0_lcc_normal_adj_pd.to_csv(path + "/adj_0_normal_lcc.csv", index=False)
+    return connec_0_lcc_normal_adj_pd
+
+def gen_1_normal_lcc_adj():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes.csv")
+    skids_1 = list(skids_segs["1"])
+    skids_1 = [x for x in skids_1 if str(x) != 'nan']
+    skids_1 = [int(i) for i in skids_1]
+
+    connec_1_normal_adj = pymaid.adjacency_matrix(skids_1)
+    connec_1_normal_adj_np = connec_1_normal_adj.to_numpy()
+    connec_1_normal_adj_adj, kept_inds = largest_connected_component(connec_1_normal_adj_np, return_inds=True)
+
+    kept_skids = np.ndarray(kept_inds.shape)
+    for i, ind in enumerate(kept_inds):
+        kept_skids[i] = skids_1[ind]
+
+    kept_skids = [int(i) for i in kept_skids]
+    connec_1_lcc_normal_adj_pd = pd.DataFrame(connec_1_normal_adj_adj, columns=kept_skids, index=kept_skids)
+    
+    connec_1_lcc_normal_adj_pd.to_csv(path + "/adj_1_normal_lcc.csv", index=False)
+    return connec_1_lcc_normal_adj_pd
+
+def gen_2_normal_lcc_adj():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes.csv")
+    skids_2 = list(skids_segs["2"])
+    skids_2 = [x for x in skids_2 if str(x) != 'nan']
+    skids_2 = [int(i) for i in skids_2]
+
+    connec_2_normal_adj = pymaid.adjacency_matrix(skids_2)
+    connec_2_normal_adj_np = connec_2_normal_adj.to_numpy()
+    connec_2_normal_adj_adj, kept_inds = largest_connected_component(connec_2_normal_adj_np, return_inds=True)
+
+    kept_skids = np.ndarray(kept_inds.shape)
+    for i, ind in enumerate(kept_inds):
+        kept_skids[i] = skids_2[ind]
+
+    kept_skids = [int(i) for i in kept_skids]
+    connec_2_lcc_normal_adj_pd = pd.DataFrame(connec_2_normal_adj_adj, columns=kept_skids, index=kept_skids)
+    
+    connec_2_lcc_normal_adj_pd.to_csv(path + "/adj_2_normal_lcc.csv", index=False)
+    return connec_2_lcc_normal_adj_pd
+
+def gen_3_normal_lcc_adj():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes.csv")
+    skids_3 = list(skids_segs["3"])
+    skids_3 = [x for x in skids_3 if str(x) != 'nan']
+    skids_3 = [int(i) for i in skids_3]
+
+    connec_3_normal_adj = pymaid.adjacency_matrix(skids_3)
+    connec_3_normal_adj_np = connec_3_normal_adj.to_numpy()
+    connec_3_normal_adj_adj, kept_inds = largest_connected_component(connec_3_normal_adj_np, return_inds=True)
+
+    kept_skids = np.ndarray(kept_inds.shape)
+    for i, ind in enumerate(kept_inds):
+        kept_skids[i] = skids_3[ind]
+
+    kept_skids = [int(i) for i in kept_skids]
+    connec_3_lcc_normal_adj_pd = pd.DataFrame(connec_3_normal_adj_adj, columns=kept_skids, index=kept_skids)
+    
+    connec_3_lcc_normal_adj_pd.to_csv(path + "/adj_3_normal_lcc.csv", index=False)
+    return connec_3_lcc_normal_adj_pd
+
+def gen_hemi_labels():
+    #get skids for l, r, head, pygidium, 0, 1, 2, 3
+
+    annotations = gen_connectome_normal_lcc_adj()
+
+    left_adj = gen_left_normal_lcc_adj()
+    left_adj_index = list(left_adj.index)
+
+    right_adj = gen_right_normal_lcc_adj()
+    right_adj_index = list(right_adj.index)
+
+    all_hemi_index  = left_adj_index + right_adj_index
+
+    annotations_hemis = annotations.loc[all_hemi_index]
+    return len(all_hemi_index)
+
+    skids_hemis = {"l": [], "r": []}
+    skids_hemis_total_list = []
+    labels_hemis = {"l": [], "r": []}
+    skids_segs = {"head": [], "pygidium": [], "0": [], "1": [], "2": [], "3": []}
+    skids_segs_total_list = []
+    labels_segs = {"head": [], "pygidium": [], "0": [], "1": [], "2": [], "3": []}
+    poss_labels = ["s", "i", "m"]
+
+#add skids and labels for hemis
+    for key in skids_hemis:
+        for i in range(len(annotations["skids"])):
+            if(annotations["side"][i]==key and annotations["class"][i] in poss_labels):
+                skids_hemis[key].append(annotations["skids"][i])
+                skids_hemis_total_list.append(annotations["skids"][i])
+                labels_hemis[key].append(annotations["class"][i])
+
+    #add skids and labels for segments
+    for key in skids_segs:
+        for i in range(len(annotations["skids"])):
+            if(annotations["segment"][i]==key and annotations["class"][i] in poss_labels):
+                skids_segs[key].append(annotations["skids"][i])
+                skids_segs_total_list.append(annotations["skids"][i])
+                labels_segs[key].append(annotations["class"][i])
+
+    skids_hemis_total_list = [str(x) for x in skids_hemis_total_list]
+
+    #dictionaries to dfs
+    skids_hemis_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in skids_hemis.items()]))
+    labels_hemis_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in labels_hemis.items()]))
+    skids_segs_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in skids_segs.items()]))
+    labels_segs_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in labels_segs.items()]))
+
+    #save dfs as csvs to get the adjs in gen_data
+    skids_hemis_df.to_csv(folder / "skids_hemi_classes.csv")
+    labels_hemis_df.to_csv(folder / "labels_hemi_classes.csv")
+    skids_segs_df.to_csv(folder / "skids_segs_classes.csv")
+    labels_segs_df.to_csv(folder / "labels_segs_classes.csv")
+
+print(gen_hemi_labels())

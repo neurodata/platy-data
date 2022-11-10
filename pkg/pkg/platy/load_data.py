@@ -7,6 +7,7 @@ import numpy as np
 from itertools import chain, combinations
 from upsetplot import plot
 from matplotlib import pyplot as plt
+from graspologic.utils import is_fully_connected
 
 DATA_PATH = Path(__file__).parent.parent.parent.parent
 DATA_PATH = DATA_PATH / "docs" / "outputs"
@@ -80,11 +81,11 @@ def load_weird_annotations():
 
 
 def load_left_adj_labels():
-    dir1 = DATA_PATH / "adj_left.csv"
+    dir1 = DATA_PATH / "adj_left_normal_lcc.csv"
     left_adj = pd.read_csv(dir1)
     left_adj = left_adj.set_axis(list(left_adj), axis="index")
 
-    dir2 = DATA_PATH / "labels_hemi_classes.csv"
+    dir2 = DATA_PATH / "labels_hemis_classes.csv"
     hemi_labels = pd.read_csv(dir2)
     left_labels = hemi_labels["l"]
     left_labels = [x for x in left_labels if str(x) != "nan"]
@@ -93,11 +94,11 @@ def load_left_adj_labels():
 
 
 def load_right_adj_labels():
-    dir1 = DATA_PATH / "adj_right.csv"
+    dir1 = DATA_PATH / "adj_right_normal_lcc.csv"
     right_adj = pd.read_csv(dir1)
     right_adj = right_adj.set_axis(list(right_adj), axis="index")
 
-    dir2 = DATA_PATH / "labels_hemi_classes.csv"
+    dir2 = DATA_PATH / "labels_hemis_classes.csv"
     hemi_labels = pd.read_csv(dir2)
     right_labels = hemi_labels["r"]
     right_labels = [x for x in right_labels if str(x) != "nan"]
@@ -106,7 +107,7 @@ def load_right_adj_labels():
 
 
 def load_head_adj_labels():
-    dir1 = DATA_PATH / "adj_head.csv"
+    dir1 = DATA_PATH / "adj_head_normal_lcc.csv"
     head_adj = pd.read_csv(dir1)
     head_adj = head_adj.set_axis(list(head_adj), axis="index")
 
@@ -119,7 +120,7 @@ def load_head_adj_labels():
 
 
 def load_pygidium_adj_labels():
-    dir1 = DATA_PATH / "adj_pygidium.csv"
+    dir1 = DATA_PATH / "adj_pygidium_normal_lcc.csv"
     pyg_adj = pd.read_csv(dir1)
     pyg_adj = pyg_adj.set_axis(list(pyg_adj), axis="index")
 
@@ -132,7 +133,7 @@ def load_pygidium_adj_labels():
 
 
 def load_0_adj_labels():
-    dir1 = DATA_PATH / "adj_0.csv"
+    dir1 = DATA_PATH / "adj_0_normal_lcc.csv"
     adj_0 = pd.read_csv(dir1)
     adj_0 = adj_0.set_axis(list(adj_0), axis="index")
 
@@ -145,7 +146,7 @@ def load_0_adj_labels():
 
 
 def load_1_adj_labels():
-    dir1 = DATA_PATH / "adj_1.csv"
+    dir1 = DATA_PATH / "adj_1_normal_lcc.csv"
     adj_1 = pd.read_csv(dir1)
     adj_1 = adj_1.set_axis(list(adj_1), axis="index")
 
@@ -158,7 +159,7 @@ def load_1_adj_labels():
 
 
 def load_2_adj_labels():
-    dir1 = DATA_PATH / "adj_2.csv"
+    dir1 = DATA_PATH / "adj_2_normal_lcc.csv"
     adj_2 = pd.read_csv(dir1)
     adj_2 = adj_2.set_axis(list(adj_2), axis="index")
 
@@ -171,7 +172,7 @@ def load_2_adj_labels():
 
 
 def load_3_adj_labels():
-    dir1 = DATA_PATH / "adj_3.csv"
+    dir1 = DATA_PATH / "adj_3_normal_lcc.csv"
     adj_3 = pd.read_csv(dir1)
     adj_3 = adj_3.set_axis(list(adj_3), axis="index")
 
@@ -183,5 +184,6 @@ def load_3_adj_labels():
     return adj_3, labels_3
 
 
-left_adj, left_labels = load_left_adj_labels()
-print(left_adj)
+adj_2, labels_2 = load_2_adj_labels()
+np_2 = adj_2.to_numpy()
+print(is_fully_connected(np_2))

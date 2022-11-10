@@ -1,0 +1,740 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>&lt;no title&gt; &#8212; Platynereis Data</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script async="async" kind="hypothesis" src="https://hypothes.is/embed.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Platynereis Data</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="abstract.html">
+                    Abstract
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Preliminaries
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="introduction.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="make_fig1.html">
+   Replicate Fig 1
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="data_summary_v3.html">
+   Data Summary Notebook
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gen_upsetplots.html">
+   Generate Upsetplots
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="density_plots.html">
+   Density Tests
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="sbm_tests.html">
+   Group Connection Testing
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="references.html">
+   References
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Slides
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference external" href="https://docs.neurodata.io/platy-data/example.pdf">
+   Example
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/neurodata/platy-data/main?urlpath=tree/platy-data/show_data_v2.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neurodata/platy-data"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neurodata/platy-data/issues/new?title=Issue%20on%20page%20%2Fshow_data_v2.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/show_data_v2.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1><no title></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+
+<span class="c1"># from giskard.plot import adjplot, scattermap</span>
+<span class="kn">from</span> <span class="nn">graspologic.embed</span> <span class="kn">import</span> <span class="n">AdjacencySpectralEmbed</span>
+<span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">networkplot</span>
+<span class="kn">from</span> <span class="nn">graspologic.layouts</span> <span class="kn">import</span> <span class="n">layout_umap</span><span class="p">,</span> <span class="n">layout_tsne</span>
+<span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">is_fully_connected</span><span class="p">,</span> <span class="n">largest_connected_component</span><span class="p">,</span> <span class="n">symmetrize</span>
+<span class="kn">from</span> <span class="nn">matplotlib.patheffects</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">Stroke</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">from pkg.data import (</span>
+<span class="sd">    load_maggot_graph,</span>
+<span class="sd">    load_network_palette,</span>
+<span class="sd">    load_node_palette,</span>
+<span class="sd">    load_unmatched,</span>
+<span class="sd">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># from pkg.io import get_environment_variables</span>
+<span class="c1"># from pkg.io import glue as default_glue</span>
+<span class="c1"># from pkg.io import savefig</span>
+<span class="c1"># from pkg.plot import set_theme</span>
+<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">load_0_adj_labels</span><span class="p">,</span>
+    <span class="n">load_1_adj_labels</span><span class="p">,</span>
+    <span class="n">load_2_adj_labels</span><span class="p">,</span>
+    <span class="n">load_3_adj_labels</span><span class="p">,</span>
+    <span class="n">load_head_adj_labels</span><span class="p">,</span>
+    <span class="n">load_pygidium_adj_labels</span><span class="p">,</span>
+    <span class="n">load_left_adj_labels</span><span class="p">,</span>
+    <span class="n">load_right_adj_labels</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scipy.cluster</span> <span class="kn">import</span> <span class="n">hierarchy</span>
+<span class="kn">from</span> <span class="nn">umap</span> <span class="kn">import</span> <span class="n">UMAP</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">8888</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load the adjs</span>
+<span class="n">left_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_left_adj_labels</span><span class="p">()</span>
+<span class="n">right_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_right_adj_labels</span><span class="p">()</span>
+<span class="n">head_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_head_adj_labels</span><span class="p">()</span>
+<span class="n">pyg_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_pygidium_adj_labels</span><span class="p">()</span>
+<span class="n">adj_0</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_0_adj_labels</span><span class="p">()</span>
+<span class="n">adj_1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_1_adj_labels</span><span class="p">()</span>
+<span class="n">adj_2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_2_adj_labels</span><span class="p">()</span>
+<span class="n">adj_3</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_3_adj_labels</span><span class="p">()</span>
+
+<span class="n">orig_adjs</span> <span class="o">=</span> <span class="p">[</span><span class="n">left_adj</span><span class="p">,</span> <span class="n">right_adj</span><span class="p">,</span> <span class="n">head_adj</span><span class="p">,</span> <span class="n">pyg_adj</span><span class="p">,</span> <span class="n">adj_0</span><span class="p">,</span> <span class="n">adj_1</span><span class="p">,</span> <span class="n">adj_2</span><span class="p">,</span> <span class="n">adj_3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#nx adjs</span>
+<span class="n">nx_adjs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">adj</span> <span class="ow">in</span> <span class="n">orig_adjs</span><span class="p">:</span>
+    <span class="n">nx_adjs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_adjacency</span><span class="p">(</span><span class="n">adj</span><span class="p">))</span>
+
+<span class="c1">#np adjs</span>
+<span class="n">np_adjs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">adj</span> <span class="ow">in</span> <span class="n">orig_adjs</span><span class="p">:</span>
+    <span class="n">np_adjs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">adj</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+
+<span class="c1">#lccs for both</span>
+<span class="n">nx_lcc_adjs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">adj</span> <span class="ow">in</span> <span class="n">nx_adjs</span><span class="p">:</span>
+    <span class="n">nx_lcc_adjs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">largest_connected_component</span><span class="p">(</span><span class="n">adj</span><span class="p">)))</span>
+
+<span class="n">np_lcc_adjs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">adj</span> <span class="ow">in</span> <span class="n">np_adjs</span><span class="p">:</span>
+    <span class="n">np_lcc_adjs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">largest_connected_component</span><span class="p">(</span><span class="n">adj</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#use layout_umap from graspologic</span>
+<span class="n">all_x</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">all_y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">all_degrees</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">all_hues</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">adj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nx_adjs</span><span class="p">):</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">node_pos</span> <span class="o">=</span> <span class="n">layout_tsne</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+    <span class="n">x_pos</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">y_pos</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">node_comms</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">node_pos</span><span class="p">:</span>
+
+        <span class="c1">#save the assigned community of the node</span>
+        <span class="n">node_comms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+        <span class="n">x_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">y_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="n">node_comms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_comms</span><span class="p">)</span>
+    <span class="n">x_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_pos</span><span class="p">)</span>
+    <span class="n">y_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_pos</span><span class="p">)</span>
+    <span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span> <span class="k">for</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="ow">in</span> <span class="n">adj</span><span class="o">.</span><span class="n">degree</span><span class="p">()]</span>
+
+    <span class="n">all_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_pos</span><span class="p">)</span>
+    <span class="n">all_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_pos</span><span class="p">)</span>
+    <span class="n">all_degrees</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">degrees</span><span class="p">)</span>
+    <span class="n">all_hues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_comms</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:800: FutureWarning: The default initialization in TSNE will change from &#39;random&#39; to &#39;pca&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:810: FutureWarning: The default learning rate in TSNE will change from 200.0 to &#39;auto&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:800: FutureWarning: The default initialization in TSNE will change from &#39;random&#39; to &#39;pca&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:810: FutureWarning: The default learning rate in TSNE will change from 200.0 to &#39;auto&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:800: FutureWarning: The default initialization in TSNE will change from &#39;random&#39; to &#39;pca&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:810: FutureWarning: The default learning rate in TSNE will change from 200.0 to &#39;auto&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:800: FutureWarning: The default initialization in TSNE will change from &#39;random&#39; to &#39;pca&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:810: FutureWarning: The default learning rate in TSNE will change from 200.0 to &#39;auto&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:800: FutureWarning: The default initialization in TSNE will change from &#39;random&#39; to &#39;pca&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:810: FutureWarning: The default learning rate in TSNE will change from 200.0 to &#39;auto&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:800: FutureWarning: The default initialization in TSNE will change from &#39;random&#39; to &#39;pca&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:810: FutureWarning: The default learning rate in TSNE will change from 200.0 to &#39;auto&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:800: FutureWarning: The default initialization in TSNE will change from &#39;random&#39; to &#39;pca&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:810: FutureWarning: The default learning rate in TSNE will change from 200.0 to &#39;auto&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:800: FutureWarning: The default initialization in TSNE will change from &#39;random&#39; to &#39;pca&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:810: FutureWarning: The default learning rate in TSNE will change from 200.0 to &#39;auto&#39; in 1.2.
+  warnings.warn(
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adj_0</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_0_adj_labels</span><span class="p">()</span>
+<span class="n">nx_0</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_adjacency</span><span class="p">(</span><span class="n">adj_0</span><span class="p">)</span>
+<span class="n">X_0</span><span class="p">,</span> <span class="n">node_pos_0</span> <span class="o">=</span> <span class="n">layout_tsne</span><span class="p">(</span><span class="n">nx_0</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="n">n_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:800: FutureWarning: The default initialization in TSNE will change from &#39;random&#39; to &#39;pca&#39; in 1.2.
+  warnings.warn(
+/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:810: FutureWarning: The default learning rate in TSNE will change from 200.0 to &#39;auto&#39; in 1.2.
+  warnings.warn(
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#hemis</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">hemi_adjs</span> <span class="o">=</span> <span class="n">np_lcc_adjs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">hemi_x</span> <span class="o">=</span> <span class="n">all_x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">hemi_y</span> <span class="o">=</span> <span class="n">all_y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">hemi_hues</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rocket&quot;</span><span class="p">,</span> <span class="s2">&quot;tab20&quot;</span><span class="p">]</span>
+<span class="n">hemi_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hemi_adjs</span><span class="p">)):</span>
+
+    <span class="n">node_hues</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hemi_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
+        <span class="n">node_hues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">node_hues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_hues</span><span class="p">)</span>
+
+    <span class="n">plot</span> <span class="o">=</span> <span class="n">networkplot</span><span class="p">(</span>
+        <span class="n">adjacency</span><span class="o">=</span><span class="n">hemi_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">hemi_x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">hemi_y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">node_hue</span> <span class="o">=</span> <span class="n">node_hues</span><span class="p">,</span>
+        <span class="n">palette</span><span class="o">=</span><span class="n">hemi_hues</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">node_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+        <span class="n">edge_hue</span><span class="o">=</span><span class="s2">&quot;source&quot;</span><span class="p">,</span>
+        <span class="n">edge_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">edge_linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2"> connection plot&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hemi_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">hemi_names</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Networkplots of hemisphere connections&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="c1">#rocket, cubehelix, tab20, dark:salmon_r, YlOrBr, icefire, seagreen, viridis, magma</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/show_data_v2_6_0.png" src="_images/show_data_v2_6_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#segs</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">seg_adjs</span> <span class="o">=</span> <span class="n">np_lcc_adjs</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="n">seg_x</span> <span class="o">=</span> <span class="n">all_x</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="n">seg_y</span> <span class="o">=</span> <span class="n">all_y</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="n">seg_hues</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cubehelix&quot;</span><span class="p">,</span> <span class="s2">&quot;dark:salmon_r&quot;</span><span class="p">,</span> <span class="s2">&quot;tab20&quot;</span><span class="p">,</span> <span class="s2">&quot;icefire&quot;</span><span class="p">,</span> <span class="s2">&quot;viridis&quot;</span><span class="p">,</span> <span class="s2">&quot;magma&quot;</span><span class="p">]</span>
+<span class="n">seg_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">,</span> <span class="s2">&quot;seg_0&quot;</span><span class="p">,</span> <span class="s2">&quot;seg_1&quot;</span><span class="p">,</span> <span class="s2">&quot;seg_2&quot;</span><span class="p">,</span> <span class="s2">&quot;seg_3&quot;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seg_adjs</span><span class="p">)):</span>
+
+    <span class="n">node_hues</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seg_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
+        <span class="n">node_hues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">node_hues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_hues</span><span class="p">)</span>
+
+    <span class="n">plot</span> <span class="o">=</span> <span class="n">networkplot</span><span class="p">(</span>
+        <span class="n">adjacency</span><span class="o">=</span><span class="n">seg_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">seg_x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">seg_y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">node_hue</span> <span class="o">=</span> <span class="n">node_hues</span><span class="p">,</span>
+        <span class="n">palette</span><span class="o">=</span><span class="n">seg_hues</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">node_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+        <span class="n">edge_hue</span><span class="o">=</span><span class="s2">&quot;source&quot;</span><span class="p">,</span>
+        <span class="n">edge_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">edge_linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2"> connection plot&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">seg_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">seg_names</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Networkplots of segment connections&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="c1">#rocket, cubehelix, tab20, dark:salmon_r, YlOrBr, icefire, seagreen, viridis, magma</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/show_data_v2_8_0.png" src="_images/show_data_v2_8_0.png" />
+</div>
+</div>
+<p>get updated data from catmaid
+run lcc version of hemis/segs adjs for all tests done so far
+make sure figs are nice (publishable ready)
+make sure notebooks are nice too
+follow show_data.py notebook to plot adjs</p>
+<ul class="simple">
+<li><p>make both fig 1a and 1b</p></li>
+<li><p>embed first</p></li>
+<li><p>for segments, generalize to case with 5-6 comparisons: 5-6 blocks in adj (keep 0 or not)</p></li>
+<li><p>one fig for hemis, one for segs</p>
+<ul>
+<li><p>play around with layouts</p></li>
+</ul>
+</li>
+<li><p>read bgm paper</p></li>
+<li><p>integrate nadine’s pair data</p></li>
+<li><p>take subgraphs with pairs and try running one of graph matching techniques: gives predicted pairing; evaluate matching accuracy</p>
+<ul>
+<li><p>which method should we use</p></li>
+</ul>
+</li>
+<li><p>use her pairs as seeds and predict remainder (remainder is nodes that aren’t given as pairs)</p></li>
+</ul>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Kareef Ullah<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

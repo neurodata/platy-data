@@ -401,55 +401,64 @@ title="Print to PDF"
 <span class="kn">from</span> <span class="nn">graspologic.inference</span> <span class="kn">import</span> <span class="n">erdos_renyi_test</span>
 <span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">adjplot</span><span class="p">,</span> <span class="n">matrixplot</span>
 <span class="kn">from</span> <span class="nn">statsmodels.stats.proportion</span> <span class="kn">import</span> <span class="n">proportion_confint</span><span class="p">,</span> <span class="n">multinomial_proportions_confint</span>
-<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_connectome_normal_lcc_annotations</span><span class="p">,</span> <span class="n">load_connectome_lcc_normal_adj</span>
+<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_connectome_normal_lcc_annotations</span><span class="p">,</span> <span class="n">load_connectome_lcc_normal_adj</span><span class="p">,</span> <span class="n">load_0_adj_labels</span><span class="p">,</span> <span class="n">load_1_adj_labels</span><span class="p">,</span> <span class="n">load_2_adj_labels</span><span class="p">,</span> <span class="n">load_3_adj_labels</span><span class="p">,</span> <span class="n">load_head_adj_labels</span><span class="p">,</span> <span class="n">load_pygidium_adj_labels</span><span class="p">,</span> <span class="n">load_left_adj_labels</span><span class="p">,</span> <span class="n">load_right_adj_labels</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">left_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_left_adj_labels</span><span class="p">()</span>
+<span class="n">right_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_right_adj_labels</span><span class="p">()</span>
+<span class="n">head_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_head_adj_labels</span><span class="p">()</span>
+<span class="n">pyg_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_pygidium_adj_labels</span><span class="p">()</span>
+<span class="c1">#adj_0, _ = load_0_adj_labels()</span>
+<span class="n">adj_1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_1_adj_labels</span><span class="p">()</span>
+<span class="n">adj_2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_2_adj_labels</span><span class="p">()</span>
+<span class="n">adj_3</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_3_adj_labels</span><span class="p">()</span>
+
+<span class="n">hemi_adjs</span> <span class="o">=</span> <span class="p">[</span><span class="n">left_adj</span><span class="p">,</span> <span class="n">right_adj</span><span class="p">]</span>
+<span class="n">segment_adjs</span> <span class="o">=</span> <span class="p">[</span><span class="n">head_adj</span><span class="p">,</span> <span class="n">pyg_adj</span><span class="p">,</span> <span class="n">adj_1</span><span class="p">,</span> <span class="n">adj_2</span><span class="p">,</span> <span class="n">adj_3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">#convert to networkx to take densities</span>
+<span class="sd">nx_hemis = []</span>
+<span class="sd">for adj in hemi_adjs:</span>
+<span class="sd">    nx_hemis.append(from_pandas_adjacency(adj))</span>
+
+<span class="sd">nx_segments = []</span>
+<span class="sd">for adj in segment_adjs:</span>
+<span class="sd">    nx_segments.append(from_pandas_adjacency(adj))</span>
+<span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
-  from .autonotebook import tqdm as notebook_tqdm
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;\n#convert to networkx to take densities\nnx_hemis = []\nfor adj in hemi_adjs:\n    nx_hemis.append(from_pandas_adjacency(adj))\n\nnx_segments = []\nfor adj in segment_adjs:\n    nx_segments.append(from_pandas_adjacency(adj))\n&#39;
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         2015233  1318919  2015241  1318929  1318938  1728550  1417265  \
-2015233      0.0      1.0      0.0      0.0      0.0      0.0      0.0   
-1318919      0.0      0.0      0.0      0.0      0.0      0.0      0.0   
-2015241      0.0      0.0      0.0      0.0      0.0      0.0      0.0   
-1318929      0.0      0.0      0.0      0.0      1.0      0.0      0.0   
-1318938      0.0      0.0      0.0      0.0      0.0      0.0      0.0   
-...          ...      ...      ...      ...      ...      ...      ...   
-1400756      0.0      0.0      0.0      0.0      0.0      0.0      0.0   
-2015193      0.0      0.0      0.0      0.0      0.0      0.0      0.0   
-1957859      0.0      0.0      0.0      0.0      0.0      0.0      0.0   
-1302513      0.0      0.0      0.0      0.0      0.0      0.0      0.0   
-1048573      0.0      0.0      0.0      0.0      0.0      0.0      0.0   
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">annotations</span> <span class="o">=</span> <span class="n">load_connectome_normal_lcc_annotations</span><span class="p">()</span>
+<span class="n">annotations</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 
-         1318965  1278006  1318986  ...  1441660  139142  2015119  147361  \
-2015233      0.0      0.0      0.0  ...      0.0     0.0      0.0     0.0   
-1318919      0.0      0.0      0.0  ...      0.0     0.0      0.0     0.0   
-2015241      0.0      0.0      0.0  ...      0.0     0.0      0.0     0.0   
-1318929      0.0      0.0      0.0  ...      0.0     0.0      0.0     0.0   
-1318938      0.0      0.0      0.0  ...      0.0     0.0      0.0     0.0   
-...          ...      ...      ...  ...      ...     ...      ...     ...   
-1400756      0.0      0.0      0.0  ...      0.0     0.0      0.0     0.0   
-2015193      0.0      0.0      0.0  ...      0.0     0.0      0.0     0.0   
-1957859      0.0      0.0      0.0  ...      0.0     0.0      0.0     0.0   
-1302513      0.0      0.0      0.0  ...      0.0     0.0      0.0     0.0   
-1048573      0.0      0.0      0.0  ...      0.0     0.0      0.0     0.0   
-
-         1359787  1400756  2015193  1957859  1302513  1048573  
-2015233      0.0      0.0      0.0      0.0      0.0      0.0  
-1318919      0.0      0.0      0.0      0.0      0.0      0.0  
-2015241      0.0      0.0      0.0      0.0      0.0      0.0  
-1318929      0.0      0.0      0.0      0.0      0.0      0.0  
-1318938      0.0      0.0      0.0      0.0      0.0      0.0  
-...          ...      ...      ...      ...      ...      ...  
-1400756      0.0      0.0      0.0      0.0      0.0      0.0  
-2015193      0.0      0.0      0.0      0.0      0.0      0.0  
-1957859      0.0      0.0      0.0      0.0      0.0      0.0  
-1302513      0.0      0.0      0.0      0.0      0.0      0.0  
-1048573      0.0      0.0      0.0      0.0      0.0      0.0  
-
-[869 rows x 869 columns]
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;segment&quot;</span><span class="p">])):</span>
+    <span class="k">if</span> <span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;segment&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="n">count</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>357
 </pre></div>
 </div>
 </div>
@@ -462,6 +471,14 @@ title="Print to PDF"
 <span class="n">annotations</span> <span class="o">=</span> <span class="n">annotations</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;N/A&quot;</span><span class="p">)</span>
 
 <span class="n">connec_lcc_adj</span> <span class="o">=</span> <span class="n">load_connectome_lcc_normal_adj</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">annotations</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">connec_lcc_adj</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2530
+2530
 </pre></div>
 </div>
 </div>
@@ -469,15 +486,22 @@ title="Print to PDF"
 <p>For the left and right hemispheres, we make a dictionary where the keys are the annotations <code class="docutils literal notranslate"><span class="pre">&quot;l&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;r&quot;</span></code> and the values are the skids that have the respective annotation</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hemi_skid_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="p">[]}</span>
-<span class="n">hemi_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;side&quot;</span><span class="p">])</span>
-<span class="n">skids_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">])</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hemi_list</span><span class="p">)):</span>
-    <span class="k">if</span> <span class="n">hemi_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;N/A&quot;</span><span class="p">:</span>
-        <span class="k">continue</span>
-    
-    <span class="k">if</span> <span class="n">hemi_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">hemi_skid_dict</span><span class="p">:</span>
-        <span class="n">hemi_skid_dict</span><span class="p">[</span><span class="n">hemi_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">skids_list</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">hemi_skid_dict = {&quot;l&quot;: [], &quot;r&quot;: []}</span>
+<span class="sd">hemi_list = list(annotations[&quot;side&quot;])</span>
+<span class="sd">skids_list = list(annotations[&quot;skids&quot;])</span>
+<span class="sd">for i in range(len(hemi_list)):</span>
+<span class="sd">    if hemi_list[i] == &quot;N/A&quot;:</span>
+<span class="sd">        continue</span>
+<span class="sd">    </span>
+<span class="sd">    if hemi_list[i] in hemi_skid_dict:</span>
+<span class="sd">        hemi_skid_dict[hemi_list[i]].append(str(skids_list[i]))</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;\nhemi_skid_dict = {&quot;l&quot;: [], &quot;r&quot;: []}\nhemi_list = list(annotations[&quot;side&quot;])\nskids_list = list(annotations[&quot;skids&quot;])\nfor i in range(len(hemi_list)):\n    if hemi_list[i] == &quot;N/A&quot;:\n        continue\n    \n    if hemi_list[i] in hemi_skid_dict:\n        hemi_skid_dict[hemi_list[i]].append(str(skids_list[i]))\n&#39;
 </pre></div>
 </div>
 </div>
@@ -485,16 +509,23 @@ title="Print to PDF"
 <p>For the segments, we make another dictionary where the keys are the annotations <code class="docutils literal notranslate"><span class="pre">&quot;head&quot;</span> <span class="pre">and</span> <span class="pre">&quot;pygidium&quot;</span> <span class="pre">and</span> <span class="pre">&quot;0&quot;</span> <span class="pre">and</span> <span class="pre">&quot;1&quot;</span> <span class="pre">and</span> <span class="pre">&quot;2&quot;</span> <span class="pre">and</span> <span class="pre">&quot;3&quot;</span></code> and the values are the skids that have the respective annotation</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#use annotations to get skids for segments</span>
-<span class="n">segment_skid_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="p">[]}</span>
-<span class="n">segment_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;segment&quot;</span><span class="p">])</span>
-<span class="n">skids_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">])</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">segment_list</span><span class="p">)):</span>
-    <span class="k">if</span> <span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;N/A&quot;</span><span class="p">:</span>
-        <span class="k">continue</span>
-    
-    <span class="k">if</span> <span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">segment_skid_dict</span><span class="p">:</span>
-        <span class="n">segment_skid_dict</span><span class="p">[</span><span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">skids_list</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">#use annotations to get skids for segments</span>
+<span class="sd">segment_skid_dict = {&quot;head&quot;: [], &quot;pygidium&quot;: [], &quot;0&quot;: [], &quot;1&quot;: [], &quot;2&quot;: [], &quot;3&quot;: []}</span>
+<span class="sd">segment_list = list(annotations[&quot;segment&quot;])</span>
+<span class="sd">skids_list = list(annotations[&quot;skids&quot;])</span>
+<span class="sd">for i in range(len(segment_list)):</span>
+<span class="sd">    if segment_list[i] == &quot;N/A&quot;:</span>
+<span class="sd">        continue</span>
+<span class="sd">    </span>
+<span class="sd">    if segment_list[i] in segment_skid_dict:</span>
+<span class="sd">        segment_skid_dict[segment_list[i]].append(str(skids_list[i]))</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;\n#use annotations to get skids for segments\nsegment_skid_dict = {&quot;head&quot;: [], &quot;pygidium&quot;: [], &quot;0&quot;: [], &quot;1&quot;: [], &quot;2&quot;: [], &quot;3&quot;: []}\nsegment_list = list(annotations[&quot;segment&quot;])\nskids_list = list(annotations[&quot;skids&quot;])\nfor i in range(len(segment_list)):\n    if segment_list[i] == &quot;N/A&quot;:\n        continue\n    \n    if segment_list[i] in segment_skid_dict:\n        segment_skid_dict[segment_list[i]].append(str(skids_list[i]))\n&#39;
 </pre></div>
 </div>
 </div>
@@ -502,16 +533,18 @@ title="Print to PDF"
 <p>We now make respective adjacency matrices for the skids for each hemisphere</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#use for loops to avoid repetition</span>
-<span class="n">df_hemis</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">annotations</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">hemi_skid_dict</span><span class="p">:</span>
-    <span class="n">df_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">connec_lcc_adj</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">hemi_skid_dict</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">hemi_skid_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">#use for loops to avoid repetition</span>
+<span class="sd">df_hemis = {&quot;l&quot;: None, &quot;r&quot;: None}</span>
+<span class="sd">print(annotations.index)</span>
+<span class="sd">for key in hemi_skid_dict:</span>
+<span class="sd">    df_hemis[key] = connec_lcc_adj.loc[hemi_skid_dict[key], hemi_skid_dict[key]]</span>
+<span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RangeIndex(start=0, stop=2701, step=1)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;\n#use for loops to avoid repetition\ndf_hemis = {&quot;l&quot;: None, &quot;r&quot;: None}\nprint(annotations.index)\nfor key in hemi_skid_dict:\n    df_hemis[key] = connec_lcc_adj.loc[hemi_skid_dict[key], hemi_skid_dict[key]]\n&#39;
 </pre></div>
 </div>
 </div>
@@ -519,9 +552,30 @@ title="Print to PDF"
 <p>We do the same here for the skids of the segments</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
-<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">segment_skid_dict</span><span class="p">:</span>
-    <span class="n">df_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">connec_lcc_adj</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">segment_skid_dict</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">segment_skid_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">df_segments = {&quot;head&quot;: None, &quot;pygidium&quot;: None, &quot;0&quot;: None, &quot;1&quot;: None, &quot;2&quot;: None, &quot;3&quot;: None}</span>
+<span class="sd">for key in segment_skid_dict:</span>
+<span class="sd">    df_segments[key] = connec_lcc_adj.loc[segment_skid_dict[key], segment_skid_dict[key]]</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;\ndf_segments = {&quot;head&quot;: None, &quot;pygidium&quot;: None, &quot;0&quot;: None, &quot;1&quot;: None, &quot;2&quot;: None, &quot;3&quot;: None}\nfor key in segment_skid_dict:\n    df_segments[key] = connec_lcc_adj.loc[segment_skid_dict[key], segment_skid_dict[key]]\n&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#sort adjacency matrices into dicts</span>
+<span class="n">df_hemis</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df_hemis</span><span class="p">):</span>
+    <span class="n">df_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">hemi_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="n">df_segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df_segments</span><span class="p">):</span>
+    <span class="n">df_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">segment_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -538,7 +592,7 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nx_segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nx_segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
 <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">df_segments</span><span class="p">:</span>
     <span class="n">nx_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_pandas_adjacency</span><span class="p">(</span><span class="n">df_segments</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
 </pre></div>
@@ -557,7 +611,7 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dens_segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dens_segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
 <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">nx_segments</span><span class="p">:</span>
     <span class="n">dens_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">density</span><span class="p">(</span><span class="n">nx_segments</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 </pre></div>
@@ -592,7 +646,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/density_plots_22_0.png" src="_images/density_plots_22_0.png" />
+<img alt="_images/density_plots_27_0.png" src="_images/density_plots_27_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -662,7 +716,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/density_plots_24_0.png" src="_images/density_plots_24_0.png" />
+<img alt="_images/density_plots_29_0.png" src="_images/density_plots_29_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -674,7 +728,7 @@ title="Print to PDF"
 <span class="c1">#run er test to get misc dict to plot confidence intervals</span>
 <span class="c1">#convert pandas df to numpy</span>
 
-<span class="n">np_segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="n">np_segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
 <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">df_segments</span><span class="p">:</span>
     <span class="n">np_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 <span class="n">plot_barplot</span><span class="p">(</span><span class="n">np_segments</span><span class="p">,</span> <span class="n">segment_labels</span><span class="p">,</span> <span class="n">segment_densities</span><span class="p">)</span>
@@ -683,7 +737,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/density_plots_25_0.png" src="_images/density_plots_25_0.png" />
+<img alt="_images/density_plots_30_0.png" src="_images/density_plots_30_0.png" />
 </div>
 </div>
 <p>Let’s now run the test for the left and right hemisphere</p>
@@ -696,7 +750,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.005929779366970326
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.3636771840698877
 </pre></div>
 </div>
 </div>
@@ -713,7 +767,7 @@ title="Print to PDF"
 <span class="n">pairwise_adjs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">adj_list</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 
 <span class="c1">#initialize dataframe</span>
-<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">]</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">]</span>
 <span class="n">zero_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)))</span>
 <span class="n">pval_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">zero_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
 <span class="n">misc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">zero_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
@@ -732,27 +786,22 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/25/jsfr4z_n287567y95vp2zgn40000gn/T/ipykernel_14061/3350976316.py:20: SettingWithCopyWarning: 
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/25/jsfr4z_n287567y95vp2zgn40000gn/T/ipykernel_19737/2980723623.py:20: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   misc_df[label[1]][label[0]] = misc
-/var/folders/25/jsfr4z_n287567y95vp2zgn40000gn/T/ipykernel_14061/3350976316.py:20: SettingWithCopyWarning: 
+/var/folders/25/jsfr4z_n287567y95vp2zgn40000gn/T/ipykernel_19737/2980723623.py:20: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   misc_df[label[1]][label[0]] = misc
-/var/folders/25/jsfr4z_n287567y95vp2zgn40000gn/T/ipykernel_14061/3350976316.py:20: SettingWithCopyWarning: 
+/var/folders/25/jsfr4z_n287567y95vp2zgn40000gn/T/ipykernel_19737/2980723623.py:20: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   misc_df[label[1]][label[0]] = misc
-/var/folders/25/jsfr4z_n287567y95vp2zgn40000gn/T/ipykernel_14061/3350976316.py:20: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  misc_df[label[1]][label[0]] = misc
-/var/folders/25/jsfr4z_n287567y95vp2zgn40000gn/T/ipykernel_14061/3350976316.py:20: SettingWithCopyWarning: 
+/var/folders/25/jsfr4z_n287567y95vp2zgn40000gn/T/ipykernel_19737/2980723623.py:20: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
@@ -779,7 +828,6 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
       <th></th>
       <th>head</th>
       <th>pygidium</th>
-      <th>0</th>
       <th>1</th>
       <th>2</th>
       <th>3</th>
@@ -789,55 +837,41 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
     <tr>
       <th>head</th>
       <td>0.000000e+00</td>
-      <td>1.029170e-29</td>
-      <td>1.571274e-03</td>
-      <td>1.510355e-11</td>
-      <td>9.314309e-04</td>
-      <td>3.182693e-05</td>
+      <td>5.854456e-66</td>
+      <td>1.171033e-27</td>
+      <td>1.887655e-31</td>
+      <td>1.345810e-32</td>
     </tr>
     <tr>
       <th>pygidium</th>
-      <td>1.029170e-29</td>
+      <td>5.854456e-66</td>
       <td>0.000000e+00</td>
-      <td>2.242307e-16</td>
-      <td>4.610634e-39</td>
-      <td>2.737831e-33</td>
-      <td>1.294301e-34</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>1.571274e-03</td>
-      <td>2.242307e-16</td>
-      <td>0.000000e+00</td>
-      <td>3.870680e-02</td>
-      <td>7.185830e-03</td>
-      <td>1.145437e-02</td>
+      <td>1.022672e-31</td>
+      <td>6.541884e-39</td>
+      <td>3.457583e-31</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>1.510355e-11</td>
-      <td>4.610634e-39</td>
-      <td>3.870680e-02</td>
+      <td>1.171033e-27</td>
+      <td>1.022672e-31</td>
       <td>0.000000e+00</td>
-      <td>6.316228e-04</td>
-      <td>2.462645e-02</td>
+      <td>5.238621e-02</td>
+      <td>7.521865e-01</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>9.314309e-04</td>
-      <td>2.737831e-33</td>
-      <td>7.185830e-03</td>
-      <td>6.316228e-04</td>
+      <td>1.887655e-31</td>
+      <td>6.541884e-39</td>
+      <td>5.238621e-02</td>
       <td>0.000000e+00</td>
-      <td>3.009934e-01</td>
+      <td>1.618403e-02</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>3.182693e-05</td>
-      <td>1.294301e-34</td>
-      <td>1.145437e-02</td>
-      <td>2.462645e-02</td>
-      <td>3.009934e-01</td>
+      <td>1.345810e-32</td>
+      <td>3.457583e-31</td>
+      <td>7.521865e-01</td>
+      <td>1.618403e-02</td>
       <td>0.000000e+00</td>
     </tr>
   </tbody>
@@ -865,7 +899,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">seaborn.utils</span> <span class="kn">import</span> <span class="n">relative_luminance</span>
-<span class="k">def</span> <span class="nf">plot_pvals_v2</span><span class="p">(</span><span class="n">pval_df</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">plot_pvals_v2</span><span class="p">(</span><span class="n">pval_df</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">multiple_correct</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">width_ratios</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
         <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
@@ -891,7 +925,12 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
         <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Source group&quot;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Target group&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Density tests p-values segments&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Source group&quot;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Target group&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">multiple_correct</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Density tests p-values segments (corrected)&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Density tests p-values segments (uncorrected)&quot;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">))</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">xticklabels</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
     <span class="n">colors</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">get_children</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_facecolors</span><span class="p">()</span>
 
@@ -925,7 +964,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">colors</span><span class="p">):</span>
         <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)))</span>
         <span class="c1">#print(pval_df[names[i]][names[j]])</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pval_df</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="n">names</span><span class="p">[</span><span class="n">j</span><span class="p">]])</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span> <span class="ow">and</span> <span class="n">i</span><span class="o">&gt;</span><span class="n">j</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pval_df</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="n">names</span><span class="p">[</span><span class="n">j</span><span class="p">]])</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span> <span class="ow">and</span> <span class="n">i</span><span class="o">!=</span><span class="n">j</span><span class="p">:</span>
             <span class="n">lum</span> <span class="o">=</span> <span class="n">relative_luminance</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
             <span class="n">text_color</span> <span class="o">=</span> <span class="s2">&quot;.15&quot;</span> <span class="k">if</span> <span class="n">lum</span> <span class="o">&gt;</span> <span class="mf">0.408</span> <span class="k">else</span> <span class="s2">&quot;w&quot;</span>
 
@@ -943,73 +982,33 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_pvals_v2</span><span class="p">(</span><span class="n">pval_df</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_pvals_v2</span><span class="p">(</span><span class="n">pval_df</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">multiple_correct</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/pandas/core/internals/blocks.py:352: RuntimeWarning: divide by zero encountered in log10
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/pandas/core/internals/blocks.py:351: RuntimeWarning: divide by zero encountered in log10
   result = func(self.values, **kwargs)
-/var/folders/25/jsfr4z_n287567y95vp2zgn40000gn/T/ipykernel_14061/878231019.py:62: RuntimeWarning: divide by zero encountered in log
-  if np.log(pval_df[names[i]][names[j]]) &lt; np.log(0.05) and i&gt;j:
+/var/folders/25/jsfr4z_n287567y95vp2zgn40000gn/T/ipykernel_19737/4091286456.py:67: RuntimeWarning: divide by zero encountered in log
+  if np.log(pval_df[names[i]][names[j]]) &lt; np.log(0.05) and i!=j:
 </pre></div>
 </div>
-<img alt="_images/density_plots_32_1.png" src="_images/density_plots_32_1.png" />
+<img alt="_images/density_plots_37_1.png" src="_images/density_plots_37_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#plot pvals for pairwise er tests between segments</span>
-<span class="k">def</span> <span class="nf">plot_pvals</span><span class="p">(</span><span class="n">pval_df</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
-    <span class="c1">#if ax == None:</span>
-    <span class="c1">#    fig, ax = plt.subplots(1, 2, figsize=(10, 10))</span>
-    <span class="c1">#make upper triangle and diag vals 0</span>
-    <span class="n">pval_lt</span> <span class="o">=</span> <span class="n">pval_df</span><span class="o">.</span><span class="n">mask</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">pval_df</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">)))</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">bool_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">pval_df</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">pval_df</span><span class="p">),</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">pval_df</span><span class="p">)]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pval_lt</span><span class="p">))</span>
-    <span class="n">segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;segment&quot;</span><span class="p">:</span> <span class="n">names</span><span class="p">}</span>
-    <span class="n">segments_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
-    <span class="n">ax</span><span class="p">,</span> <span class="n">divider</span> <span class="o">=</span> <span class="n">adjplot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pval_lt</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">meta</span><span class="o">=</span><span class="n">segments_df</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;segment&quot;</span><span class="p">])</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
-    <span class="n">test_ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">test_ax_2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-    <span class="n">test_ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">xmargin</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
-    <span class="c1">#print(segments_df)</span>
-    <span class="c1">#im = adjplot(np.log10(pval_lt).to_numpy(), ax=ax[0], meta=segments_df, color=[&quot;segment&quot;])</span>
-    <span class="c1">#im2 = adjplot(np.log10(pval_lt).to_numpy(), ax=ax[1], meta=segments_df, color=[&quot;segment&quot;], group=[&quot;segment&quot;])</span>
-    <span class="c1">#ax[0].set(ylabel=names, xlabel=names)</span>
-    <span class="c1">#im = matrixplot(np.log10(pval_lt).to_numpy(), ax=ax[0], col_meta=segments, row_meta=segments, row_color=names, col_color=names)</span>
-    <span class="k">return</span> <span class="n">ax</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#heatmap of pvals</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-
-<span class="n">names_mod</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
-<span class="n">names_mod</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;pyg&quot;</span>
-<span class="n">plot_pvals</span><span class="p">(</span><span class="n">pval_df</span><span class="p">,</span> <span class="n">names_mod</span><span class="p">)</span>
-<span class="c1">#plt.savefig(folder / &quot;uncorrected_ER_test_heatmap.png&quot;)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">statsmodels.stats.multitest</span> <span class="kn">import</span> <span class="n">multipletests</span>
+<span class="n">np_pvals_hemis</span> <span class="o">=</span> <span class="n">pval_hemis</span>
+<span class="n">corrected_pval_hemi</span> <span class="o">=</span> <span class="n">multipletests</span><span class="p">(</span><span class="n">pval_hemis</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">corrected_pval_hemi</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>               head   pygidium         0         1         2    3
-head       0.000000   0.000000  0.000000  0.000000  0.000000  0.0
-pygidium -28.987513   0.000000  0.000000  0.000000  0.000000  0.0
-0         -2.803748 -15.649305  0.000000  0.000000  0.000000  0.0
-1        -10.820921 -38.336239 -1.412213  0.000000  0.000000  0.0
-2         -3.030849 -32.562593 -2.143523 -3.199542  0.000000  0.0
-3         -4.497205 -33.887965 -1.941029 -1.608598 -0.521443  0.0
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.36367718])
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:&gt;
-</pre></div>
-</div>
-<img alt="_images/density_plots_34_2.png" src="_images/density_plots_34_2.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1030,11 +1029,25 @@ pygidium -28.987513   0.000000  0.000000  0.000000  0.000000  0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/pandas/core/internals/blocks.py:352: RuntimeWarning: divide by zero encountered in log10
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/pandas/core/internals/blocks.py:351: RuntimeWarning: divide by zero encountered in log10
   result = func(self.values, **kwargs)
 </pre></div>
 </div>
-<img alt="_images/density_plots_35_1.png" src="_images/density_plots_35_1.png" />
+<img alt="_images/density_plots_39_1.png" src="_images/density_plots_39_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_pvals_v2</span><span class="p">(</span><span class="n">corrected_pvals_df</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">multiple_correct</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/25/jsfr4z_n287567y95vp2zgn40000gn/T/ipykernel_19737/4091286456.py:67: RuntimeWarning: divide by zero encountered in log
+  if np.log(pval_df[names[i]][names[j]]) &lt; np.log(0.05) and i!=j:
+</pre></div>
+</div>
+<img alt="_images/density_plots_41_1.png" src="_images/density_plots_41_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1173,7 +1186,6 @@ pygidium -28.987513   0.000000  0.000000  0.000000  0.000000  0.0
       <th></th>
       <th>head</th>
       <th>pygidium</th>
-      <th>0</th>
       <th>1</th>
       <th>2</th>
       <th>3</th>
@@ -1187,7 +1199,6 @@ pygidium -28.987513   0.000000  0.000000  0.000000  0.000000  0.0
       <td>True</td>
       <td>True</td>
       <td>True</td>
-      <td>True</td>
     </tr>
     <tr>
       <th>pygidium</th>
@@ -1196,24 +1207,13 @@ pygidium -28.987513   0.000000  0.000000  0.000000  0.000000  0.0
       <td>True</td>
       <td>True</td>
       <td>True</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>True</td>
-      <td>True</td>
-      <td>True</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
     </tr>
     <tr>
       <th>1</th>
       <td>True</td>
       <td>True</td>
+      <td>True</td>
       <td>False</td>
-      <td>True</td>
-      <td>True</td>
       <td>False</td>
     </tr>
     <tr>
@@ -1222,14 +1222,12 @@ pygidium -28.987513   0.000000  0.000000  0.000000  0.000000  0.0
       <td>True</td>
       <td>False</td>
       <td>True</td>
-      <td>True</td>
       <td>False</td>
     </tr>
     <tr>
       <th>3</th>
       <td>True</td>
       <td>True</td>
-      <td>False</td>
       <td>False</td>
       <td>False</td>
       <td>True</td>
@@ -1344,14 +1342,7 @@ pygidium -28.987513   0.000000  0.000000  0.000000  0.000000  0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.001708424262795441 0.0018305779447240762 0.001829632006604465 0.001957388868456069
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 400x600 with 1 Axes&gt;,
- &lt;AxesSubplot:title={&#39;center&#39;:&#39;l vs r; pval: 0.005929779366970326, method: beta&#39;}, xlabel=&#39;Section&#39;, ylabel=&#39;Estimated density ($\\hat{p}$)&#39;&gt;)
-</pre></div>
-</div>
-<img alt="_images/density_plots_42_2.png" src="_images/density_plots_42_2.png" />
+<img alt="_images/density_plots_48_0.png" src="_images/density_plots_48_0.png" />
 </div>
 </div>
 <p>To make comparisons for the segments, we will make two lists: one that has every pairwise combination of the segment names and the other of the pairwise combination of the respective adjs</p>
@@ -1376,21 +1367,16 @@ pygidium -28.987513   0.000000  0.000000  0.000000  0.000000  0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/density_plots_46_0.png" src="_images/density_plots_46_0.png" />
-<img alt="_images/density_plots_46_1.png" src="_images/density_plots_46_1.png" />
-<img alt="_images/density_plots_46_2.png" src="_images/density_plots_46_2.png" />
-<img alt="_images/density_plots_46_3.png" src="_images/density_plots_46_3.png" />
-<img alt="_images/density_plots_46_4.png" src="_images/density_plots_46_4.png" />
-<img alt="_images/density_plots_46_5.png" src="_images/density_plots_46_5.png" />
-<img alt="_images/density_plots_46_6.png" src="_images/density_plots_46_6.png" />
-<img alt="_images/density_plots_46_7.png" src="_images/density_plots_46_7.png" />
-<img alt="_images/density_plots_46_8.png" src="_images/density_plots_46_8.png" />
-<img alt="_images/density_plots_46_9.png" src="_images/density_plots_46_9.png" />
-<img alt="_images/density_plots_46_10.png" src="_images/density_plots_46_10.png" />
-<img alt="_images/density_plots_46_11.png" src="_images/density_plots_46_11.png" />
-<img alt="_images/density_plots_46_12.png" src="_images/density_plots_46_12.png" />
-<img alt="_images/density_plots_46_13.png" src="_images/density_plots_46_13.png" />
-<img alt="_images/density_plots_46_14.png" src="_images/density_plots_46_14.png" />
+<img alt="_images/density_plots_52_0.png" src="_images/density_plots_52_0.png" />
+<img alt="_images/density_plots_52_1.png" src="_images/density_plots_52_1.png" />
+<img alt="_images/density_plots_52_2.png" src="_images/density_plots_52_2.png" />
+<img alt="_images/density_plots_52_3.png" src="_images/density_plots_52_3.png" />
+<img alt="_images/density_plots_52_4.png" src="_images/density_plots_52_4.png" />
+<img alt="_images/density_plots_52_5.png" src="_images/density_plots_52_5.png" />
+<img alt="_images/density_plots_52_6.png" src="_images/density_plots_52_6.png" />
+<img alt="_images/density_plots_52_7.png" src="_images/density_plots_52_7.png" />
+<img alt="_images/density_plots_52_8.png" src="_images/density_plots_52_8.png" />
+<img alt="_images/density_plots_52_9.png" src="_images/density_plots_52_9.png" />
 </div>
 </div>
 </section>

@@ -380,325 +380,159 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="group-connection-testing">
 <h1>Group Connection Testing<a class="headerlink" href="#group-connection-testing" title="Permalink to this headline">#</a></h1>
+<p>In this notebook we will be testing whether the hemispheres/segments come from an stochastic block model, which models graphs containing communities, in which subsets of nodes within each community are characterized as being connected to each other with particular edge densities. Here, our communities are determined by the classes of the neurons within each hemisphere/segment, which we are considering can be interneuron, motorneuron, or sensory neuron.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
-<span class="kn">import</span> <span class="nn">itertools</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">from</span> <span class="nn">networkx</span> <span class="kn">import</span> <span class="n">from_pandas_adjacency</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">combinations</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
-<span class="kn">from</span> <span class="nn">graspologic.inference</span> <span class="kn">import</span> <span class="n">group_connection_test</span>
-<span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">heatmap</span><span class="p">,</span> <span class="n">adjplot</span>
-<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_connectome_normal_lcc_annotations</span><span class="p">,</span> <span class="n">load_left_adj_labels</span><span class="p">,</span> <span class="n">load_right_adj_labels</span><span class="p">,</span> <span class="n">load_head_adj_labels</span><span class="p">,</span> <span class="n">load_pygidium_adj_labels</span><span class="p">,</span> <span class="n">load_0_adj_labels</span><span class="p">,</span> <span class="n">load_1_adj_labels</span><span class="p">,</span> <span class="n">load_2_adj_labels</span><span class="p">,</span> <span class="n">load_3_adj_labels</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import logging
+import pandas as pd
+import numpy as np
+import csv
+import networkx as nx
+import itertools
+import seaborn as sns
+from pathlib import Path
+from networkx import from_pandas_adjacency
+from itertools import chain, combinations
+from matplotlib import pyplot as plt
+from collections import namedtuple
+from graspologic.inference import group_connection_test
+from graspologic.plot import heatmap, adjplot
+from pkg.platy import _get_folder, load_connectome_normal_lcc_annotations, load_left_adj_labels, load_right_adj_labels, load_head_adj_labels, load_pygidium_adj_labels, load_0_adj_labels, load_1_adj_labels, load_2_adj_labels, load_3_adj_labels
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>folder = _get_folder()
+annotations = load_connectome_normal_lcc_annotations()
+folder
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PosixPath(&#39;/Users/kareefullah/Desktop/NeuroData/neurodata/platy-data/docs/outputs&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following blocks of code generate dataframes, where the <code class="docutils literal notranslate"><span class="pre">skids_df</span></code> represent the skids of interest in the hemispheres/segments and <code class="docutils literal notranslate"><span class="pre">labels_df</span></code> represent the corresponding labels of the classes of the neurons</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>left_adj, _ = load_left_adj_labels()
+left_adj_index = list(left_adj.index)
+
+right_adj, _ = load_right_adj_labels()
+right_adj_index = list(right_adj.index)
+
+all_hemi_index  = left_adj_index + right_adj_index
+all_hemi_index = [int(i) for i in all_hemi_index]
+
+skids_hemis = {&quot;l&quot;: [], &quot;r&quot;: []}
+labels_hemis = {&quot;l&quot;: [], &quot;r&quot;: []}
+poss_labels = [&quot;s&quot;, &quot;i&quot;, &quot;m&quot;]
+
+#add skids and labels for hemis;
+for key in skids_hemis:
+    for i in range(len(annotations[&quot;skids&quot;])):
+
+        #check if the skid is in the left/right adj (normal, lcc), and the side is left or right, and the class exists as sensory, motor, or inter
+        if(annotations[&quot;skids&quot;][i] in all_hemi_index and annotations[&quot;side&quot;][i]==key and annotations[&quot;class&quot;][i] in poss_labels):
+            skids_hemis[key].append(annotations[&quot;skids&quot;][i])
+            labels_hemis[key].append(annotations[&quot;class&quot;][i])
+
+#convert dicts to dataframes
+skids_hemis_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in skids_hemis.items()]))
+labels_hemis_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in labels_hemis.items()]))
+skids_hemis_df.to_csv(folder / &quot;skids_hemis_classes.csv&quot;)
+labels_hemis_df.to_csv(folder / &quot;labels_hemis_classes.csv&quot;)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folder</span> <span class="o">=</span> <span class="n">_get_folder</span><span class="p">()</span>
-<span class="n">annotations</span> <span class="o">=</span> <span class="n">load_connectome_normal_lcc_annotations</span><span class="p">()</span>
-<span class="n">annotations</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>head_adj, _ = load_head_adj_labels()
+head_adj_index = list(head_adj.index)
+
+pyg_adj, _ = load_pygidium_adj_labels()
+pyg_adj_index = list(pyg_adj.index)
+
+#adj_0, _ = load_0_adj_labels()
+#adj_0_index = list(adj_0.index)
+
+adj_1, _ = load_1_adj_labels()
+adj_1_index = list(adj_1.index)
+
+adj_2, _ = load_2_adj_labels()
+adj_2_index = list(adj_2.index)
+
+adj_3, _ = load_3_adj_labels()
+adj_3_index = list(adj_3.index)
+
+all_segs_index  = head_adj_index + pyg_adj_index + adj_1_index + adj_2_index + adj_3_index
+all_segs_index = [int(i) for i in all_segs_index]
+
+skids_segs = {&quot;head&quot;: [], &quot;pygidium&quot;: [], &quot;1&quot;: [], &quot;2&quot;: [], &quot;3&quot;: []}
+labels_segs = {&quot;head&quot;: [], &quot;pygidium&quot;: [], &quot;1&quot;: [], &quot;2&quot;: [], &quot;3&quot;: []}
+
+for key in skids_segs:
+    for i in range(len(annotations[&quot;skids&quot;])):
+        if(annotations[&quot;skids&quot;][i] in all_segs_index and annotations[&quot;segment&quot;][i]==key and annotations[&quot;class&quot;][i] in poss_labels):
+            skids_segs[key].append(annotations[&quot;skids&quot;][i])
+            labels_segs[key].append(annotations[&quot;class&quot;][i])
+
+skids_segs_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in skids_segs.items()]))
+labels_segs_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in labels_segs.items()]))
+skids_segs_df.to_csv(folder / &quot;skids_segs_classes.csv&quot;)
+labels_segs_df.to_csv(folder / &quot;labels_segs_classes.csv&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We make barplots for the counts of each of the classes across the hemispheres/segments using the dictionaries we generated above</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>new_folder = Path.joinpath(folder, &quot;group_connection_plots&quot;)
+new_folder
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>skids</th>
-      <th>side</th>
-      <th>class</th>
-      <th>segment</th>
-      <th>type</th>
-      <th>group</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>2015233</td>
-      <td>l</td>
-      <td>s</td>
-      <td>head</td>
-      <td>100.0</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1548290</td>
-      <td>l</td>
-      <td>NaN</td>
-      <td>1</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1318919</td>
-      <td>l</td>
-      <td>s</td>
-      <td>head</td>
-      <td>88.0</td>
-      <td>15.0</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2015241</td>
-      <td>l</td>
-      <td>s</td>
-      <td>head</td>
-      <td>100.0</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1294348</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>2525</th>
-      <td>1302513</td>
-      <td>l</td>
-      <td>s</td>
-      <td>head</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2526</th>
-      <td>1671147</td>
-      <td>r</td>
-      <td>m</td>
-      <td>1</td>
-      <td>165.0</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2527</th>
-      <td>1974266</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2528</th>
-      <td>1376251</td>
-      <td>l</td>
-      <td>i</td>
-      <td>head</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2529</th>
-      <td>1048573</td>
-      <td>l</td>
-      <td>i</td>
-      <td>3</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-  </tbody>
-</table>
-<p>2530 rows × 6 columns</p>
-</div></div></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">left_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_left_adj_labels</span><span class="p">()</span>
-<span class="n">left_adj_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">left_adj</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-
-<span class="n">right_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_right_adj_labels</span><span class="p">()</span>
-<span class="n">right_adj_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">right_adj</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-
-<span class="n">all_hemi_index</span>  <span class="o">=</span> <span class="n">left_adj_index</span> <span class="o">+</span> <span class="n">right_adj_index</span>
-<span class="n">all_hemi_index</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">all_hemi_index</span><span class="p">]</span>
-
-<span class="n">skids_hemis</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="p">[]}</span>
-<span class="n">labels_hemis</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="p">[]}</span>
-<span class="n">poss_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">]</span>
-
-<span class="c1">#add skids and labels for hemis</span>
-<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">skids_hemis</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">])):</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">all_hemi_index</span> <span class="ow">and</span> <span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;side&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">key</span> <span class="ow">and</span> <span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">poss_labels</span><span class="p">):</span>
-            <span class="n">skids_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">labels_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
-
-<span class="n">skids_hemis_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">dict</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">skids_hemis</span><span class="o">.</span><span class="n">items</span><span class="p">()]))</span>
-<span class="n">labels_hemis_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">dict</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">labels_hemis</span><span class="o">.</span><span class="n">items</span><span class="p">()]))</span>
-<span class="n">skids_hemis_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;skids_hemis_classes.csv&quot;</span><span class="p">)</span>
-<span class="n">labels_hemis_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;labels_hemis_classes.csv&quot;</span><span class="p">)</span>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PosixPath(&#39;/Users/kareefullah/Desktop/NeuroData/neurodata/platy-data/docs/outputs/group_connection_plots&#39;)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">head_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_head_adj_labels</span><span class="p">()</span>
-<span class="n">head_adj_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">head_adj</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#comparison for hemis
+count_hemis = {&quot;l&quot; : {&quot;s&quot;: 0, &quot;i&quot;: 0, &quot;m&quot;: 0}, &quot;r&quot;: {&quot;s&quot;: 0, &quot;i&quot;: 0, &quot;m&quot;: 0}}
 
-<span class="n">pyg_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_pygidium_adj_labels</span><span class="p">()</span>
-<span class="n">pyg_adj_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pyg_adj</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+for key in count_hemis:
+    for i in range(len(labels_hemis[key])):
+        count_hemis[key][labels_hemis[key][i]] += 1
 
-<span class="n">adj_0</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_0_adj_labels</span><span class="p">()</span>
-<span class="n">adj_0_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">adj_0</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+# get the lists of number of skids for y values, x values are the keys
+keys = poss_labels # &quot;s&quot;, &quot;i&quot;, &quot;m&quot;
+list_counts_hemis = []
+class_label_hemis = []
+hemi_label = []
+# loop through &quot;l&quot; and &quot;r&quot;
+for key in count_hemis:
+    # loop through &quot;s&quot;, &quot;i&quot;, &quot;m&quot;
+    for inner_key in count_hemis[key]:
+        # append &quot;s&quot; &quot;i&quot; or &quot;m&quot;
+        class_label_hemis.append(inner_key)
+        # add 1 to the count of the respective class label in the respective key of count_hemis
+        list_counts_hemis.append(count_hemis[key][inner_key])
+        # append the outer key from count_hemis
+        hemi_label.append(key)
 
-<span class="n">adj_1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_1_adj_labels</span><span class="p">()</span>
-<span class="n">adj_1_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">adj_1</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-
-<span class="n">adj_2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_2_adj_labels</span><span class="p">()</span>
-<span class="n">adj_2_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">adj_2</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-
-<span class="n">adj_3</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_3_adj_labels</span><span class="p">()</span>
-<span class="n">adj_3_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">adj_3</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-
-<span class="n">all_segs_index</span>  <span class="o">=</span> <span class="n">head_adj_index</span> <span class="o">+</span> <span class="n">pyg_adj_index</span> <span class="o">+</span> <span class="n">adj_0_index</span> <span class="o">+</span> <span class="n">adj_1_index</span> <span class="o">+</span> <span class="n">adj_2_index</span> <span class="o">+</span> <span class="n">adj_3_index</span>
-<span class="n">all_segs_index</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">all_segs_index</span><span class="p">]</span>
-
-<span class="n">skids_segs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="p">[]}</span>
-<span class="n">labels_segs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="p">[]}</span>
-
-<span class="c1">#add skids and labels for hemis</span>
-<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">skids_segs</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">])):</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">all_segs_index</span> <span class="ow">and</span> <span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;segment&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">key</span> <span class="ow">and</span> <span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">poss_labels</span><span class="p">):</span>
-            <span class="n">skids_segs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">labels_segs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
-
-<span class="n">skids_segs_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">dict</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">skids_segs</span><span class="o">.</span><span class="n">items</span><span class="p">()]))</span>
-<span class="n">labels_segs_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">dict</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">labels_segs</span><span class="o">.</span><span class="n">items</span><span class="p">()]))</span>
-<span class="n">skids_segs_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;skids_segs_classes.csv&quot;</span><span class="p">)</span>
-<span class="n">labels_segs_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;labels_segs_classes.csv&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">#get skids for l, r, head, pygidium, 0, 1, 2, 3</span>
-
-
-<span class="sd">skids_hemis = {&quot;l&quot;: [], &quot;r&quot;: []}</span>
-<span class="sd">skids_hemis_total_list = []</span>
-<span class="sd">labels_hemis = {&quot;l&quot;: [], &quot;r&quot;: []}</span>
-<span class="sd">skids_segs = {&quot;head&quot;: [], &quot;pygidium&quot;: [], &quot;0&quot;: [], &quot;1&quot;: [], &quot;2&quot;: [], &quot;3&quot;: []}</span>
-<span class="sd">skids_segs_total_list = []</span>
-<span class="sd">labels_segs = {&quot;head&quot;: [], &quot;pygidium&quot;: [], &quot;0&quot;: [], &quot;1&quot;: [], &quot;2&quot;: [], &quot;3&quot;: []}</span>
-<span class="sd">poss_labels = [&quot;s&quot;, &quot;i&quot;, &quot;m&quot;]</span>
-
-<span class="sd">#add skids and labels for hemis</span>
-<span class="sd">for key in skids_hemis:</span>
-<span class="sd">    for i in range(len(annotations[&quot;skids&quot;])):</span>
-<span class="sd">        if(annotations[&quot;side&quot;][i]==key and annotations[&quot;class&quot;][i] in poss_labels):</span>
-<span class="sd">            skids_hemis[key].append(annotations[&quot;skids&quot;][i])</span>
-<span class="sd">            skids_hemis_total_list.append(annotations[&quot;skids&quot;][i])</span>
-<span class="sd">            labels_hemis[key].append(annotations[&quot;class&quot;][i])</span>
-
-<span class="sd">#add skids and labels for segments</span>
-<span class="sd">for key in skids_segs:</span>
-<span class="sd">    for i in range(len(annotations[&quot;skids&quot;])):</span>
-<span class="sd">        if(annotations[&quot;segment&quot;][i]==key and annotations[&quot;class&quot;][i] in poss_labels):</span>
-<span class="sd">            skids_segs[key].append(annotations[&quot;skids&quot;][i])</span>
-<span class="sd">            skids_segs_total_list.append(annotations[&quot;skids&quot;][i])</span>
-<span class="sd">            labels_segs[key].append(annotations[&quot;class&quot;][i])</span>
-
-<span class="sd">skids_hemis_total_list = [str(x) for x in skids_hemis_total_list]</span>
-
-<span class="sd">#dictionaries to dfs</span>
-<span class="sd">skids_hemis_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in skids_hemis.items()]))</span>
-<span class="sd">labels_hemis_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in labels_hemis.items()]))</span>
-<span class="sd">skids_segs_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in skids_segs.items()]))</span>
-<span class="sd">labels_segs_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in labels_segs.items()]))</span>
-
-<span class="sd">#save dfs as csvs to get the adjs in gen_data</span>
-<span class="sd">skids_hemis_df.to_csv(folder / &quot;skids_hemi_classes.csv&quot;)</span>
-<span class="sd">labels_hemis_df.to_csv(folder / &quot;labels_hemi_classes.csv&quot;)</span>
-<span class="sd">skids_segs_df.to_csv(folder / &quot;skids_segs_classes.csv&quot;)</span>
-<span class="sd">labels_segs_df.to_csv(folder / &quot;labels_segs_classes.csv&quot;)</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;\n#get skids for l, r, head, pygidium, 0, 1, 2, 3\n\n\nskids_hemis = {&quot;l&quot;: [], &quot;r&quot;: []}\nskids_hemis_total_list = []\nlabels_hemis = {&quot;l&quot;: [], &quot;r&quot;: []}\nskids_segs = {&quot;head&quot;: [], &quot;pygidium&quot;: [], &quot;0&quot;: [], &quot;1&quot;: [], &quot;2&quot;: [], &quot;3&quot;: []}\nskids_segs_total_list = []\nlabels_segs = {&quot;head&quot;: [], &quot;pygidium&quot;: [], &quot;0&quot;: [], &quot;1&quot;: [], &quot;2&quot;: [], &quot;3&quot;: []}\nposs_labels = [&quot;s&quot;, &quot;i&quot;, &quot;m&quot;]\n\n#add skids and labels for hemis\nfor key in skids_hemis:\n    for i in range(len(annotations[&quot;skids&quot;])):\n        if(annotations[&quot;side&quot;][i]==key and annotations[&quot;class&quot;][i] in poss_labels):\n            skids_hemis[key].append(annotations[&quot;skids&quot;][i])\n            skids_hemis_total_list.append(annotations[&quot;skids&quot;][i])\n            labels_hemis[key].append(annotations[&quot;class&quot;][i])\n\n#add skids and labels for segments\nfor key in skids_segs:\n    for i in range(len(annotations[&quot;skids&quot;])):\n        if(annotations[&quot;segment&quot;][i]==key and annotations[&quot;class&quot;][i] in poss_labels):\n            skids_segs[key].append(annotations[&quot;skids&quot;][i])\n            skids_segs_total_list.append(annotations[&quot;skids&quot;][i])\n            labels_segs[key].append(annotations[&quot;class&quot;][i])\n\nskids_hemis_total_list = [str(x) for x in skids_hemis_total_list]\n\n#dictionaries to dfs\nskids_hemis_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in skids_hemis.items()]))\nlabels_hemis_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in labels_hemis.items()]))\nskids_segs_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in skids_segs.items()]))\nlabels_segs_df = pd.DataFrame(dict([(k, pd.Series(v)) for k,v in labels_segs.items()]))\n\n#save dfs as csvs to get the adjs in gen_data\nskids_hemis_df.to_csv(folder / &quot;skids_hemi_classes.csv&quot;)\nlabels_hemis_df.to_csv(folder / &quot;labels_hemi_classes.csv&quot;)\nskids_segs_df.to_csv(folder / &quot;skids_segs_classes.csv&quot;)\nlabels_segs_df.to_csv(folder / &quot;labels_segs_classes.csv&quot;)\n\n&#39;
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#comparison for hemis</span>
-<span class="n">count_hemis</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}}</span>
-
-<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">count_hemis</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">labels_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">])):</span>
-        <span class="n">count_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">labels_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
-
-<span class="c1"># get the lists of number of skids for y values, x values are the keys</span>
-<span class="n">keys</span> <span class="o">=</span> <span class="n">poss_labels</span> <span class="c1"># &quot;s&quot;, &quot;i&quot;, &quot;m&quot;</span>
-<span class="n">list_counts_hemis</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">class_label_hemis</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">hemi_label</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="c1"># loop through &quot;l&quot; and &quot;r&quot;</span>
-<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">count_hemis</span><span class="p">:</span>
-    <span class="c1"># loop through &quot;s&quot;, &quot;i&quot;, &quot;m&quot;</span>
-    <span class="k">for</span> <span class="n">inner_key</span> <span class="ow">in</span> <span class="n">count_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
-        <span class="c1"># append &quot;s&quot; &quot;i&quot; or &quot;m&quot;</span>
-        <span class="n">class_label_hemis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inner_key</span><span class="p">)</span>
-        <span class="c1"># add 1 to the count of the respective class label in the respective key of count_hemis</span>
-        <span class="n">list_counts_hemis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">count_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">inner_key</span><span class="p">])</span>
-        <span class="c1"># append the outer key from count_hemis</span>
-        <span class="n">hemi_label</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-
-<span class="n">label_counts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">class_label_hemis</span><span class="p">,</span> <span class="n">list_counts_hemis</span><span class="p">,</span> <span class="n">hemi_label</span><span class="p">))</span>
-<span class="n">df_hemis</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">label_counts</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="s2">&quot;side&quot;</span><span class="p">])</span>
-<span class="n">df_hemis</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;hemi_classes.csv&quot;</span><span class="p">)</span>
-<span class="n">df_hemis</span>
+label_counts = list(zip(class_label_hemis, list_counts_hemis, hemi_label))
+df_hemis = pd.DataFrame(label_counts, columns = [&quot;class&quot;, &quot;count&quot;, &quot;side&quot;])
+df_hemis.to_csv(new_folder / &quot;hemi_classes_counts.csv&quot;)
+df_hemis
 </pre></div>
 </div>
 </div>
@@ -769,57 +603,55 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;side&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_hemis</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;counts of classes across hemis&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sns.set(style=&quot;white&quot;)
+sns.barplot(x=&quot;class&quot;, y=&quot;count&quot;, hue=&quot;side&quot;, data=df_hemis)
+plt.title(&quot;counts of classes across hemis&quot;)
+plt.savefig(new_folder / &quot;hemi_classes_barplot.png&quot;)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;counts of classes across hemis&#39;)
-</pre></div>
-</div>
-<img alt="_images/sbm_tests_7_1.png" src="_images/sbm_tests_7_1.png" />
+<img alt="_images/sbm_tests_10_0.png" src="_images/sbm_tests_10_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#comparison for segments</span>
-<span class="n">count_segs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
-              <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
-              <span class="s2">&quot;0&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
-              <span class="s2">&quot;1&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
-              <span class="s2">&quot;2&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
-              <span class="s2">&quot;3&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#comparison for segments
+count_segs = {&quot;head&quot; : {&quot;s&quot;: 0, &quot;i&quot;: 0, &quot;m&quot;: 0},
+              &quot;pygidium&quot;: {&quot;s&quot;: 0, &quot;i&quot;: 0, &quot;m&quot;: 0},
+              &quot;1&quot; : {&quot;s&quot;: 0, &quot;i&quot;: 0, &quot;m&quot;: 0},
+              &quot;2&quot; : {&quot;s&quot;: 0, &quot;i&quot;: 0, &quot;m&quot;: 0},
+              &quot;3&quot; : {&quot;s&quot;: 0, &quot;i&quot;: 0, &quot;m&quot;: 0},}
 
-<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">count_segs</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">labels_segs</span><span class="p">[</span><span class="n">key</span><span class="p">])):</span>
-        <span class="n">count_segs</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">labels_segs</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">count_segs</span><span class="p">)</span>
-<span class="c1"># get the lists of number of skids for y values, x values are the keys</span>
-<span class="n">keys</span> <span class="o">=</span> <span class="n">poss_labels</span> <span class="c1"># &quot;s&quot;, &quot;i&quot;, &quot;m&quot;</span>
-<span class="n">list_counts_segs</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">class_label_segs</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">segs_label</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="c1"># loop through &quot;l&quot; and &quot;r&quot;</span>
-<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">count_segs</span><span class="p">:</span>
-    <span class="c1"># loop through &quot;s&quot;, &quot;i&quot;, &quot;m&quot;</span>
-    <span class="k">for</span> <span class="n">inner_key</span> <span class="ow">in</span> <span class="n">count_segs</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
-        <span class="c1"># append &quot;s&quot; &quot;i&quot; or &quot;m&quot;</span>
-        <span class="n">class_label_segs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inner_key</span><span class="p">)</span>
-        <span class="c1"># add 1 to the count of the respective class label in the respective key of count_hemis</span>
-        <span class="n">list_counts_segs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">count_segs</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">inner_key</span><span class="p">])</span>
-        <span class="c1"># append the outer key from count_hemis</span>
-        <span class="n">segs_label</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+for key in count_segs:
+    for i in range(len(labels_segs[key])):
+        count_segs[key][labels_segs[key][i]] += 1
+print(count_segs)
+# get the lists of number of skids for y values, x values are the keys
+keys = poss_labels # &quot;s&quot;, &quot;i&quot;, &quot;m&quot;
+list_counts_segs = []
+class_label_segs = []
+segs_label = []
+# loop through &quot;l&quot; and &quot;r&quot;
+for key in count_segs:
+    # loop through &quot;s&quot;, &quot;i&quot;, &quot;m&quot;
+    for inner_key in count_segs[key]:
+        # append &quot;s&quot; &quot;i&quot; or &quot;m&quot;
+        class_label_segs.append(inner_key)
+        # add 1 to the count of the respective class label in the respective key of count_hemis
+        list_counts_segs.append(count_segs[key][inner_key])
+        # append the outer key from count_hemis
+        segs_label.append(key)
 
-<span class="n">label_counts_segs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">class_label_segs</span><span class="p">,</span> <span class="n">list_counts_segs</span><span class="p">,</span> <span class="n">segs_label</span><span class="p">))</span>
-<span class="n">df_segs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">label_counts_segs</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="s2">&quot;segment&quot;</span><span class="p">])</span>
-<span class="n">df_segs</span>
+label_counts_segs = list(zip(class_label_segs, list_counts_segs, segs_label))
+df_segs = pd.DataFrame(label_counts_segs, columns = [&quot;class&quot;, &quot;count&quot;, &quot;segment&quot;])
+df_segs.to_csv(new_folder / &quot;segs_classes_counts.csv&quot;)
+df_segs
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;head&#39;: {&#39;s&#39;: 310, &#39;i&#39;: 339, &#39;m&#39;: 22}, &#39;pygidium&#39;: {&#39;s&#39;: 40, &#39;i&#39;: 13, &#39;m&#39;: 3}, &#39;0&#39;: {&#39;s&#39;: 2, &#39;i&#39;: 0, &#39;m&#39;: 0}, &#39;1&#39;: {&#39;s&#39;: 21, &#39;i&#39;: 113, &#39;m&#39;: 45}, &#39;2&#39;: {&#39;s&#39;: 40, &#39;i&#39;: 150, &#39;m&#39;: 67}, &#39;3&#39;: {&#39;s&#39;: 40, &#39;i&#39;: 98, &#39;m&#39;: 49}}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;head&#39;: {&#39;s&#39;: 310, &#39;i&#39;: 339, &#39;m&#39;: 22}, &#39;pygidium&#39;: {&#39;s&#39;: 40, &#39;i&#39;: 13, &#39;m&#39;: 3}, &#39;1&#39;: {&#39;s&#39;: 21, &#39;i&#39;: 113, &#39;m&#39;: 45}, &#39;2&#39;: {&#39;s&#39;: 40, &#39;i&#39;: 150, &#39;m&#39;: 67}, &#39;3&#39;: {&#39;s&#39;: 40, &#39;i&#39;: 98, &#39;m&#39;: 49}}
 </pre></div>
 </div>
 <div class="output text_html"><div>
@@ -885,71 +717,53 @@ title="Print to PDF"
     <tr>
       <th>6</th>
       <td>s</td>
-      <td>2</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>i</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>m</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>s</td>
       <td>21</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>10</th>
+      <th>7</th>
       <td>i</td>
       <td>113</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>11</th>
+      <th>8</th>
       <td>m</td>
       <td>45</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>12</th>
+      <th>9</th>
       <td>s</td>
       <td>40</td>
       <td>2</td>
     </tr>
     <tr>
-      <th>13</th>
+      <th>10</th>
       <td>i</td>
       <td>150</td>
       <td>2</td>
     </tr>
     <tr>
-      <th>14</th>
+      <th>11</th>
       <td>m</td>
       <td>67</td>
       <td>2</td>
     </tr>
     <tr>
-      <th>15</th>
+      <th>12</th>
       <td>s</td>
       <td>40</td>
       <td>3</td>
     </tr>
     <tr>
-      <th>16</th>
+      <th>13</th>
       <td>i</td>
       <td>98</td>
       <td>3</td>
     </tr>
     <tr>
-      <th>17</th>
+      <th>14</th>
       <td>m</td>
       <td>49</td>
       <td>3</td>
@@ -960,773 +774,96 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;segment&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_segs</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;counts of classes across segments&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;counts of classes across segments&#39;)
-</pre></div>
-</div>
-<img alt="_images/sbm_tests_9_1.png" src="_images/sbm_tests_9_1.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">load_0_adj_labels</span><span class="p">,</span> <span class="n">load_1_adj_labels</span><span class="p">,</span> <span class="n">load_2_adj_labels</span><span class="p">,</span> <span class="n">load_3_adj_labels</span><span class="p">,</span> <span class="n">load_right_adj_labels</span><span class="p">,</span> <span class="n">load_left_adj_labels</span><span class="p">,</span> <span class="n">load_head_adj_labels</span><span class="p">,</span> <span class="n">load_pygidium_adj_labels</span>
-
-<span class="c1">#block for loading adjs/labels</span>
-
-<span class="c1">#hemis</span>
-<span class="n">left_adj</span><span class="p">,</span> <span class="n">left_labels</span> <span class="o">=</span> <span class="n">load_left_adj_labels</span><span class="p">()</span>
-<span class="n">right_adj</span><span class="p">,</span> <span class="n">right_labels</span> <span class="o">=</span> <span class="n">load_right_adj_labels</span><span class="p">()</span>
-
-<span class="c1">#segments</span>
-<span class="n">head_adj</span><span class="p">,</span> <span class="n">head_labels</span> <span class="o">=</span> <span class="n">load_head_adj_labels</span><span class="p">()</span>
-<span class="n">pyg_adj</span><span class="p">,</span> <span class="n">pyg_labels</span> <span class="o">=</span> <span class="n">load_pygidium_adj_labels</span><span class="p">()</span>
-<span class="c1">#adj_0, labels_0 = load_0_adj_labels()</span>
-<span class="n">adj_1</span><span class="p">,</span> <span class="n">labels_1</span> <span class="o">=</span> <span class="n">load_1_adj_labels</span><span class="p">()</span>
-<span class="n">adj_2</span><span class="p">,</span> <span class="n">labels_2</span> <span class="o">=</span> <span class="n">load_2_adj_labels</span><span class="p">()</span>
-<span class="n">adj_3</span><span class="p">,</span> <span class="n">labels_3</span> <span class="o">=</span> <span class="n">load_3_adj_labels</span><span class="p">()</span>
-
-<span class="n">head_labels</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;m&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;m&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;m&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;m&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;m&#39;,
- &#39;m&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;m&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;m&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;m&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;m&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;m&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;m&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;m&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;m&#39;,
- &#39;m&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;m&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;m&#39;,
- &#39;m&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;m&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;m&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;m&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;m&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;s&#39;,
- &#39;i&#39;,
- &#39;s&#39;,
- &#39;i&#39;]
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#lists for adjs/labels/anems</span>
-<span class="n">hemi_adjs</span> <span class="o">=</span> <span class="p">[</span><span class="n">left_adj</span><span class="p">,</span> <span class="n">right_adj</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hemi_adjs</span><span class="p">):</span>
-    <span class="n">hemi_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-<span class="n">segment_adjs</span> <span class="o">=</span> <span class="p">[</span><span class="n">head_adj</span><span class="p">,</span> <span class="n">pyg_adj</span><span class="p">,</span> <span class="n">adj_1</span><span class="p">,</span> <span class="n">adj_2</span><span class="p">,</span> <span class="n">adj_3</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">segment_adjs</span><span class="p">):</span>
-    <span class="n">segment_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-<span class="n">all_adjs</span> <span class="o">=</span> <span class="n">hemi_adjs</span> <span class="o">+</span> <span class="n">segment_adjs</span>
-
-<span class="n">hemi_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">left_labels</span><span class="p">,</span> <span class="n">right_labels</span><span class="p">]</span>
-<span class="n">segment_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">head_labels</span><span class="p">,</span> <span class="n">pyg_labels</span><span class="p">,</span> <span class="n">labels_1</span><span class="p">,</span> <span class="n">labels_2</span><span class="p">,</span> <span class="n">labels_3</span><span class="p">]</span>
-<span class="n">all_labels</span> <span class="o">=</span> <span class="n">hemi_labels</span> <span class="o">+</span> <span class="n">segment_labels</span>
-
-<span class="n">hemi_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">]</span>
-<span class="n">segment_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">]</span>
-<span class="n">all_names</span> <span class="o">=</span> <span class="n">hemi_names</span> <span class="o">+</span> <span class="n">segment_names</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#scatterplots</span>
-
-<span class="c1">#metadata</span>
-<span class="n">metas</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_adjs</span><span class="p">)):</span>
-    <span class="n">metas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-        <span class="n">data</span><span class="o">=</span><span class="p">{</span>
-              <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_labels&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">all_names</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span> <span class="n">all_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="p">},</span>
-<span class="p">))</span>
-
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_adjs</span><span class="p">)):</span>
-    <span class="n">adjplot</span><span class="p">(</span><span class="n">all_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="n">metas</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_labels&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">all_names</span><span class="p">[</span><span class="n">i</span><span class="p">])])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;group_connection_plots&quot;</span> <span class="o">/</span> <span class="s2">&quot;scatterplots&quot;</span> <span class="o">/</span> <span class="s2">&quot;connection_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">all_names</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sns.set(style=&quot;white&quot;)
+sns.barplot(x=&quot;class&quot;, y=&quot;count&quot;, hue=&quot;segment&quot;, data=df_segs)
+plt.title(&quot;counts of classes across segments&quot;)
+plt.savefig(new_folder / &quot;segs_classes_barplot.png&quot;)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <img alt="_images/sbm_tests_12_0.png" src="_images/sbm_tests_12_0.png" />
-<img alt="_images/sbm_tests_12_1.png" src="_images/sbm_tests_12_1.png" />
-<img alt="_images/sbm_tests_12_2.png" src="_images/sbm_tests_12_2.png" />
-<img alt="_images/sbm_tests_12_3.png" src="_images/sbm_tests_12_3.png" />
-<img alt="_images/sbm_tests_12_4.png" src="_images/sbm_tests_12_4.png" />
-<img alt="_images/sbm_tests_12_5.png" src="_images/sbm_tests_12_5.png" />
-<img alt="_images/sbm_tests_12_6.png" src="_images/sbm_tests_12_6.png" />
+</div>
+</div>
+<p>We will now visualize the adjs of the hemispheres/segments, in which the nodes will be grouped into communities of sensory, motor, or interneurons</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from pkg.platy import load_0_adj_labels, load_1_adj_labels, load_2_adj_labels, load_3_adj_labels, load_right_adj_labels, load_left_adj_labels, load_head_adj_labels, load_pygidium_adj_labels
+
+#block for loading adjs/labels
+
+#hemis
+left_adj, left_labels = load_left_adj_labels()
+right_adj, right_labels = load_right_adj_labels()
+
+#segments
+head_adj, head_labels = load_head_adj_labels()
+pyg_adj, pyg_labels = load_pygidium_adj_labels()
+#adj_0, labels_0 = load_0_adj_labels()
+adj_1, labels_1 = load_1_adj_labels()
+adj_2, labels_2 = load_2_adj_labels()
+adj_3, labels_3 = load_3_adj_labels()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#lists for adjs/labels/names
+hemi_adjs = [left_adj, right_adj]
+for i, val in enumerate(hemi_adjs):
+    hemi_adjs[i] = val.to_numpy()
+
+segment_adjs = [head_adj, pyg_adj, adj_1, adj_2, adj_3]
+for i, val in enumerate(segment_adjs):
+    segment_adjs[i] = val.to_numpy()
+all_adjs = hemi_adjs + segment_adjs
+
+hemi_labels = [left_labels, right_labels]
+segment_labels = [head_labels, pyg_labels, labels_1, labels_2, labels_3]
+all_labels = hemi_labels + segment_labels
+
+hemi_names = [&quot;left&quot;, &quot;right&quot;]
+segment_names = [&quot;head&quot;, &quot;pygidium&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;]
+all_names = hemi_names + segment_names
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#scatterplots
+
+#metadata
+metas = []
+for i in range(len(all_adjs)):
+    metas.append(pd.DataFrame(
+        data={
+              &quot;{}_labels&quot;.format(all_names[i]): all_labels[i]
+        },
+))
+
+for i in range(len(all_adjs)):
+    adjplot(all_adjs[i], plot_type=&quot;scattermap&quot;, meta=metas[i], group=[&quot;{}_labels&quot;.format(all_names[i])])
+    plt.savefig(new_folder / &quot;scatterplots&quot; / &quot;connection_{}&quot;.format(all_names[i]))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/sbm_tests_16_0.png" src="_images/sbm_tests_16_0.png" />
+<img alt="_images/sbm_tests_16_1.png" src="_images/sbm_tests_16_1.png" />
+<img alt="_images/sbm_tests_16_2.png" src="_images/sbm_tests_16_2.png" />
+<img alt="_images/sbm_tests_16_3.png" src="_images/sbm_tests_16_3.png" />
+<img alt="_images/sbm_tests_16_4.png" src="_images/sbm_tests_16_4.png" />
+<img alt="_images/sbm_tests_16_5.png" src="_images/sbm_tests_16_5.png" />
+<img alt="_images/sbm_tests_16_6.png" src="_images/sbm_tests_16_6.png" />
 </div>
 </div>
 <p>Group Connection Test for Left and Right Hemispheres</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">misc</span> <span class="o">=</span> <span class="n">group_connection_test</span><span class="p">(</span><span class="n">hemi_adjs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hemi_adjs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hemi_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hemi_labels</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">pval</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>stat, pval, misc = group_connection_test(hemi_adjs[0], hemi_adjs[1], hemi_labels[0], hemi_labels[1])
+pval
 </pre></div>
 </div>
 </div>
@@ -1739,19 +876,19 @@ title="Print to PDF"
 <p>We do the same for all the pairwise combinations of segments</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">segment_labels</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="n">pairwise_adjs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">segment_adjs</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="n">pairwise_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">segment_names</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="c1">#initialize dataframe</span>
-<span class="n">zero_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">segment_names</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment_names</span><span class="p">)))</span>
-<span class="n">pval_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">zero_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">segment_names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">segment_names</span><span class="p">)</span>
-<span class="n">pval_list</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">adjs</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pairwise_labels</span><span class="p">,</span> <span class="n">pairwise_adjs</span><span class="p">,</span> <span class="n">pairwise_names</span><span class="p">):</span>
-    <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">misc</span> <span class="o">=</span> <span class="n">group_connection_test</span><span class="p">(</span><span class="n">adjs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">adjs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">pval_df</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pval</span>
-    <span class="n">pval_df</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pval</span>
-<span class="n">pval_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;group_connection_plots&quot;</span> <span class="o">/</span> <span class="s2">&quot;group_connection_test_pvals_segments.csv&quot;</span><span class="p">)</span>
-<span class="n">pval_df</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pairwise_labels = list(itertools.combinations(segment_labels, 2))
+pairwise_adjs = list(itertools.combinations(segment_adjs, 2))
+pairwise_names = list(itertools.combinations(segment_names, 2))
+#initialize dataframe
+zero_data = np.zeros(shape=(len(segment_names), len(segment_names)))
+pval_df = pd.DataFrame(zero_data, columns=segment_names, index=segment_names)
+pval_list = []
+for label, adjs, name in zip(pairwise_labels, pairwise_adjs, pairwise_names):
+    stat, pval, misc = group_connection_test(adjs[0], adjs[1], label[0], label[1])
+    pval_df[name[0]][name[1]] = pval
+    pval_df[name[1]][name[0]] = pval
+pval_df.to_csv(folder / &quot;group_connection_plots&quot; / &quot;group_connection_test_pvals_segments.csv&quot;)
+pval_df
 </pre></div>
 </div>
 </div>
@@ -1826,11 +963,94 @@ title="Print to PDF"
 </table>
 </div></div></div>
 </div>
-<p>Density adjusted version of group connection tests</p>
+<p>Let’s use bonferroni’s correction on the segment p-values to reduce the chances of obtaining false positive results since we are using multiple pairwise tests</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">misc</span> <span class="o">=</span> <span class="n">group_connection_test</span><span class="p">(</span><span class="n">hemi_adjs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hemi_adjs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hemi_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hemi_labels</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">density_adjustment</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">pval</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#bonferroni correction for non-density adjusted p-vals
+from statsmodels.stats.multitest import multipletests
+np_pvals = pval_df.to_numpy().flatten()
+corrected_pvals = multipletests(np_pvals)[1].reshape((len(segment_names), len(segment_names)))
+pvals_df_bonferroni_corrected = pd.DataFrame(corrected_pvals, columns=segment_names, index=segment_names)
+pvals_df_bonferroni_corrected
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>head</th>
+      <th>pygidium</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>head</th>
+      <td>0.000000e+00</td>
+      <td>2.429292e-53</td>
+      <td>3.243555e-07</td>
+      <td>5.853861e-09</td>
+      <td>3.512782e-20</td>
+    </tr>
+    <tr>
+      <th>pygidium</th>
+      <td>2.429292e-53</td>
+      <td>0.000000e+00</td>
+      <td>7.733367e-02</td>
+      <td>2.887330e-10</td>
+      <td>7.711503e-02</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>3.243555e-07</td>
+      <td>7.733367e-02</td>
+      <td>0.000000e+00</td>
+      <td>6.356383e-01</td>
+      <td>9.764851e-01</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>5.853861e-09</td>
+      <td>2.887330e-10</td>
+      <td>6.356383e-01</td>
+      <td>0.000000e+00</td>
+      <td>1.317926e-02</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3.512782e-20</td>
+      <td>7.711503e-02</td>
+      <td>9.764851e-01</td>
+      <td>1.317926e-02</td>
+      <td>0.000000e+00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Now, let’s use the density adjusted version of group connection tests, which accounts for the potential difference in density across the adjs (are the group-to-group connection probabilities of one adj simply a scaled-up version of those of the other)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>stat, pval, misc = group_connection_test(hemi_adjs[0], hemi_adjs[1], hemi_labels[0], hemi_labels[1], density_adjustment=True)
+pval
 </pre></div>
 </div>
 </div>
@@ -1842,19 +1062,19 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">segment_labels</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="n">pairwise_adjs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">segment_adjs</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="n">pairwise_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">segment_names</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="c1">#initialize dataframe</span>
-<span class="n">zero_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">segment_names</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment_names</span><span class="p">)))</span>
-<span class="n">pval_df_correct</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">zero_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">segment_names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">segment_names</span><span class="p">)</span>
-<span class="n">pval_list</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">adjs</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pairwise_labels</span><span class="p">,</span> <span class="n">pairwise_adjs</span><span class="p">,</span> <span class="n">pairwise_names</span><span class="p">):</span>
-    <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">misc</span> <span class="o">=</span> <span class="n">group_connection_test</span><span class="p">(</span><span class="n">adjs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">adjs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">density_adjustment</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">pval_df_correct</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pval</span>
-    <span class="n">pval_df_correct</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pval</span>
-<span class="n">pval_df_correct</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;group_connection_plots&quot;</span> <span class="o">/</span> <span class="s2">&quot;group_connection_test_pvals_segments_density_adjust.csv&quot;</span><span class="p">)</span>
-<span class="n">pval_df_correct</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pairwise_labels = list(itertools.combinations(segment_labels, 2))
+pairwise_adjs = list(itertools.combinations(segment_adjs, 2))
+pairwise_names = list(itertools.combinations(segment_names, 2))
+#initialize dataframe
+zero_data = np.zeros(shape=(len(segment_names), len(segment_names)))
+pval_df_density_correct = pd.DataFrame(zero_data, columns=segment_names, index=segment_names)
+pval_list = []
+for label, adjs, name in zip(pairwise_labels, pairwise_adjs, pairwise_names):
+    stat, pval, misc = group_connection_test(adjs[0], adjs[1], label[0], label[1], density_adjustment=True)
+    pval_df_density_correct[name[0]][name[1]] = pval
+    pval_df_density_correct[name[1]][name[0]] = pval
+pval_df_density_correct.to_csv(folder / &quot;group_connection_plots&quot; / &quot;group_connection_test_pvals_segments_density_adjust.csv&quot;)
+pval_df_density_correct
 </pre></div>
 </div>
 </div>
@@ -1929,137 +1149,243 @@ title="Print to PDF"
 </table>
 </div></div></div>
 </div>
+<p>Using Bonferroni’s correction for the density adjusted segments:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib.transforms</span> <span class="kn">import</span> <span class="n">Bbox</span>
-<span class="k">def</span> <span class="nf">shrink_axis</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="n">pos</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span>
-    <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">ymax</span> <span class="o">+</span> <span class="n">pos</span><span class="o">.</span><span class="n">ymin</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-    <span class="n">height</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">pos</span><span class="o">.</span><span class="n">ymin</span>
-    <span class="n">new_pos</span> <span class="o">=</span> <span class="n">Bbox</span><span class="p">(</span>
-        <span class="p">[</span>
-            <span class="p">[</span><span class="n">pos</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">mid</span> <span class="o">-</span> <span class="n">scale</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">height</span> <span class="o">-</span> <span class="n">shift</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">pos</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="n">scale</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">height</span> <span class="o">-</span> <span class="n">shift</span><span class="p">],</span>
-        <span class="p">]</span>
-    <span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_position</span><span class="p">(</span><span class="n">new_pos</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>np_pvals_density_correct = pval_df_density_correct.to_numpy().flatten()
+corrected_pvals_density_correct = multipletests(np_pvals_density_correct)[1].reshape((len(segment_names), len(segment_names)))
+pvals_df_density_corrected_bonferroni_corrected = pd.DataFrame(corrected_pvals_density_correct, columns=segment_names, index=segment_names)
+pvals_df_density_corrected_bonferroni_corrected
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>head</th>
+      <th>pygidium</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>head</th>
+      <td>0.000000e+00</td>
+      <td>0.294855</td>
+      <td>6.928793e-17</td>
+      <td>5.647662e-10</td>
+      <td>7.259633e-10</td>
+    </tr>
+    <tr>
+      <th>pygidium</th>
+      <td>2.948552e-01</td>
+      <td>0.000000</td>
+      <td>9.999986e-01</td>
+      <td>9.999986e-01</td>
+      <td>9.999986e-01</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>6.928793e-17</td>
+      <td>0.999999</td>
+      <td>0.000000e+00</td>
+      <td>9.998966e-01</td>
+      <td>9.999875e-01</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>5.647662e-10</td>
+      <td>0.999999</td>
+      <td>9.998966e-01</td>
+      <td>0.000000e+00</td>
+      <td>1.623013e-01</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7.259633e-10</td>
+      <td>0.999999</td>
+      <td>9.999875e-01</td>
+      <td>1.623013e-01</td>
+      <td>0.000000e+00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>The following functions will allow us to visualize the p-values of the segments in a heatmap, where significant p-values are denoted with an X</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from matplotlib.transforms import Bbox
+def shrink_axis(ax, scale=0.7, shift=0):
+    pos = ax.get_position()
+    mid = (pos.ymax + pos.ymin) / 2
+    height = pos.ymax - pos.ymin
+    new_pos = Bbox(
+        [
+            [pos.xmin, mid - scale * 0.5 * height - shift],
+            [pos.xmax, mid + scale * 0.5 * height - shift],
+        ]
+    )
+    ax.set_position(new_pos)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">seaborn.utils</span> <span class="kn">import</span> <span class="n">relative_luminance</span>
-<span class="k">def</span> <span class="nf">plot_pvals_v2</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">density_correct</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">width_ratios</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
-            <span class="mi">1</span><span class="p">,</span>
-            <span class="mi">3</span><span class="p">,</span>
-            <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
-            <span class="n">gridspec_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-                <span class="n">width_ratios</span><span class="o">=</span><span class="n">width_ratios</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-        <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
-        <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">cax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from seaborn.utils import relative_luminance
+def plot_pvals(df, names, density_correct=True, bonferroni_correct=False, ax=None):
+    if ax is None:
+        width_ratios = [0.5, 3, 10]
+        fig, axs = plt.subplots(
+            1,
+            3,
+            figsize=(10, 10),
+            gridspec_kw=dict(
+                width_ratios=width_ratios,
+            ),
+        )
+        axs[1].remove()
+        ax = axs[-1]
+        cax = axs[0]
     
-    <span class="n">plot_pvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-    <span class="n">plot_pvalues</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">im</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
-        <span class="n">plot_pvalues</span><span class="p">,</span>
-        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu&quot;</span><span class="p">,</span>
-        <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
+    plot_pvalues = np.log10(df)
+    plot_pvalues.replace(-np.inf, 0, inplace=True)
+    im = sns.heatmap(
+        plot_pvalues,
+        ax=ax,
+        cmap=&quot;RdBu&quot;,
+        center=0,
+        square=True,
+        cbar=False,
+        fmt=&quot;s&quot;,
+    )
 
-    <span class="k">if</span> <span class="n">density_correct</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Source group&quot;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Target group&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Group Connection p-values segments (density corrected)&quot;</span><span class="p">)</span>
+    title = &quot;Group Connection p-values segments&quot;
+    if density_correct == True:
+        title += &quot; (density adjusted)&quot;
 
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Source group&quot;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Target group&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Group Connection p-values segments&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">))</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">xticklabels</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+    if bonferroni_correct == True:
+        title += &quot; (bonferroni corrected)&quot;
+
+    ax.set(ylabel=&quot;Source group&quot;, xlabel=&quot;Target group&quot;, title=title)
+    ax.set(xticks=np.arange(len(names)) + 0.5, xticklabels=names)
     
-    <span class="n">colors</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">get_children</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_facecolors</span><span class="p">()</span>
+    colors = im.get_children()[0].get_facecolors()
 
-    <span class="n">shrink_axis</span><span class="p">(</span><span class="n">cax</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
-    <span class="n">_</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span>
-        <span class="n">im</span><span class="o">.</span><span class="n">get_children</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
-        <span class="n">cax</span><span class="o">=</span><span class="n">cax</span><span class="p">,</span>
-        <span class="n">fraction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">shrink</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">ticklocation</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">cax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$log_</span><span class="si">{10}</span><span class="s2">$&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">corrected&quot;</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">p-value&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    shrink_axis(cax, scale=0.5, shift=0.05)
+    fig = ax.get_figure()
+    _ = fig.colorbar(
+        im.get_children()[0],
+        cax=cax,
+        fraction=1,
+        shrink=1,
+        ticklocation=&quot;left&quot;,
+    )
+    cax.set_title(r&quot;$log_{10}$&quot; + &quot;\ncorrected&quot; &quot;\np-value&quot;, pad=20)
 
-    <span class="n">cax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">0.05</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)],</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span>
-    <span class="p">)</span>
+    cax.plot(
+        [0, 1], [np.log10(0.05), np.log10(0.05)], zorder=100, color=&quot;black&quot;, linewidth=3
+    )
 
-    <span class="n">cax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
-        <span class="sa">r</span><span class="s2">&quot;$\alpha$&quot;</span><span class="p">,</span>
-        <span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)),</span>
-        <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-        <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span><span class="p">,</span>
-        <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
-        <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
-        <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;arrowstyle&quot;</span><span class="p">:</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;linewidth&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;relpos&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)},</span>
-    <span class="p">)</span>
+    cax.annotate(
+        r&quot;$\alpha$&quot;,
+        (0.05, np.log10(0.05)),
+        xytext=(-5, 0),
+        textcoords=&quot;offset points&quot;,
+        va=&quot;center&quot;,
+        ha=&quot;right&quot;,
+        arrowprops={&quot;arrowstyle&quot;: &quot;-&quot;, &quot;linewidth&quot;: 3, &quot;relpos&quot;: (0, 0.5)},
+    )
     
-    <span class="c1">#make X&#39;s</span>
-    <span class="n">pad</span><span class="o">=</span><span class="mf">0.2</span>
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">colors</span><span class="p">):</span>
-        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)))</span>
-        <span class="c1">#print(pval_df[names[i]][names[j]])</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="n">names</span><span class="p">[</span><span class="n">j</span><span class="p">]])</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span> <span class="ow">and</span> <span class="n">i</span><span class="o">!=</span><span class="n">j</span><span class="p">:</span>
-            <span class="n">lum</span> <span class="o">=</span> <span class="n">relative_luminance</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
-            <span class="n">text_color</span> <span class="o">=</span> <span class="s2">&quot;.15&quot;</span> <span class="k">if</span> <span class="n">lum</span> <span class="o">&gt;</span> <span class="mf">0.408</span> <span class="k">else</span> <span class="s2">&quot;w&quot;</span>
+    #make X&#39;s
+    pad=0.2
+    for idx, color in enumerate(colors):
+        i, j = np.unravel_index(idx, (len(names), len(names)))
+        #print(pval_df[names[i]][names[j]])
+        if i!=j and np.log(df[names[i]][names[j]]) &lt; np.log(0.05):
+            lum = relative_luminance(color)
+            text_color = &quot;.15&quot; if lum &gt; 0.408 else &quot;w&quot;
 
-            <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">]</span>
-            <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">pad</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">]</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">text_color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-            <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span>
-            <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">pad</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">]</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">text_color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+            xs = [j + pad, j + 1 - pad]
+            ys = [i + pad, i + 1 - pad]
+            ax.plot(xs, ys, color=text_color, linewidth=4)
+            xs = [j + 1 - pad, j + pad]
+            ys = [i + pad, i + 1 - pad]
+            ax.plot(xs, ys, color=text_color, linewidth=4)
 
-    <span class="c1">#print(np.log(0.05))</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_pvals_v2</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">pval_df</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">segment_names</span><span class="p">,</span> <span class="n">density_correct</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_pvals(df=pval_df, names=segment_names, density_correct=False, bonferroni_correct=False)
+plt.savefig(new_folder / &quot;group_connection_heatmap_segments&quot;)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/pandas/core/internals/blocks.py:351: RuntimeWarning: divide by zero encountered in log10
   result = func(self.values, **kwargs)
-/var/folders/25/jsfr4z_n287567y95vp2zgn40000gn/T/ipykernel_19351/2901435597.py:68: RuntimeWarning: divide by zero encountered in log
-  if np.log(df[names[i]][names[j]]) &lt; np.log(0.05) and i!=j:
 </pre></div>
 </div>
-<img alt="_images/sbm_tests_22_1.png" src="_images/sbm_tests_22_1.png" />
+<img alt="_images/sbm_tests_31_1.png" src="_images/sbm_tests_31_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_pvals_v2</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">pval_df_correct</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">segment_names</span><span class="p">,</span> <span class="n">density_correct</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_pvals(df=pvals_df_bonferroni_corrected, names=segment_names, density_correct=False, bonferroni_correct=True)
+plt.savefig(new_folder / &quot;group_connection_heatmap_segments_bonferroni_corrected&quot;)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/25/jsfr4z_n287567y95vp2zgn40000gn/T/ipykernel_19351/2901435597.py:68: RuntimeWarning: divide by zero encountered in log
-  if np.log(df[names[i]][names[j]]) &lt; np.log(0.05) and i!=j:
+<img alt="_images/sbm_tests_32_0.png" src="_images/sbm_tests_32_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_pvals(df=pval_df_density_correct, names=segment_names, density_correct=True)
+plt.savefig(new_folder / &quot;group_connection_heatmap_segments_density_adjusted&quot;)
 </pre></div>
 </div>
-<img alt="_images/sbm_tests_23_1.png" src="_images/sbm_tests_23_1.png" />
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/pandas/core/internals/blocks.py:351: RuntimeWarning: divide by zero encountered in log10
+  result = func(self.values, **kwargs)
+</pre></div>
+</div>
+<img alt="_images/sbm_tests_33_1.png" src="_images/sbm_tests_33_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_pvals(df=pvals_df_density_corrected_bonferroni_corrected, names=segment_names, density_correct=True, bonferroni_correct=True)
+plt.savefig(new_folder / &quot;group_connection_heatmap_segments_density_adjusted_bonferroni_corrected&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/sbm_tests_34_0.png" src="_images/sbm_tests_34_0.png" />
 </div>
 </div>
 </section>

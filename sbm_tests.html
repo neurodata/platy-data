@@ -885,6 +885,12 @@ pval_df = pd.DataFrame(zero_data, columns=segment_names, index=segment_names)
 pval_list = []
 for label, adjs, name in zip(pairwise_labels, pairwise_adjs, pairwise_names):
     stat, pval, misc = group_connection_test(adjs[0], adjs[1], label[0], label[1])
+
+    #lower limit
+    thres = 1e-12
+    if pval&lt;thres:
+        pval = thres
+    
     pval_df[name[0]][name[1]] = pval
     pval_df[name[1]][name[0]] = pval
 pval_df.to_csv(folder / &quot;group_connection_plots&quot; / &quot;group_connection_test_pvals_segments.csv&quot;)
@@ -922,14 +928,14 @@ pval_df
     <tr>
       <th>head</th>
       <td>0.000000e+00</td>
-      <td>1.214646e-54</td>
+      <td>1.000000e-12</td>
       <td>2.702963e-08</td>
       <td>4.181329e-10</td>
-      <td>1.951546e-21</td>
+      <td>1.000000e-12</td>
     </tr>
     <tr>
       <th>pygidium</th>
-      <td>1.214646e-54</td>
+      <td>1.000000e-12</td>
       <td>0.000000e+00</td>
       <td>1.332503e-02</td>
       <td>1.804581e-11</td>
@@ -953,7 +959,7 @@ pval_df
     </tr>
     <tr>
       <th>3</th>
-      <td>1.951546e-21</td>
+      <td>1.000000e-12</td>
       <td>9.981189e-03</td>
       <td>8.466542e-01</td>
       <td>1.325808e-03</td>
@@ -1005,14 +1011,14 @@ pvals_df_bonferroni_corrected
     <tr>
       <th>head</th>
       <td>0.000000e+00</td>
-      <td>2.429292e-53</td>
+      <td>2.000000e-11</td>
       <td>3.243555e-07</td>
       <td>5.853861e-09</td>
-      <td>3.512782e-20</td>
+      <td>2.000000e-11</td>
     </tr>
     <tr>
       <th>pygidium</th>
-      <td>2.429292e-53</td>
+      <td>2.000000e-11</td>
       <td>0.000000e+00</td>
       <td>7.733367e-02</td>
       <td>2.887330e-10</td>
@@ -1036,7 +1042,7 @@ pvals_df_bonferroni_corrected
     </tr>
     <tr>
       <th>3</th>
-      <td>3.512782e-20</td>
+      <td>2.000000e-11</td>
       <td>7.711503e-02</td>
       <td>9.764851e-01</td>
       <td>1.317926e-02</td>
@@ -1071,6 +1077,11 @@ pval_df_density_correct = pd.DataFrame(zero_data, columns=segment_names, index=s
 pval_list = []
 for label, adjs, name in zip(pairwise_labels, pairwise_adjs, pairwise_names):
     stat, pval, misc = group_connection_test(adjs[0], adjs[1], label[0], label[1], density_adjustment=True)
+
+    #lower limit
+    if pval&lt;thres:
+        pval = thres
+        
     pval_df_density_correct[name[0]][name[1]] = pval
     pval_df_density_correct[name[1]][name[0]] = pval
 pval_df_density_correct.to_csv(folder / &quot;group_connection_plots&quot; / &quot;group_connection_test_pvals_segments_density_adjust.csv&quot;)
@@ -1109,7 +1120,7 @@ pval_df_density_correct
       <th>head</th>
       <td>0.000000e+00</td>
       <td>0.028693</td>
-      <td>3.464397e-18</td>
+      <td>1.000000e-12</td>
       <td>3.137590e-11</td>
       <td>4.537271e-11</td>
     </tr>
@@ -1123,7 +1134,7 @@ pval_df_density_correct
     </tr>
     <tr>
       <th>1</th>
-      <td>3.464397e-18</td>
+      <td>1.000000e-12</td>
       <td>0.894052</td>
       <td>0.000000e+00</td>
       <td>6.005472e-01</td>
@@ -1190,7 +1201,7 @@ pvals_df_density_corrected_bonferroni_corrected
       <th>head</th>
       <td>0.000000e+00</td>
       <td>0.294855</td>
-      <td>6.928793e-17</td>
+      <td>2.000000e-11</td>
       <td>5.647662e-10</td>
       <td>7.259633e-10</td>
     </tr>
@@ -1204,7 +1215,7 @@ pvals_df_density_corrected_bonferroni_corrected
     </tr>
     <tr>
       <th>1</th>
-      <td>6.928793e-17</td>
+      <td>2.000000e-11</td>
       <td>0.999999</td>
       <td>0.000000e+00</td>
       <td>9.998966e-01</td>
@@ -1251,8 +1262,17 @@ def shrink_axis(ax, scale=0.7, shift=0):
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import matplotlib as mpl
+cmap = mpl.colormaps[&quot;RdBu&quot;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from seaborn.utils import relative_luminance
-def plot_pvals(df, names, density_correct=True, bonferroni_correct=False, ax=None):
+import matplotlib as mpl
+def plot_pvals(df, names, density_correct=True, bonferroni_correct=False, ax=None, thres=None):
     if ax is None:
         width_ratios = [0.5, 3, 10]
         fig, axs = plt.subplots(
@@ -1290,22 +1310,47 @@ def plot_pvals(df, names, density_correct=True, bonferroni_correct=False, ax=Non
     ax.set(xticks=np.arange(len(names)) + 0.5, xticklabels=names)
     
     colors = im.get_children()[0].get_facecolors()
-
+    print(im.get_children()[0])
+    #print(colors)
     shrink_axis(cax, scale=0.5, shift=0.05)
+    
     fig = ax.get_figure()
-    _ = fig.colorbar(
-        im.get_children()[0],
-        cax=cax,
-        fraction=1,
-        shrink=1,
-        ticklocation=&quot;left&quot;,
-    )
-    cax.set_title(r&quot;$log_{10}$&quot; + &quot;\ncorrected&quot; &quot;\np-value&quot;, pad=20)
 
+    
+    if thres is None:
+        cb = fig.colorbar(
+            im.get_children()[0],
+            cax=cax,
+            fraction=1,
+            shrink=1,
+            ticklocation=&quot;left&quot;,
+        )
+
+    #do threshold stuff: set ticks based on thres and then follow tutorial to make everything outside the threshold a diff color; then set ticks=ticks
+    if thres is not None:
+        #account for change in threshold from bonferroni correction
+        # if bonferroni_correct == True:
+        #     thres = 1e-5
+        cb = fig.colorbar(
+            im.get_children()[0],
+            cax=cax,
+            fraction=1,
+            shrink=1,
+            ticks=np.linspace(np.log(thres), 0, 10),
+            ticklocation=&quot;left&quot;,
+        )
+        &quot;&quot;&quot;cmap = mpl.colormaps[&quot;RdBu&quot;]
+        norm = mpl.colors.BoundaryNorm(ticks, colors.N, extend=&quot;both&quot;)
+        cb = fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=colors), cax=cax, fraction=1, shrink=1, ticklocation=&quot;left&quot;)&quot;&quot;&quot;
+    
+   
+    
+    cax.set_title(r&quot;$log_{10}$&quot; + &quot;\ncorrected&quot; &quot;\np-value&quot;, pad=20)
+    
     cax.plot(
         [0, 1], [np.log10(0.05), np.log10(0.05)], zorder=100, color=&quot;black&quot;, linewidth=3
     )
-
+    
     cax.annotate(
         r&quot;$\alpha$&quot;,
         (0.05, np.log10(0.05)),
@@ -1320,7 +1365,6 @@ def plot_pvals(df, names, density_correct=True, bonferroni_correct=False, ax=Non
     pad=0.2
     for idx, color in enumerate(colors):
         i, j = np.unravel_index(idx, (len(names), len(names)))
-        #print(pval_df[names[i]][names[j]])
         if i!=j and np.log(df[names[i]][names[j]]) &lt; np.log(0.05):
             lum = relative_luminance(color)
             text_color = &quot;.15&quot; if lum &gt; 0.408 else &quot;w&quot;
@@ -1338,7 +1382,7 @@ def plot_pvals(df, names, density_correct=True, bonferroni_correct=False, ax=Non
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_pvals(df=pval_df, names=segment_names, density_correct=False, bonferroni_correct=False)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_pvals(df=pval_df, names=segment_names, density_correct=False, bonferroni_correct=False, thres=thres)
 plt.savefig(new_folder / &quot;group_connection_heatmap_segments&quot;)
 </pre></div>
 </div>
@@ -1348,30 +1392,21 @@ plt.savefig(new_folder / &quot;group_connection_heatmap_segments&quot;)
   result = func(self.values, **kwargs)
 </pre></div>
 </div>
-<img alt="_images/sbm_tests_31_1.png" src="_images/sbm_tests_31_1.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.QuadMesh object at 0x1336b0640&gt;
+</pre></div>
+</div>
+<img alt="_images/sbm_tests_32_2.png" src="_images/sbm_tests_32_2.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_pvals(df=pvals_df_bonferroni_corrected, names=segment_names, density_correct=False, bonferroni_correct=True)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_pvals(df=pvals_df_bonferroni_corrected, names=segment_names, density_correct=False, bonferroni_correct=True, thres=thres)
 plt.savefig(new_folder / &quot;group_connection_heatmap_segments_bonferroni_corrected&quot;)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/sbm_tests_32_0.png" src="_images/sbm_tests_32_0.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_pvals(df=pval_df_density_correct, names=segment_names, density_correct=True)
-plt.savefig(new_folder / &quot;group_connection_heatmap_segments_density_adjusted&quot;)
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/kareefullah/Library/Caches/pypoetry/virtualenvs/platy-data-EVeqgmAk-py3.9/lib/python3.9/site-packages/pandas/core/internals/blocks.py:351: RuntimeWarning: divide by zero encountered in log10
-  result = func(self.values, **kwargs)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.QuadMesh object at 0x1331c97f0&gt;
 </pre></div>
 </div>
 <img alt="_images/sbm_tests_33_1.png" src="_images/sbm_tests_33_1.png" />
@@ -1379,13 +1414,29 @@ plt.savefig(new_folder / &quot;group_connection_heatmap_segments_density_adjuste
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_pvals(df=pvals_df_density_corrected_bonferroni_corrected, names=segment_names, density_correct=True, bonferroni_correct=True)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_pvals(df=pval_df_density_correct, names=segment_names, density_correct=True, thres=thres)
+plt.savefig(new_folder / &quot;group_connection_heatmap_segments_density_adjusted&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.QuadMesh object at 0x133373df0&gt;
+</pre></div>
+</div>
+<img alt="_images/sbm_tests_34_1.png" src="_images/sbm_tests_34_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_pvals(df=pvals_df_density_corrected_bonferroni_corrected, names=segment_names, density_correct=True, bonferroni_correct=True, thres=thres)
 plt.savefig(new_folder / &quot;group_connection_heatmap_segments_density_adjusted_bonferroni_corrected&quot;)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/sbm_tests_34_0.png" src="_images/sbm_tests_34_0.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.QuadMesh object at 0x1357922b0&gt;
+</pre></div>
+</div>
 </div>
 </div>
 </section>

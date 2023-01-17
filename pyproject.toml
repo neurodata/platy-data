@@ -13,6 +13,7 @@ UpSetPlot = "^0.6.1"
 pyplot-themes = "^0.2.2"
 python-catmaid = "^2.1.1"
 graspologic = {path = "../graspologic", develop = true}
+giskard-toolbox = {path = "../giskard", develop = true}
 pkg = {path = "pkg", develop = true}
 seaborn = "^0.12.0"
 statsmodels = "^0.13.2"
@@ -21,7 +22,6 @@ black = "^22.8.0"
 ipykernel = "^6.15.3"
 matplotlib = "3.5.3"
 importlib-metadata = "^4.12.0"
-giskard = "^1.6.0"
 
 [tool.poetry.dev-dependencies]
 

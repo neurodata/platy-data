@@ -496,7 +496,7 @@ def gen_hemi_labels():
 
     annotations_hemis = annotations.loc[all_hemi_index]
     return len(all_hemi_index)
-
+"""
     skids_hemis = {"l": [], "r": []}
     skids_hemis_total_list = []
     labels_hemis = {"l": [], "r": []}
@@ -534,5 +534,6 @@ def gen_hemi_labels():
     labels_hemis_df.to_csv(folder / "labels_hemi_classes.csv")
     skids_segs_df.to_csv(folder / "skids_segs_classes.csv")
     labels_segs_df.to_csv(folder / "labels_segs_classes.csv")
-
-print(gen_hemi_labels())
+"""
+y = gen_connectome_adj()
+print(len(y))

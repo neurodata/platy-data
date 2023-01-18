@@ -184,6 +184,6 @@ def load_3_adj_labels():
     return adj_3, labels_3
 
 
-adj_2, labels_2 = load_2_adj_labels()
-np_2 = adj_2.to_numpy()
-print(is_fully_connected(np_2))
+adj, labels = load_left_adj_labels()
+print(adj.index)
+print(labels)

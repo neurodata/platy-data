@@ -138,7 +138,7 @@ def gen_all_annotations():
     annotations = pd.concat(series_ids, axis=1, ignore_index=False, names="ID").fillna(
         "N/A"
     )
-    annotations.to_csv(path + "/all_annotations.csv", index_label="skids")
+    annotations.to_csv(path + "/all_annotations_new.csv", index_label="skids")
     return annotations
 
 
@@ -170,7 +170,7 @@ def gen_connectome_lcc_annotations():
     inds = gen_connectome_lcc_adj().index
     inds = [str(skid) for skid in inds]
     connec_lcc_annots = connec_annots.loc[inds]
-    connec_lcc_annots.to_csv(path + "/connec_lcc_annotations.csv", index_label="skids")
+    connec_lcc_annots.to_csv(path + "/connec_lcc_annotations_new.csv", index_label="skids")
     return connec_lcc_annots
 
 
@@ -182,7 +182,7 @@ def gen_normal_connectome_lcc_annotations():
         [i for i in connec_lcc_annots.index if i not in inds]
     ]
     connec_lcc_normal_annots.to_csv(
-        path + "/connec_lcc_normal_annotations.csv", index_label="skids"
+        path + "/connec_lcc_normal_annotations_new.csv", index_label="skids"
     )
     print(connec_lcc_normal_annots)
     return gen_normal_connectome_lcc_annotations
@@ -192,7 +192,7 @@ def gen_normal_connectome_lcc_annotations():
 def gen_connectome_adj():
     skids_connec = pymaid.get_skids_by_annotation("connectome")
     adj_pandas = pymaid.adjacency_matrix(skids_connec)
-    adj_pandas.to_csv(path + "/adj_connectome.csv", index=False)
+    adj_pandas.to_csv(path + "/adj_connectome_new.csv", index=False)
     return adj_pandas
 
 
@@ -207,7 +207,7 @@ def gen_connectome_lcc_adj():
         kept_skids[i] = all_skids[ind]
     kept_skids = [int(i) for i in kept_skids]
     adj_lcc_pandas = pd.DataFrame(adj_lcc, columns=kept_skids, index=kept_skids)
-    adj_lcc_pandas.to_csv(path + "/adj_connectome_lcc.csv", index=False)
+    adj_lcc_pandas.to_csv(path + "/adj_connectome_lcc_new.csv", index=False)
     return adj_lcc_pandas
 
 
@@ -218,14 +218,14 @@ def gen_connectome_normal_lcc_adj():
     inds = gen_weird_neurons_annots().index
     normal_skids = [int(i) for i in adj_lcc_skids if i not in inds]
     connec_normal_lcc_adj = adj_lcc.loc[normal_skids, normal_skids]
-    connec_normal_lcc_adj.to_csv(path + "/adj_connectome_normal_lcc.csv", index=False)
+    connec_normal_lcc_adj.to_csv(path + "/adj_connectome_normal_lcc_new.csv", index=False)
     return connec_normal_lcc_adj
 
 
 def gen_full_adj():
     all_skids = list(gen_all_annotations().index)
     full_adj = pymaid.adjacency_matrix(all_skids)
-    full_adj.to_csv(path + "/full_adj.csv", index=False)
+    full_adj.to_csv(path + "/full_adj_new.csv", index=False)
     return full_adj
 
 
@@ -239,7 +239,7 @@ def gen_weird_neurons_annots():
         | (connec_lcc_annots["class"] == "im")
         | (connec_lcc_annots["class"] == "sm")
     ]
-    weird_annots.to_csv(path + "/weird_annotations.csv", index_label="skids")
+    weird_annots.to_csv(path + "/weird_annotations_new.csv", index_label="skids")
     return weird_annots
 
 def gen_left_adj():
@@ -248,7 +248,7 @@ def gen_left_adj():
     skids_left = [int(x) for x in skids_left if str(x) != "nan"]
 
     adj_left = pymaid.adjacency_matrix(skids_left)
-    adj_left.to_csv(path + "/adj_left.csv", index=False)
+    adj_left.to_csv(path + "/adj_left_new.csv", index=False)
     return adj_left
 
 def gen_right_adj():
@@ -257,7 +257,7 @@ def gen_right_adj():
     skids_right = [int(x) for x in skids_right if str(x) != "nan"]
 
     adj_right = pymaid.adjacency_matrix(skids_right)
-    adj_right.to_csv(path + "/adj_right.csv", index=False)
+    adj_right.to_csv(path + "/adj_right_new.csv", index=False)
 
     return adj_right
 
@@ -267,7 +267,7 @@ def gen_head_adj():
     skids_head = [int(x) for x in skids_head if str(x) != "nan"]
 
     adj_head = pymaid.adjacency_matrix(skids_head)
-    adj_head.to_csv(path + "/adj_head.csv", index=False)
+    adj_head.to_csv(path + "/adj_head_new.csv", index=False)
 
     return adj_head
 
@@ -277,7 +277,7 @@ def gen_pygidium_adj():
     skids_pyg = [int(x) for x in skids_pyg if str(x) != "nan"]
 
     adj_pyg = pymaid.adjacency_matrix(skids_pyg)
-    adj_pyg.to_csv(path + "/adj_pygidium.csv", index=False)
+    adj_pyg.to_csv(path + "/adj_pygidium_new.csv", index=False)
 
     return adj_pyg
 
@@ -287,7 +287,7 @@ def gen_0_adj():
     skids_0 = [int(x) for x in skids_0 if str(x) != "nan"]
 
     adj_0 = pymaid.adjacency_matrix(skids_0)
-    adj_0.to_csv(path + "/adj_0.csv", index=False)
+    adj_0.to_csv(path + "/adj_0_new.csv", index=False)
 
     return adj_0
 
@@ -297,7 +297,7 @@ def gen_1_adj():
     skids_1 = [int(x) for x in skids_1 if str(x) != "nan"]
 
     adj_1 = pymaid.adjacency_matrix(skids_1)
-    adj_1.to_csv(path + "/adj_1.csv", index=False)
+    adj_1.to_csv(path + "/adj_1_new.csv", index=False)
 
     return adj_1
 
@@ -307,7 +307,7 @@ def gen_2_adj():
     skids_2 = [int(x) for x in skids_2 if str(x) != "nan"]
 
     adj_2 = pymaid.adjacency_matrix(skids_2)
-    adj_2.to_csv(path + "/adj_2.csv", index=False)
+    adj_2.to_csv(path + "/adj_2_new.csv", index=False)
 
     return adj_2
 
@@ -317,7 +317,7 @@ def gen_3_adj():
     skids_3 = [int(x) for x in skids_3 if str(x) != "nan"]
 
     adj_3 = pymaid.adjacency_matrix(skids_3)
-    adj_3.to_csv(path + "/adj_3.csv", index=False)
+    adj_3.to_csv(path + "/adj_3_new.csv", index=False)
 
     return adj_3
 
@@ -338,7 +338,7 @@ def gen_left_normal_lcc_adj():
     kept_skids = [int(i) for i in kept_skids]
     left_connec_lcc_normal_adj_pd = pd.DataFrame(left_connec_lcc_normal_adj, columns=kept_skids, index=kept_skids)
     
-    left_connec_lcc_normal_adj_pd.to_csv(path + "/adj_left_normal_lcc.csv", index=False)
+    left_connec_lcc_normal_adj_pd.to_csv(path + "/adj_left_normal_lcc_new.csv", index=False)
     return left_connec_lcc_normal_adj_pd
 
 def gen_right_normal_lcc_adj():
@@ -358,7 +358,7 @@ def gen_right_normal_lcc_adj():
     kept_skids = [int(i) for i in kept_skids]
     right_connec_lcc_normal_adj_pd = pd.DataFrame(right_connec_lcc_normal_adj, columns=kept_skids, index=kept_skids)
     
-    right_connec_lcc_normal_adj_pd.to_csv(path + "/adj_right_normal_lcc.csv", index=False)
+    right_connec_lcc_normal_adj_pd.to_csv(path + "/adj_right_normal_lcc_new.csv", index=False)
     return right_connec_lcc_normal_adj_pd
 
 def gen_head_normal_lcc_adj():
@@ -378,7 +378,7 @@ def gen_head_normal_lcc_adj():
     kept_skids = [int(i) for i in kept_skids]
     head_connec_lcc_normal_adj_pd = pd.DataFrame(head_connec_lcc_normal_adj, columns=kept_skids, index=kept_skids)
     
-    head_connec_lcc_normal_adj_pd.to_csv(path + "/adj_head_normal_lcc.csv", index=False)
+    head_connec_lcc_normal_adj_pd.to_csv(path + "/adj_head_normal_lcc_new.csv", index=False)
     return head_connec_lcc_normal_adj_pd
 
 def gen_pygidium_normal_lcc_adj():
@@ -398,7 +398,7 @@ def gen_pygidium_normal_lcc_adj():
     kept_skids = [int(i) for i in kept_skids]
     pyg_connec_lcc_normal_adj_pd = pd.DataFrame(pyg_connec_lcc_normal_adj, columns=kept_skids, index=kept_skids)
     
-    pyg_connec_lcc_normal_adj_pd.to_csv(path + "/adj_pygidium_normal_lcc.csv", index=False)
+    pyg_connec_lcc_normal_adj_pd.to_csv(path + "/adj_pygidium_normal_lcc_new.csv", index=False)
     return pyg_connec_lcc_normal_adj_pd
 
 def gen_0_normal_lcc_adj():
@@ -418,7 +418,7 @@ def gen_0_normal_lcc_adj():
     kept_skids = [int(i) for i in kept_skids]
     connec_0_lcc_normal_adj_pd = pd.DataFrame(connec_0_normal_adj_adj, columns=kept_skids, index=kept_skids)
     
-    connec_0_lcc_normal_adj_pd.to_csv(path + "/adj_0_normal_lcc.csv", index=False)
+    connec_0_lcc_normal_adj_pd.to_csv(path + "/adj_0_normal_lcc_new.csv", index=False)
     return connec_0_lcc_normal_adj_pd
 
 def gen_1_normal_lcc_adj():
@@ -438,7 +438,7 @@ def gen_1_normal_lcc_adj():
     kept_skids = [int(i) for i in kept_skids]
     connec_1_lcc_normal_adj_pd = pd.DataFrame(connec_1_normal_adj_adj, columns=kept_skids, index=kept_skids)
     
-    connec_1_lcc_normal_adj_pd.to_csv(path + "/adj_1_normal_lcc.csv", index=False)
+    connec_1_lcc_normal_adj_pd.to_csv(path + "/adj_1_normal_lcc_new.csv", index=False)
     return connec_1_lcc_normal_adj_pd
 
 def gen_2_normal_lcc_adj():
@@ -458,7 +458,7 @@ def gen_2_normal_lcc_adj():
     kept_skids = [int(i) for i in kept_skids]
     connec_2_lcc_normal_adj_pd = pd.DataFrame(connec_2_normal_adj_adj, columns=kept_skids, index=kept_skids)
     
-    connec_2_lcc_normal_adj_pd.to_csv(path + "/adj_2_normal_lcc.csv", index=False)
+    connec_2_lcc_normal_adj_pd.to_csv(path + "/adj_2_normal_lcc_new.csv", index=False)
     return connec_2_lcc_normal_adj_pd
 
 def gen_3_normal_lcc_adj():
@@ -478,7 +478,7 @@ def gen_3_normal_lcc_adj():
     kept_skids = [int(i) for i in kept_skids]
     connec_3_lcc_normal_adj_pd = pd.DataFrame(connec_3_normal_adj_adj, columns=kept_skids, index=kept_skids)
     
-    connec_3_lcc_normal_adj_pd.to_csv(path + "/adj_3_normal_lcc.csv", index=False)
+    connec_3_lcc_normal_adj_pd.to_csv(path + "/adj_3_normal_lcc_new.csv", index=False)
     return connec_3_lcc_normal_adj_pd
 
 def gen_hemi_labels():
@@ -535,5 +535,4 @@ def gen_hemi_labels():
     skids_segs_df.to_csv(folder / "skids_segs_classes.csv")
     labels_segs_df.to_csv(folder / "labels_segs_classes.csv")
 """
-y = gen_connectome_adj()
-print(len(y))
+print(gen_hemi_labels())

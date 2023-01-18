@@ -87,6 +87,7 @@ def load_left_adj_labels():
 
     dir2 = DATA_PATH / "labels_hemis_classes.csv"
     hemi_labels = pd.read_csv(dir2)
+    print(hemi_labels)
     left_labels = hemi_labels["l"]
     left_labels = [x for x in left_labels if str(x) != "nan"]
 
@@ -185,5 +186,5 @@ def load_3_adj_labels():
 
 
 adj, labels = load_left_adj_labels()
-print(adj.index)
+print(adj)
 print(labels)

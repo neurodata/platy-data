@@ -405,121 +405,121 @@ title="Print to PDF"
                 
   <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import datetime
-import time
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
 
-import matplotlib.pyplot as plt
-import numpy as np
-import seaborn as sns
-import networkx as nx
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 
-# from giskard.plot import adjplot, scattermap
-from graspologic.embed import AdjacencySpectralEmbed
-from graspologic.plot import networkplot
-from graspologic.layouts import layout_umap, layout_tsne
-from graspologic.utils import is_fully_connected, largest_connected_component, symmetrize
-from matplotlib.patheffects import Normal, Stroke
+<span class="c1"># from giskard.plot import adjplot, scattermap</span>
+<span class="kn">from</span> <span class="nn">graspologic.embed</span> <span class="kn">import</span> <span class="n">AdjacencySpectralEmbed</span>
+<span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">networkplot</span>
+<span class="kn">from</span> <span class="nn">graspologic.layouts</span> <span class="kn">import</span> <span class="n">layout_umap</span><span class="p">,</span> <span class="n">layout_tsne</span>
+<span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">is_fully_connected</span><span class="p">,</span> <span class="n">largest_connected_component</span><span class="p">,</span> <span class="n">symmetrize</span>
+<span class="kn">from</span> <span class="nn">matplotlib.patheffects</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">Stroke</span>
 
-&quot;&quot;&quot;
-from pkg.data import (
-    load_maggot_graph,
-    load_network_palette,
-    load_node_palette,
-    load_unmatched,
-)
-&quot;&quot;&quot;
-# from pkg.io import get_environment_variables
-# from pkg.io import glue as default_glue
-# from pkg.io import savefig
-# from pkg.plot import set_theme
-from pkg.platy import (
-    load_0_adj_labels,
-    load_1_adj_labels,
-    load_2_adj_labels,
-    load_3_adj_labels,
-    load_head_adj_labels,
-    load_pygidium_adj_labels,
-    load_left_adj_labels,
-    load_right_adj_labels,
-)
-from scipy.cluster import hierarchy
-from umap import UMAP
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">from pkg.data import (</span>
+<span class="sd">    load_maggot_graph,</span>
+<span class="sd">    load_network_palette,</span>
+<span class="sd">    load_node_palette,</span>
+<span class="sd">    load_unmatched,</span>
+<span class="sd">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># from pkg.io import get_environment_variables</span>
+<span class="c1"># from pkg.io import glue as default_glue</span>
+<span class="c1"># from pkg.io import savefig</span>
+<span class="c1"># from pkg.plot import set_theme</span>
+<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">load_0_adj_labels</span><span class="p">,</span>
+    <span class="n">load_1_adj_labels</span><span class="p">,</span>
+    <span class="n">load_2_adj_labels</span><span class="p">,</span>
+    <span class="n">load_3_adj_labels</span><span class="p">,</span>
+    <span class="n">load_head_adj_labels</span><span class="p">,</span>
+    <span class="n">load_pygidium_adj_labels</span><span class="p">,</span>
+    <span class="n">load_left_adj_labels</span><span class="p">,</span>
+    <span class="n">load_right_adj_labels</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scipy.cluster</span> <span class="kn">import</span> <span class="n">hierarchy</span>
+<span class="kn">from</span> <span class="nn">umap</span> <span class="kn">import</span> <span class="n">UMAP</span>
 
-rng = np.random.default_rng(8888)
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">8888</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># load the adjs
-left_adj, _ = load_left_adj_labels()
-right_adj, _ = load_right_adj_labels()
-head_adj, _ = load_head_adj_labels()
-pyg_adj, _ = load_pygidium_adj_labels()
-adj_0, _ = load_0_adj_labels()
-adj_1, _ = load_1_adj_labels()
-adj_2, _ = load_2_adj_labels()
-adj_3, _ = load_3_adj_labels()
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load the adjs</span>
+<span class="n">left_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_left_adj_labels</span><span class="p">()</span>
+<span class="n">right_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_right_adj_labels</span><span class="p">()</span>
+<span class="n">head_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_head_adj_labels</span><span class="p">()</span>
+<span class="n">pyg_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_pygidium_adj_labels</span><span class="p">()</span>
+<span class="n">adj_0</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_0_adj_labels</span><span class="p">()</span>
+<span class="n">adj_1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_1_adj_labels</span><span class="p">()</span>
+<span class="n">adj_2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_2_adj_labels</span><span class="p">()</span>
+<span class="n">adj_3</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_3_adj_labels</span><span class="p">()</span>
 
-orig_adjs = [left_adj, right_adj, head_adj, pyg_adj, adj_0, adj_1, adj_2, adj_3]
+<span class="n">orig_adjs</span> <span class="o">=</span> <span class="p">[</span><span class="n">left_adj</span><span class="p">,</span> <span class="n">right_adj</span><span class="p">,</span> <span class="n">head_adj</span><span class="p">,</span> <span class="n">pyg_adj</span><span class="p">,</span> <span class="n">adj_0</span><span class="p">,</span> <span class="n">adj_1</span><span class="p">,</span> <span class="n">adj_2</span><span class="p">,</span> <span class="n">adj_3</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#nx adjs
-nx_adjs = []
-for adj in orig_adjs:
-    nx_adjs.append(nx.from_pandas_adjacency(adj))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#nx adjs</span>
+<span class="n">nx_adjs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">adj</span> <span class="ow">in</span> <span class="n">orig_adjs</span><span class="p">:</span>
+    <span class="n">nx_adjs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_adjacency</span><span class="p">(</span><span class="n">adj</span><span class="p">))</span>
 
-#np adjs
-np_adjs = []
-for adj in orig_adjs:
-    np_adjs.append(adj.to_numpy())
+<span class="c1">#np adjs</span>
+<span class="n">np_adjs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">adj</span> <span class="ow">in</span> <span class="n">orig_adjs</span><span class="p">:</span>
+    <span class="n">np_adjs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">adj</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
 
-#lccs for both
-nx_lcc_adjs = []
-for adj in nx_adjs:
-    nx_lcc_adjs.append((largest_connected_component(adj)))
+<span class="c1">#lccs for both</span>
+<span class="n">nx_lcc_adjs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">adj</span> <span class="ow">in</span> <span class="n">nx_adjs</span><span class="p">:</span>
+    <span class="n">nx_lcc_adjs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">largest_connected_component</span><span class="p">(</span><span class="n">adj</span><span class="p">)))</span>
 
-np_lcc_adjs = []
-for adj in np_adjs:
-    np_lcc_adjs.append((largest_connected_component(adj)))
+<span class="n">np_lcc_adjs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">adj</span> <span class="ow">in</span> <span class="n">np_adjs</span><span class="p">:</span>
+    <span class="n">np_lcc_adjs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">largest_connected_component</span><span class="p">(</span><span class="n">adj</span><span class="p">)))</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#use layout_umap from graspologic
-all_x = []
-all_y = []
-all_degrees = []
-all_hues = []
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#use layout_umap from graspologic</span>
+<span class="n">all_x</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">all_y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">all_degrees</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">all_hues</span> <span class="o">=</span> <span class="p">[]</span>
 
-for i, adj in enumerate(nx_adjs):
-    X, node_pos = layout_tsne(adj, perplexity=1, n_iter=10000)
-    x_pos = []
-    y_pos = []
-    node_comms = []
-    for pos in node_pos:
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">adj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nx_adjs</span><span class="p">):</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">node_pos</span> <span class="o">=</span> <span class="n">layout_tsne</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+    <span class="n">x_pos</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">y_pos</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">node_comms</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">node_pos</span><span class="p">:</span>
 
-        #save the assigned community of the node
-        node_comms.append(pos[4])
-        x_pos.append(pos[1])
-        y_pos.append(pos[2])
+        <span class="c1">#save the assigned community of the node</span>
+        <span class="n">node_comms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+        <span class="n">x_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">y_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 
-    node_comms = np.array(node_comms)
-    x_pos = np.array(x_pos)
-    y_pos = np.array(y_pos)
-    degrees = [val for (node, val) in adj.degree()]
+    <span class="n">node_comms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_comms</span><span class="p">)</span>
+    <span class="n">x_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_pos</span><span class="p">)</span>
+    <span class="n">y_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_pos</span><span class="p">)</span>
+    <span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span> <span class="k">for</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="ow">in</span> <span class="n">adj</span><span class="o">.</span><span class="n">degree</span><span class="p">()]</span>
 
-    all_x.append(x_pos)
-    all_y.append(y_pos)
-    all_degrees.append(degrees)
-    all_hues.append(node_comms)
+    <span class="n">all_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_pos</span><span class="p">)</span>
+    <span class="n">all_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_pos</span><span class="p">)</span>
+    <span class="n">all_degrees</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">degrees</span><span class="p">)</span>
+    <span class="n">all_hues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_comms</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -562,9 +562,9 @@ for i, adj in enumerate(nx_adjs):
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>adj_0, _ = load_0_adj_labels()
-nx_0 = nx.from_pandas_adjacency(adj_0)
-X_0, node_pos_0 = layout_tsne(nx_0, perplexity=1,  n_iter=10000)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adj_0</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_0_adj_labels</span><span class="p">()</span>
+<span class="n">nx_0</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_adjacency</span><span class="p">(</span><span class="n">adj_0</span><span class="p">)</span>
+<span class="n">X_0</span><span class="p">,</span> <span class="n">node_pos_0</span> <span class="o">=</span> <span class="n">layout_tsne</span><span class="p">(</span><span class="n">nx_0</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="n">n_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -579,39 +579,39 @@ X_0, node_pos_0 = layout_tsne(nx_0, perplexity=1,  n_iter=10000)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#hemis
-fig, axs = plt.subplots(1, 2, figsize=(20, 10))
-hemi_adjs = np_lcc_adjs[0:2]
-hemi_x = all_x[0:2]
-hemi_y = all_y[0:2]
-hemi_hues = [&quot;rocket&quot;, &quot;tab20&quot;]
-hemi_names = [&quot;left&quot;, &quot;right&quot;]
-for i in range(len(hemi_adjs)):
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#hemis</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">hemi_adjs</span> <span class="o">=</span> <span class="n">np_lcc_adjs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">hemi_x</span> <span class="o">=</span> <span class="n">all_x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">hemi_y</span> <span class="o">=</span> <span class="n">all_y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">hemi_hues</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rocket&quot;</span><span class="p">,</span> <span class="s2">&quot;tab20&quot;</span><span class="p">]</span>
+<span class="n">hemi_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hemi_adjs</span><span class="p">)):</span>
 
-    node_hues = []
-    for j in range(len(hemi_adjs[i])):
-        node_hues.append(0)
+    <span class="n">node_hues</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hemi_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
+        <span class="n">node_hues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-    node_hues = np.array(node_hues)
+    <span class="n">node_hues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_hues</span><span class="p">)</span>
 
-    plot = networkplot(
-        adjacency=hemi_adjs[i],
-        x=hemi_x[i],
-        y=hemi_y[i],
-        node_hue = node_hues,
-        palette=hemi_hues[i],
-        node_sizes=(15, 100),
-        edge_hue=&quot;source&quot;,
-        edge_alpha=0.5,
-        edge_linewidth=0.5,
-        ax = axs[i]
-    )
+    <span class="n">plot</span> <span class="o">=</span> <span class="n">networkplot</span><span class="p">(</span>
+        <span class="n">adjacency</span><span class="o">=</span><span class="n">hemi_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">hemi_x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">hemi_y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">node_hue</span> <span class="o">=</span> <span class="n">node_hues</span><span class="p">,</span>
+        <span class="n">palette</span><span class="o">=</span><span class="n">hemi_hues</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">node_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+        <span class="n">edge_hue</span><span class="o">=</span><span class="s2">&quot;source&quot;</span><span class="p">,</span>
+        <span class="n">edge_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">edge_linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="p">)</span>
 
-    axs[i].set(xlabel=&quot;{} to {} connection plot&quot;.format(hemi_names[i], hemi_names[i]))
-    axs[i].xaxis.label.set_size(20)
-    fig.suptitle(&quot;Networkplots of hemisphere connections&quot;, fontsize=30)
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2"> connection plot&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hemi_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">hemi_names</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Networkplots of hemisphere connections&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 
-#rocket, cubehelix, tab20, dark:salmon_r, YlOrBr, icefire, seagreen, viridis, magma
+<span class="c1">#rocket, cubehelix, tab20, dark:salmon_r, YlOrBr, icefire, seagreen, viridis, magma</span>
 </pre></div>
 </div>
 </div>
@@ -621,39 +621,39 @@ for i in range(len(hemi_adjs)):
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#segs
-fig, axs = plt.subplots(1, 6, figsize=(20, 10))
-seg_adjs = np_lcc_adjs[2:]
-seg_x = all_x[2:]
-seg_y = all_y[2:]
-seg_hues = [&quot;cubehelix&quot;, &quot;dark:salmon_r&quot;, &quot;tab20&quot;, &quot;icefire&quot;, &quot;viridis&quot;, &quot;magma&quot;]
-seg_names = [&quot;head&quot;, &quot;pygidium&quot;, &quot;seg_0&quot;, &quot;seg_1&quot;, &quot;seg_2&quot;, &quot;seg_3&quot;]
-for i in range(len(seg_adjs)):
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#segs</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">seg_adjs</span> <span class="o">=</span> <span class="n">np_lcc_adjs</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="n">seg_x</span> <span class="o">=</span> <span class="n">all_x</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="n">seg_y</span> <span class="o">=</span> <span class="n">all_y</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="n">seg_hues</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cubehelix&quot;</span><span class="p">,</span> <span class="s2">&quot;dark:salmon_r&quot;</span><span class="p">,</span> <span class="s2">&quot;tab20&quot;</span><span class="p">,</span> <span class="s2">&quot;icefire&quot;</span><span class="p">,</span> <span class="s2">&quot;viridis&quot;</span><span class="p">,</span> <span class="s2">&quot;magma&quot;</span><span class="p">]</span>
+<span class="n">seg_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">,</span> <span class="s2">&quot;seg_0&quot;</span><span class="p">,</span> <span class="s2">&quot;seg_1&quot;</span><span class="p">,</span> <span class="s2">&quot;seg_2&quot;</span><span class="p">,</span> <span class="s2">&quot;seg_3&quot;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seg_adjs</span><span class="p">)):</span>
 
-    node_hues = []
-    for j in range(len(seg_adjs[i])):
-        node_hues.append(0)
+    <span class="n">node_hues</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seg_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
+        <span class="n">node_hues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-    node_hues = np.array(node_hues)
+    <span class="n">node_hues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_hues</span><span class="p">)</span>
 
-    plot = networkplot(
-        adjacency=seg_adjs[i],
-        x=seg_x[i],
-        y=seg_y[i],
-        node_hue = node_hues,
-        palette=seg_hues[i],
-        node_sizes=(15, 100),
-        edge_hue=&quot;source&quot;,
-        edge_alpha=0.5,
-        edge_linewidth=0.5,
-        ax = axs[i]
-    )
+    <span class="n">plot</span> <span class="o">=</span> <span class="n">networkplot</span><span class="p">(</span>
+        <span class="n">adjacency</span><span class="o">=</span><span class="n">seg_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">seg_x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">seg_y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">node_hue</span> <span class="o">=</span> <span class="n">node_hues</span><span class="p">,</span>
+        <span class="n">palette</span><span class="o">=</span><span class="n">seg_hues</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">node_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+        <span class="n">edge_hue</span><span class="o">=</span><span class="s2">&quot;source&quot;</span><span class="p">,</span>
+        <span class="n">edge_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">edge_linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="p">)</span>
 
-    axs[i].set(xlabel=&quot;{} to {} connection plot&quot;.format(seg_names[i], seg_names[i]))
-    axs[i].xaxis.label.set_size(10)
-    fig.suptitle(&quot;Networkplots of segment connections&quot;, fontsize=30)
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2"> connection plot&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">seg_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">seg_names</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Networkplots of segment connections&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 
-#rocket, cubehelix, tab20, dark:salmon_r, YlOrBr, icefire, seagreen, viridis, magma
+<span class="c1">#rocket, cubehelix, tab20, dark:salmon_r, YlOrBr, icefire, seagreen, viridis, magma</span>
 </pre></div>
 </div>
 </div>

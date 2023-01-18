@@ -383,26 +383,26 @@ title="Print to PDF"
 <p>In this notebook we will be getting densities of the adjacency matrices representing the neurons in different sections of the larva (hemispheres and segments). We will then test if there is any statistical significance between the densities across hemispheres/segments.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import os
-import logging
-import pandas as pd
-import numpy as np
-import itertools
-import networkx as nx
-import seaborn as sns
-from itertools import chain, combinations
-from upsetplot import plot
-from pathlib import Path
-from matplotlib import pyplot as plt
-from networkx import from_numpy_array, from_pandas_adjacency, number_of_nodes, number_of_edges, density
-from graspologic.embed import AdjacencySpectralEmbed
-from graspologic.layouts import layout_tsne, layout_umap
-from graspologic.plot.plot import networkplot
-from graspologic.utils import is_fully_connected, largest_connected_component, is_symmetric, symmetrize
-from graspologic.inference import erdos_renyi_test
-from graspologic.plot import adjplot, matrixplot
-from statsmodels.stats.proportion import proportion_confint, multinomial_proportions_confint
-from pkg.platy import _get_folder, load_connectome_normal_lcc_annotations, load_connectome_lcc_normal_adj, load_0_adj_labels, load_1_adj_labels, load_2_adj_labels, load_3_adj_labels, load_head_adj_labels, load_pygidium_adj_labels, load_left_adj_labels, load_right_adj_labels
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">upsetplot</span> <span class="kn">import</span> <span class="n">plot</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">networkx</span> <span class="kn">import</span> <span class="n">from_numpy_array</span><span class="p">,</span> <span class="n">from_pandas_adjacency</span><span class="p">,</span> <span class="n">number_of_nodes</span><span class="p">,</span> <span class="n">number_of_edges</span><span class="p">,</span> <span class="n">density</span>
+<span class="kn">from</span> <span class="nn">graspologic.embed</span> <span class="kn">import</span> <span class="n">AdjacencySpectralEmbed</span>
+<span class="kn">from</span> <span class="nn">graspologic.layouts</span> <span class="kn">import</span> <span class="n">layout_tsne</span><span class="p">,</span> <span class="n">layout_umap</span>
+<span class="kn">from</span> <span class="nn">graspologic.plot.plot</span> <span class="kn">import</span> <span class="n">networkplot</span>
+<span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">is_fully_connected</span><span class="p">,</span> <span class="n">largest_connected_component</span><span class="p">,</span> <span class="n">is_symmetric</span><span class="p">,</span> <span class="n">symmetrize</span>
+<span class="kn">from</span> <span class="nn">graspologic.inference</span> <span class="kn">import</span> <span class="n">erdos_renyi_test</span>
+<span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">adjplot</span><span class="p">,</span> <span class="n">matrixplot</span>
+<span class="kn">from</span> <span class="nn">statsmodels.stats.proportion</span> <span class="kn">import</span> <span class="n">proportion_confint</span><span class="p">,</span> <span class="n">multinomial_proportions_confint</span>
+<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_connectome_normal_lcc_annotations</span><span class="p">,</span> <span class="n">load_connectome_lcc_normal_adj</span><span class="p">,</span> <span class="n">load_0_adj_labels</span><span class="p">,</span> <span class="n">load_1_adj_labels</span><span class="p">,</span> <span class="n">load_2_adj_labels</span><span class="p">,</span> <span class="n">load_3_adj_labels</span><span class="p">,</span> <span class="n">load_head_adj_labels</span><span class="p">,</span> <span class="n">load_pygidium_adj_labels</span><span class="p">,</span> <span class="n">load_left_adj_labels</span><span class="p">,</span> <span class="n">load_right_adj_labels</span>
 </pre></div>
 </div>
 </div>
@@ -410,26 +410,26 @@ from pkg.platy import _get_folder, load_connectome_normal_lcc_annotations, load_
 <p>We will first load all of the adjs of the regions we are interested in: the left and right hemisphere, and for the segments, the head, pygidium, segment 1, segment 2, and segment 3. Keep in mind that these adjs represent the largest connected component of each region.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>left_adj, _ = load_left_adj_labels()
-right_adj, _ = load_right_adj_labels()
-head_adj, _ = load_head_adj_labels()
-pyg_adj, _ = load_pygidium_adj_labels()
-#adj_0, _ = load_0_adj_labels()
-adj_1, _ = load_1_adj_labels()
-adj_2, _ = load_2_adj_labels()
-adj_3, _ = load_3_adj_labels()
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">left_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_left_adj_labels</span><span class="p">()</span>
+<span class="n">right_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_right_adj_labels</span><span class="p">()</span>
+<span class="n">head_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_head_adj_labels</span><span class="p">()</span>
+<span class="n">pyg_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_pygidium_adj_labels</span><span class="p">()</span>
+<span class="c1">#adj_0, _ = load_0_adj_labels()</span>
+<span class="n">adj_1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_1_adj_labels</span><span class="p">()</span>
+<span class="n">adj_2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_2_adj_labels</span><span class="p">()</span>
+<span class="n">adj_3</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_3_adj_labels</span><span class="p">()</span>
 
-hemi_adjs = [left_adj, right_adj]
-segment_adjs = [head_adj, pyg_adj, adj_1, adj_2, adj_3]
+<span class="n">hemi_adjs</span> <span class="o">=</span> <span class="p">[</span><span class="n">left_adj</span><span class="p">,</span> <span class="n">right_adj</span><span class="p">]</span>
+<span class="n">segment_adjs</span> <span class="o">=</span> <span class="p">[</span><span class="n">head_adj</span><span class="p">,</span> <span class="n">pyg_adj</span><span class="p">,</span> <span class="n">adj_1</span><span class="p">,</span> <span class="n">adj_2</span><span class="p">,</span> <span class="n">adj_3</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>folder = _get_folder()
-folder = Path.joinpath(folder, &quot;density_plots&quot;)
-folder
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folder</span> <span class="o">=</span> <span class="n">_get_folder</span><span class="p">()</span>
+<span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">&quot;density_plots&quot;</span><span class="p">)</span>
+<span class="n">folder</span>
 </pre></div>
 </div>
 </div>
@@ -442,14 +442,14 @@ folder
 <p>To keep track of the adjs easier, we separate the hemisphere and segment adjs into two dictionaries</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#sort adjacency matrices into dicts
-df_hemis = {&quot;l&quot;: None, &quot;r&quot;: None}
-for i, key in enumerate(df_hemis):
-    df_hemis[key] = hemi_adjs[i]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#sort adjacency matrices into dicts</span>
+<span class="n">df_hemis</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df_hemis</span><span class="p">):</span>
+    <span class="n">df_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">hemi_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-df_segments = {&quot;head&quot;: None, &quot;pygidium&quot;: None, &quot;1&quot;: None, &quot;2&quot;: None, &quot;3&quot;: None}
-for i, key in enumerate(df_segments):
-    df_segments[key] = segment_adjs[i]
+<span class="n">df_segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df_segments</span><span class="p">):</span>
+    <span class="n">df_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">segment_adjs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -457,18 +457,18 @@ for i, key in enumerate(df_segments):
 <p>We convert the adjacency matrices to networkx objects so we can get the density of these graphs</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nx_hemis = {&quot;l&quot;: None, &quot;r&quot;: None}
-for key in df_hemis:
-    nx_hemis[key] = from_pandas_adjacency(df_hemis[key], create_using=nx.DiGraph)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nx_hemis</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">df_hemis</span><span class="p">:</span>
+    <span class="n">nx_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_pandas_adjacency</span><span class="p">(</span><span class="n">df_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nx_segments = {&quot;head&quot;: None, &quot;pygidium&quot;: None, &quot;1&quot;: None, &quot;2&quot;: None, &quot;3&quot;: None}
-for key in df_segments:
-    nx_segments[key] = from_pandas_adjacency(df_segments[key], create_using=nx.DiGraph)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nx_segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">df_segments</span><span class="p">:</span>
+    <span class="n">nx_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_pandas_adjacency</span><span class="p">(</span><span class="n">df_segments</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -476,18 +476,18 @@ for key in df_segments:
 <p>We then get the densities of these networkx graphs</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dens_hemis = {&quot;l&quot;: None, &quot;r&quot;: None}
-for key in nx_hemis:
-    dens_hemis[key] = density(nx_hemis[key])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dens_hemis</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">nx_hemis</span><span class="p">:</span>
+    <span class="n">dens_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">density</span><span class="p">(</span><span class="n">nx_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dens_segments = {&quot;head&quot;: None, &quot;pygidium&quot;: None, &quot;1&quot;: None, &quot;2&quot;: None, &quot;3&quot;: None}
-for key in nx_segments:
-    dens_segments[key] = density(nx_segments[key])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dens_segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">nx_segments</span><span class="p">:</span>
+    <span class="n">dens_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">density</span><span class="p">(</span><span class="n">nx_segments</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -495,27 +495,27 @@ for key in nx_segments:
 <p>We concatenate the dicts so we can get a barplot of all the dictionaries we have</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>all_dicts = dens_hemis | dens_segments
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_dicts</span> <span class="o">=</span> <span class="n">dens_hemis</span> <span class="o">|</span> <span class="n">dens_segments</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>labels = list(all_dicts.keys())
-densities = list(all_dicts.values())
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">all_dicts</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">densities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">all_dicts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sns.set_style(&quot;white&quot;)
-sns.barplot(x=labels, y=densities) 
-plt.title(&quot;Densities in different sections of the larva&quot;)
-plt.xlabel(&quot;Section&quot;)
-plt.ylabel(&quot;Density&quot;)
-plt.savefig(folder / &quot;densities_sections&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">densities</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Densities in different sections of the larva&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Section&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Density&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;densities_sections&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -526,48 +526,48 @@ plt.savefig(folder / &quot;densities_sections&quot;)
 <p>The following function allows us to display confidence intervals of the barplots of hemispheres and segments</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def plot_barplot(networks, labels, densities, coverage=0.95):
-    fig, ax = plt.subplots(figsize=(6, 6))
-    palette = None
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_barplot</span><span class="p">(</span><span class="n">networks</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">densities</span><span class="p">,</span> <span class="n">coverage</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">palette</span> <span class="o">=</span> <span class="kc">None</span>
     
-    #barplot features
+    <span class="c1">#barplot features</span>
 
-    ax.set_title(&quot;Densities in different sections of the larva&quot;)
-    if len(networks) == 2:
-        ax.set_xlabel(&quot;Side&quot;)
-        palette = sns.color_palette(&quot;Set1&quot;)
-    else:
-        ax.set_xlabel(&quot;Segment&quot;)
-        palette = sns.color_palette(&quot;Set2&quot;)
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Densities in different sections of the larva&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">networks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Side&quot;</span><span class="p">)</span>
+        <span class="n">palette</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s2">&quot;Set1&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Segment&quot;</span><span class="p">)</span>
+        <span class="n">palette</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s2">&quot;Set2&quot;</span><span class="p">)</span>
         
-    ax.set_ylabel(&quot;Density&quot;)
-    ax = sns.barplot(x=labels, y=densities, palette=palette)
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Density&quot;</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">densities</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">)</span>
 
-    if len(networks) == 2:
-        ax.set_xticklabels([&quot;left&quot;, &quot;right&quot;])
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">networks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">])</span>
 
-    #get possible number of edges, number of edges
-    possible_edges = []
-    num_edges = []
-    for i, network in enumerate(networks.values()):
-        #possible edges
-        n = np.shape(network)[0]
-        n_possible = n * (n-1)
-        possible_edges.append(n_possible)
+    <span class="c1">#get possible number of edges, number of edges</span>
+    <span class="n">possible_edges</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">num_edges</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">network</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">networks</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+        <span class="c1">#possible edges</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">network</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">n_possible</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">possible_edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n_possible</span><span class="p">)</span>
 
-        #number of edges
-        num_edges.append(np.count_nonzero(network))
+        <span class="c1">#number of edges</span>
+        <span class="n">num_edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">network</span><span class="p">))</span>
 
-    #upper and lower bound for each network
-    bounds = []
-    for poss, num in zip(possible_edges, num_edges):
-        lower, upper = proportion_confint(num, poss, alpha=1-coverage, method=&quot;beta&quot;)
-        bounds.append([lower, upper])
+    <span class="c1">#upper and lower bound for each network</span>
+    <span class="n">bounds</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">poss</span><span class="p">,</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">possible_edges</span><span class="p">,</span> <span class="n">num_edges</span><span class="p">):</span>
+        <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span> <span class="o">=</span> <span class="n">proportion_confint</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">poss</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">coverage</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;beta&quot;</span><span class="p">)</span>
+        <span class="n">bounds</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">])</span>
 
-    linewidth = 2    
-    #plot confidence intervals
-    for x, bound in enumerate(bounds):
-        ax.plot([x, x], [bounds[x][0], bounds[x][1]], color=&quot;black&quot;, linewidth=linewidth)
+    <span class="n">linewidth</span> <span class="o">=</span> <span class="mi">2</span>    
+    <span class="c1">#plot confidence intervals</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">bound</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bounds</span><span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span class="p">[</span><span class="n">bounds</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">)</span>
     
 </pre></div>
 </div>
@@ -575,16 +575,16 @@ plt.savefig(folder / &quot;densities_sections&quot;)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#bar plot for dens_hemis with confidence intervals
-hemi_labels = list(dens_hemis.keys())
-hemi_densities = list(dens_hemis.values())
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#bar plot for dens_hemis with confidence intervals</span>
+<span class="n">hemi_labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dens_hemis</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">hemi_densities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dens_hemis</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
-#convert pandas df to numpy
-np_hemis = {&quot;l&quot;: None, &quot;r&quot;: None}
-for key in df_hemis:
-    np_hemis[key] = df_hemis[key].to_numpy()
-plot_barplot(np_hemis, hemi_labels, hemi_densities)
-plt.savefig(folder / &quot;densities_hemis&quot;)
+<span class="c1">#convert pandas df to numpy</span>
+<span class="n">np_hemis</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">df_hemis</span><span class="p">:</span>
+    <span class="n">np_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_hemis</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">plot_barplot</span><span class="p">(</span><span class="n">np_hemis</span><span class="p">,</span> <span class="n">hemi_labels</span><span class="p">,</span> <span class="n">hemi_densities</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;densities_hemis&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -594,16 +594,16 @@ plt.savefig(folder / &quot;densities_hemis&quot;)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#bar plot for dens_segments with confidence intervals
-segment_labels = list(dens_segments.keys())
-segment_densities = list(dens_segments.values())
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#bar plot for dens_segments with confidence intervals</span>
+<span class="n">segment_labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dens_segments</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">segment_densities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dens_segments</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
-#convert pandas df to numpy
-np_segments = {&quot;head&quot;: None, &quot;pygidium&quot;: None, &quot;1&quot;: None, &quot;2&quot;: None, &quot;3&quot;: None}
-for key in df_segments:
-    np_segments[key] = df_segments[key].to_numpy()
-plot_barplot(np_segments, segment_labels, segment_densities)
-plt.savefig(folder / &quot;densities_segments&quot;)
+<span class="c1">#convert pandas df to numpy</span>
+<span class="n">np_segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;head&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">df_segments</span><span class="p">:</span>
+    <span class="n">np_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">plot_barplot</span><span class="p">(</span><span class="n">np_segments</span><span class="p">,</span> <span class="n">segment_labels</span><span class="p">,</span> <span class="n">segment_densities</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;densities_segments&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -614,9 +614,9 @@ plt.savefig(folder / &quot;densities_segments&quot;)
 <p>Let’s now run the test for the left and right hemisphere</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#print p val of er test of left vs right
-stats_hemis, pval_hemis, misc_hemis = erdos_renyi_test(np_hemis[&quot;l&quot;], np_hemis[&quot;r&quot;])
-print(pval_hemis)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#print p val of er test of left vs right</span>
+<span class="n">stats_hemis</span><span class="p">,</span> <span class="n">pval_hemis</span><span class="p">,</span> <span class="n">misc_hemis</span> <span class="o">=</span> <span class="n">erdos_renyi_test</span><span class="p">(</span><span class="n">np_hemis</span><span class="p">[</span><span class="s2">&quot;l&quot;</span><span class="p">],</span> <span class="n">np_hemis</span><span class="p">[</span><span class="s2">&quot;r&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pval_hemis</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -629,28 +629,28 @@ print(pval_hemis)
 <p>We see that the pvalue is very small, which means that we reject the null hypothesis that the edge probability for the adj of the left hemisphere is not different from the edge probability of the adj of the right hemisphere</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#5 by 5 df of pvals of the segments
-labels_segments = list(dens_segments.keys())
-adj_list = list(np_segments.values())
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#5 by 5 df of pvals of the segments</span>
+<span class="n">labels_segments</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dens_segments</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">adj_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np_segments</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
-#make pairwise combination list of all elements in list 
-pairwise_labels = list(itertools.combinations(labels_segments, 2))
-pairwise_adjs = list(itertools.combinations(adj_list, 2))
+<span class="c1">#make pairwise combination list of all elements in list </span>
+<span class="n">pairwise_labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">labels_segments</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">pairwise_adjs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">adj_list</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 
-#initialize dataframe
-names = [&quot;head&quot;, &quot;pygidium&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;]
-zero_data = np.zeros(shape=(len(names), len(names)))
-pval_df = pd.DataFrame(zero_data, columns=names, index=names)
-misc_df = pd.DataFrame(zero_data, columns=names, index=names)
-pval_list = []
-for label, adjs in zip(pairwise_labels, pairwise_adjs):
-    stat, pval, misc = erdos_renyi_test(adjs[0], adjs[1])
-    pval_df.loc[label[0]][label[1]] = pval
-    pval_df.loc[label[1]][label[0]] = pval
-    misc_df.loc[label[0]][label[1]] = misc
-    misc_df.loc[label[1]][label[0]] = misc
-pval_df.to_csv(folder / &quot;er_pvals_segments.csv&quot;)
-pval_df
+<span class="c1">#initialize dataframe</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="s2">&quot;pygidium&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">]</span>
+<span class="n">zero_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)))</span>
+<span class="n">pval_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">zero_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+<span class="n">misc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">zero_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+<span class="n">pval_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">adjs</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pairwise_labels</span><span class="p">,</span> <span class="n">pairwise_adjs</span><span class="p">):</span>
+    <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">misc</span> <span class="o">=</span> <span class="n">erdos_renyi_test</span><span class="p">(</span><span class="n">adjs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">adjs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">pval_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">label</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pval</span>
+    <span class="n">pval_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">label</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pval</span>
+    <span class="n">misc_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">label</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">misc</span>
+    <span class="n">misc_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">label</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">misc</span>
+<span class="n">pval_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;er_pvals_segments.csv&quot;</span><span class="p">)</span>
+<span class="n">pval_df</span>
 </pre></div>
 </div>
 </div>
@@ -728,109 +728,108 @@ pval_df
 <p>The following functions will allow us to visualize the pvalues in a heatmap, where significant p values will be denoted with an X</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from matplotlib.transforms import Bbox
-def shrink_axis(ax, scale=0.7, shift=0):
-    pos = ax.get_position()
-    mid = (pos.ymax + pos.ymin) / 2
-    height = pos.ymax - pos.ymin
-    new_pos = Bbox(
-        [
-            [pos.xmin, mid - scale * 0.5 * height - shift],
-            [pos.xmax, mid + scale * 0.5 * height - shift],
-        ]
-    )
-    ax.set_position(new_pos)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib.transforms</span> <span class="kn">import</span> <span class="n">Bbox</span>
+<span class="k">def</span> <span class="nf">shrink_axis</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span>
+    <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">ymax</span> <span class="o">+</span> <span class="n">pos</span><span class="o">.</span><span class="n">ymin</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">pos</span><span class="o">.</span><span class="n">ymin</span>
+    <span class="n">new_pos</span> <span class="o">=</span> <span class="n">Bbox</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">[</span><span class="n">pos</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">mid</span> <span class="o">-</span> <span class="n">scale</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">height</span> <span class="o">-</span> <span class="n">shift</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">pos</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="n">scale</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">height</span> <span class="o">-</span> <span class="n">shift</span><span class="p">],</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_position</span><span class="p">(</span><span class="n">new_pos</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from seaborn.utils import relative_luminance
-def plot_pvals(pval_df, names, multiple_correct=True, ax=None):
-    if ax is None:
-        width_ratios = [0.5, 3, 10]
-        fig, axs = plt.subplots(
-            1,
-            3,
-            figsize=(10, 10),
-            gridspec_kw=dict(
-                width_ratios=width_ratios,
-            ),
-        )
-        axs[1].remove()
-        ax = axs[-1]
-        cax = axs[0]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">seaborn.utils</span> <span class="kn">import</span> <span class="n">relative_luminance</span>
+<span class="k">def</span> <span class="nf">plot_pvals</span><span class="p">(</span><span class="n">pval_df</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">multiple_correct</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">width_ratios</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span>
+            <span class="mi">3</span><span class="p">,</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+            <span class="n">gridspec_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">width_ratios</span><span class="o">=</span><span class="n">width_ratios</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">cax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     
-    plot_pvalues = np.log10(pval_df)
-    plot_pvalues.replace(-np.inf, 0, inplace=True)
-    im = sns.heatmap(
-        plot_pvalues,
-        ax=ax,
-        cmap=&quot;RdBu&quot;,
-        center=0,
-        square=True,
-        cbar=False,
-        fmt=&quot;s&quot;,
-    )
-    ax.set(ylabel=&quot;Source group&quot;, xlabel=&quot;Target group&quot;)
+    <span class="n">plot_pvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pval_df</span><span class="p">)</span>
+    <span class="n">plot_pvalues</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
+        <span class="n">plot_pvalues</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu&quot;</span><span class="p">,</span>
+        <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Source group&quot;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Target group&quot;</span><span class="p">)</span>
 
-    if multiple_correct == True:
-        ax.set(title=&quot;Density tests p-values segments (corrected)&quot;)
-    else:
-        ax.set(title=&quot;Density tests p-values segments (uncorrected)&quot;)
+    <span class="k">if</span> <span class="n">multiple_correct</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Density tests p-values segments (corrected)&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Density tests p-values segments (uncorrected)&quot;</span><span class="p">)</span>
 
-    ax.set(xticks=np.arange(len(names)) + 0.5, xticklabels=names)
-    colors = im.get_children()[0].get_facecolors()
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">))</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">xticklabels</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">get_children</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_facecolors</span><span class="p">()</span>
 
-    shrink_axis(cax, scale=0.5, shift=0.05)
-    fig = ax.get_figure()
-    _ = fig.colorbar(
-        im.get_children()[0],
-        cax=cax,
-        fraction=1,
-        shrink=1,
-        ticklocation=&quot;left&quot;,
-    )
-    cax.set_title(r&quot;$log_{10}$&quot; + &quot;\ncorrected&quot; &quot;\np-value&quot;, pad=20)
+    <span class="n">shrink_axis</span><span class="p">(</span><span class="n">cax</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span>
+        <span class="n">im</span><span class="o">.</span><span class="n">get_children</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">cax</span><span class="o">=</span><span class="n">cax</span><span class="p">,</span>
+        <span class="n">fraction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">shrink</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">ticklocation</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">cax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$log_</span><span class="si">{10}</span><span class="s2">$&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">corrected&quot;</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">p-value&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
-    cax.plot(
-        [0, 1], [np.log10(0.05), np.log10(0.05)], zorder=100, color=&quot;black&quot;, linewidth=3
-    )
+    <span class="n">cax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">0.05</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)],</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span>
+    <span class="p">)</span>
 
-    cax.annotate(
-        r&quot;$\alpha$&quot;,
-        (0.05, np.log10(0.05)),
-        xytext=(-5, 0),
-        textcoords=&quot;offset points&quot;,
-        va=&quot;center&quot;,
-        ha=&quot;right&quot;,
-        arrowprops={&quot;arrowstyle&quot;: &quot;-&quot;, &quot;linewidth&quot;: 3, &quot;relpos&quot;: (0, 0.5)},
-    )
+    <span class="n">cax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s2">&quot;$\alpha$&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)),</span>
+        <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span><span class="p">,</span>
+        <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+        <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
+        <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;arrowstyle&quot;</span><span class="p">:</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;linewidth&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;relpos&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)},</span>
+    <span class="p">)</span>
     
-    #make X&#39;s
-    pad=0.2
-    for idx, color in enumerate(colors):
-        i, j = np.unravel_index(idx, (len(names), len(names)))
-        if i!=j and np.log(pval_df[names[i]][names[j]]) &lt; np.log(0.05):
-            lum = relative_luminance(color)
-            text_color = &quot;.15&quot; if lum &gt; 0.408 else &quot;w&quot;
-            xs = [j + pad, j + 1 - pad]
-            ys = [i + pad, i + 1 - pad]
-            ax.plot(xs, ys, color=text_color, linewidth=4)
-            xs = [j + 1 - pad, j + pad]
-            ys = [i + pad, i + 1 - pad]
-            ax.plot(xs, ys, color=text_color, linewidth=4)
+    <span class="c1">#make X&#39;s</span>
+    <span class="n">pad</span><span class="o">=</span><span class="mf">0.2</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">colors</span><span class="p">):</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">!=</span><span class="n">j</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pval_df</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="n">names</span><span class="p">[</span><span class="n">j</span><span class="p">]])</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.05</span><span class="p">):</span>
+            <span class="n">lum</span> <span class="o">=</span> <span class="n">relative_luminance</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+            <span class="n">text_color</span> <span class="o">=</span> <span class="s2">&quot;.15&quot;</span> <span class="k">if</span> <span class="n">lum</span> <span class="o">&gt;</span> <span class="mf">0.408</span> <span class="k">else</span> <span class="s2">&quot;w&quot;</span>
+            <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">]</span>
+            <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">pad</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">]</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">text_color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+            <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span>
+            <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">pad</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">]</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">text_color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
     
-
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_pvals(pval_df, names, multiple_correct=False)
-plt.savefig(folder / &quot;density_heatmap_uncorrected.png&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_pvals</span><span class="p">(</span><span class="n">pval_df</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">multiple_correct</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;density_heatmap_uncorrected.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -841,20 +840,20 @@ plt.savefig(folder / &quot;density_heatmap_uncorrected.png&quot;)
 <p>We can see that the p values are significant across the head and pygidium, but seem mostly insignificant across the segments. Let’s use bonferroni’s correction on the segment p-values to reduce the chances of obtaining false positive results since we are using multiple pairwise tests</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#bonferroni correction for pvals
-from statsmodels.stats.multitest import multipletests
-np_pvals = pval_df.to_numpy().flatten()
-corrected_pvals = multipletests(np_pvals)[1].reshape((len(names), len(names)))
-corrected_pvals_df = pd.DataFrame(corrected_pvals, columns=names, index=names)
-corrected_pvals_df.to_csv(folder / &quot;er_corrected_pvals_segments.csv&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#bonferroni correction for pvals</span>
+<span class="kn">from</span> <span class="nn">statsmodels.stats.multitest</span> <span class="kn">import</span> <span class="n">multipletests</span>
+<span class="n">np_pvals</span> <span class="o">=</span> <span class="n">pval_df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">corrected_pvals</span> <span class="o">=</span> <span class="n">multipletests</span><span class="p">(</span><span class="n">np_pvals</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)))</span>
+<span class="n">corrected_pvals_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">corrected_pvals</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+<span class="n">corrected_pvals_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;er_corrected_pvals_segments.csv&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_pvals(corrected_pvals_df, names, multiple_correct=True)
-plt.savefig(folder / &quot;density_heatmap_corrected.png&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_pvals</span><span class="p">(</span><span class="n">corrected_pvals_df</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">multiple_correct</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;density_heatmap_corrected.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -869,16 +868,16 @@ plt.savefig(folder / &quot;density_heatmap_corrected.png&quot;)
 <p>The following methods will allow us to plot the density of the sections that we are interested in, as well as the pvalue after running the <code class="docutils literal notranslate"><span class="pre">erdos_renyi_test</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def convert_pvalue_to_asterisks(pvalue):
-    if pvalue &lt;= 0.0001:
-        return &quot;****&quot;
-    elif pvalue &lt;= 0.001:
-        return &quot;***&quot;
-    elif pvalue &lt;= 0.01:
-        return &quot;**&quot;
-    elif pvalue &lt;= 0.05:
-        return &quot;*&quot;
-    return &quot;ns&quot;
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">convert_pvalue_to_asterisks</span><span class="p">(</span><span class="n">pvalue</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">pvalue</span> <span class="o">&lt;=</span> <span class="mf">0.0001</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;****&quot;</span>
+    <span class="k">elif</span> <span class="n">pvalue</span> <span class="o">&lt;=</span> <span class="mf">0.001</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;***&quot;</span>
+    <span class="k">elif</span> <span class="n">pvalue</span> <span class="o">&lt;=</span> <span class="mf">0.01</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;**&quot;</span>
+    <span class="k">elif</span> <span class="n">pvalue</span> <span class="o">&lt;=</span> <span class="mf">0.05</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;*&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;ns&quot;</span>
     
 </pre></div>
 </div>
@@ -886,80 +885,80 @@ plt.savefig(folder / &quot;density_heatmap_corrected.png&quot;)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def plot_density_bin(pval, label1, label2, misc, method=&quot;beta&quot;, ax=None, coverage=0.95):
-    if ax is None:
-        fig, ax = plt.subplots(1, 1, figsize=(4, 6))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_density_bin</span><span class="p">(</span><span class="n">pval</span><span class="p">,</span> <span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">,</span> <span class="n">misc</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coverage</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
-    n_possible_first = misc[&quot;possible1&quot;]
-    n_possible_second = misc[&quot;possible2&quot;]
+    <span class="n">n_possible_first</span> <span class="o">=</span> <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;possible1&quot;</span><span class="p">]</span>
+    <span class="n">n_possible_second</span> <span class="o">=</span> <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;possible2&quot;</span><span class="p">]</span>
 
-    density_first = misc[&quot;probability1&quot;]
-    density_second = misc[&quot;probability2&quot;]
+    <span class="n">density_first</span> <span class="o">=</span> <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;probability1&quot;</span><span class="p">]</span>
+    <span class="n">density_second</span> <span class="o">=</span> <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;probability2&quot;</span><span class="p">]</span>
 
-    n_edges_first = misc[&quot;observed1&quot;]
-    n_edges_second = misc[&quot;observed2&quot;]
+    <span class="n">n_edges_first</span> <span class="o">=</span> <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;observed1&quot;</span><span class="p">]</span>
+    <span class="n">n_edges_second</span> <span class="o">=</span> <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;observed2&quot;</span><span class="p">]</span>
 
-    first_lower, first_upper = proportion_confint(
-        n_edges_first, n_possible_first, alpha=1 - coverage, method=method
-    )
-    second_lower, second_upper = proportion_confint(
-        n_edges_second, n_possible_second, alpha=1 - coverage, method=method
-    )
+    <span class="n">first_lower</span><span class="p">,</span> <span class="n">first_upper</span> <span class="o">=</span> <span class="n">proportion_confint</span><span class="p">(</span>
+        <span class="n">n_edges_first</span><span class="p">,</span> <span class="n">n_possible_first</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="n">coverage</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span>
+    <span class="p">)</span>
+    <span class="n">second_lower</span><span class="p">,</span> <span class="n">second_upper</span> <span class="o">=</span> <span class="n">proportion_confint</span><span class="p">(</span>
+        <span class="n">n_edges_second</span><span class="p">,</span> <span class="n">n_possible_second</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="n">coverage</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span>
+    <span class="p">)</span>
     
 
-    halfwidth = 0.1
-    linewidth = 4
-    colors = sns.color_palette(&quot;Set2&quot;)
-    palette = dict(zip([label1, label2], [colors[0], colors[1]]))
+    <span class="n">halfwidth</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">linewidth</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s2">&quot;Set2&quot;</span><span class="p">)</span>
+    <span class="n">palette</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span><span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">],</span> <span class="p">[</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">]]))</span>
 
-    color = palette[label1]
-    x = 0
-    ax.plot(
-        [x - halfwidth, x + halfwidth],
-        [density_first, density_first],
-        color=color,
-        linewidth=linewidth,
-    )
-    ax.plot([x, x], [first_lower, first_upper], color=color, linewidth=linewidth)
+    <span class="n">color</span> <span class="o">=</span> <span class="n">palette</span><span class="p">[</span><span class="n">label1</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="n">halfwidth</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">halfwidth</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">density_first</span><span class="p">,</span> <span class="n">density_first</span><span class="p">],</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span class="p">[</span><span class="n">first_lower</span><span class="p">,</span> <span class="n">first_upper</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">)</span>
 
-    color = palette[label2]
-    x = 1
-    ax.plot(
-        [x - halfwidth, x + halfwidth],
-        [density_second, density_second],
-        color=color,
-        linewidth=linewidth,
-    )
-    ax.plot([x, x], [second_lower, second_upper], color=color, linewidth=linewidth)
+    <span class="n">color</span> <span class="o">=</span> <span class="n">palette</span><span class="p">[</span><span class="n">label2</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="n">halfwidth</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">halfwidth</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">density_second</span><span class="p">,</span> <span class="n">density_second</span><span class="p">],</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span class="p">[</span><span class="n">second_lower</span><span class="p">,</span> <span class="n">second_upper</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">)</span>
 
-    #yticks = [np.round(density_left, 4), np.round(density_right, 4)]
-    yticks = [density_first, density_second]
-    ax.set(
-        xlabel=&quot;Section&quot;,
-        xticks=[0, 1],
-        xticklabels=[label1, label2],
-        xlim=(-0.5, 1.5),
-        yticks=yticks,
-        # ylim=(0, max(right_upper, left_upper) * 1.05),
-        ylabel=r&quot;Estimated density ($\hat{p}$)&quot;,
-        title=&quot;{} vs {}; pval: {}, method: {}&quot;.format(label1, label2, pval, method)
-    )
-    scale = 0.04
-    line_shift = 0.000005
-    max_upper = max(first_upper, second_upper)
-    line_start = max_upper + line_shift
-    y_shift = max_upper * scale
-    ax.plot([label1, label1, label2, label2], [max_upper+line_shift, max_upper+y_shift, max_upper+y_shift, max_upper+line_shift])
-    text = convert_pvalue_to_asterisks(pval)
+    <span class="c1">#yticks = [np.round(density_left, 4), np.round(density_right, 4)]</span>
+    <span class="n">yticks</span> <span class="o">=</span> <span class="p">[</span><span class="n">density_first</span><span class="p">,</span> <span class="n">density_second</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+        <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Section&quot;</span><span class="p">,</span>
+        <span class="n">xticks</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="n">xticklabels</span><span class="o">=</span><span class="p">[</span><span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">],</span>
+        <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">),</span>
+        <span class="n">yticks</span><span class="o">=</span><span class="n">yticks</span><span class="p">,</span>
+        <span class="c1"># ylim=(0, max(right_upper, left_upper) * 1.05),</span>
+        <span class="n">ylabel</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;Estimated density ($\hat</span><span class="si">{p}</span><span class="s2">$)&quot;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> vs </span><span class="si">{}</span><span class="s2">; pval: </span><span class="si">{}</span><span class="s2">, method: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="mf">0.04</span>
+    <span class="n">line_shift</span> <span class="o">=</span> <span class="mf">0.000005</span>
+    <span class="n">max_upper</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">first_upper</span><span class="p">,</span> <span class="n">second_upper</span><span class="p">)</span>
+    <span class="n">line_start</span> <span class="o">=</span> <span class="n">max_upper</span> <span class="o">+</span> <span class="n">line_shift</span>
+    <span class="n">y_shift</span> <span class="o">=</span> <span class="n">max_upper</span> <span class="o">*</span> <span class="n">scale</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">label1</span><span class="p">,</span> <span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">,</span> <span class="n">label2</span><span class="p">],</span> <span class="p">[</span><span class="n">max_upper</span><span class="o">+</span><span class="n">line_shift</span><span class="p">,</span> <span class="n">max_upper</span><span class="o">+</span><span class="n">y_shift</span><span class="p">,</span> <span class="n">max_upper</span><span class="o">+</span><span class="n">y_shift</span><span class="p">,</span> <span class="n">max_upper</span><span class="o">+</span><span class="n">line_shift</span><span class="p">])</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">convert_pvalue_to_asterisks</span><span class="p">(</span><span class="n">pval</span><span class="p">)</span>
     
-    x_text = 0.5
-    y_text = max_upper+y_shift
-    ax.text(x_text, y_text, text, ha=&#39;center&#39;, va=&#39;bottom&#39;)
-    labels = ax.get_xticklabels()
-    for label in labels:
-        text_string = label.get_text()
-        label.set_color(palette[text_string])
-    return ax.get_figure(), ax
+    <span class="n">x_text</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">y_text</span> <span class="o">=</span> <span class="n">max_upper</span><span class="o">+</span><span class="n">y_shift</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_text</span><span class="p">,</span> <span class="n">y_text</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+        <span class="n">text_string</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">palette</span><span class="p">[</span><span class="n">text_string</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">(),</span> <span class="n">ax</span>
 </pre></div>
 </div>
 </div>
@@ -967,9 +966,9 @@ plt.savefig(folder / &quot;density_heatmap_corrected.png&quot;)
 <p>We plot the densities for adjs of the left and right hemisphere</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>bin_folder = Path.joinpath(folder, &quot;pairwise binary plots&quot;)
-plot_density_bin(pval_hemis, list(np_hemis.keys())[0], list(np_hemis.keys())[1], misc_hemis, method=&quot;beta&quot;)
-plt.savefig(bin_folder / &quot;{} vs {}.png&quot;.format(&quot;left&quot;, &quot;right&quot;), bbox_inches=&#39;tight&#39;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bin_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">&quot;pairwise binary plots&quot;</span><span class="p">)</span>
+<span class="n">plot_density_bin</span><span class="p">(</span><span class="n">pval_hemis</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">np_hemis</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">np_hemis</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">1</span><span class="p">],</span> <span class="n">misc_hemis</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;beta&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">bin_folder</span> <span class="o">/</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> vs </span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">),</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -980,10 +979,10 @@ plt.savefig(bin_folder / &quot;{} vs {}.png&quot;.format(&quot;left&quot;, &quot
 <p>To make comparisons for the segments, we will make two lists: one that has every pairwise combination of the segment names and the other of the pairwise combination of the respective adjs</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>keys = list(np_segments.keys())
-vals = list(np_segments[key] for key in keys)
-keys = list(itertools.combinations(keys, 2))
-vals = list(itertools.combinations(vals, 2))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np_segments</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">)</span>
+<span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -991,10 +990,10 @@ vals = list(itertools.combinations(vals, 2))
 <p>We plot the densities of all the pairwise combinations of segments</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for pair_key, pair_val in zip(keys, vals):
-    stat, pval, misc = erdos_renyi_test(pair_val[0], pair_val[1])
-    plot_density_bin(pval, pair_key[0], pair_key[1], misc)
-    plt.savefig(bin_folder / &quot;{} vs {}.png&quot;.format(pair_key[0], pair_key[1]), bbox_inches=&#39;tight&#39;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">pair_key</span><span class="p">,</span> <span class="n">pair_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
+    <span class="n">stat</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">misc</span> <span class="o">=</span> <span class="n">erdos_renyi_test</span><span class="p">(</span><span class="n">pair_val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair_val</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">plot_density_bin</span><span class="p">(</span><span class="n">pval</span><span class="p">,</span> <span class="n">pair_key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair_key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">misc</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">bin_folder</span> <span class="o">/</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> vs </span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pair_key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair_key</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

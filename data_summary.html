@@ -405,25 +405,25 @@ title="Print to PDF"
                 
   <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import pymaid
-import navis
-import matplotlib.pyplot as plt
-import pandas as pd
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymaid</span>
+<span class="kn">import</span> <span class="nn">navis</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rm = pymaid.CatmaidInstance(
-    server=&quot;https://catmaid.jekelylab.ex.ac.uk/#&quot;,
-    project_id=11,
-    api_token=None,
-    http_user=None,
-    http_password=None,
-)
-print(f&#39;Server is running CATMAID version {rm.catmaid_version}&#39;)
-path = &quot;/Users/kareefullah/Desktop/neurodata/neurodata/platy-data/docs/outputs&quot;
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rm</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">CatmaidInstance</span><span class="p">(</span>
+    <span class="n">server</span><span class="o">=</span><span class="s2">&quot;https://catmaid.jekelylab.ex.ac.uk/#&quot;</span><span class="p">,</span>
+    <span class="n">project_id</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+    <span class="n">api_token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">http_user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">http_password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Server is running CATMAID version </span><span class="si">{</span><span class="n">rm</span><span class="o">.</span><span class="n">catmaid_version</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/Users/kareefullah/Desktop/neurodata/neurodata/platy-data/docs/outputs&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -438,13 +438,13 @@ path = &quot;/Users/kareefullah/Desktop/neurodata/neurodata/platy-data/docs/outp
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>left = pymaid.get_skids_by_annotation(&quot;left&quot;)
-right = pymaid.get_skids_by_annotation(&quot;right&quot;)
-hemis = {&quot;left&quot;: len(left), &quot;right&quot;: len(right)}
-plt.bar(hemis.keys(), hemis.values()) 
-plt.title(&quot;# of Neurons in each Hemisphere&quot;)
-plt.xlabel(&quot;Hemisphere&quot;)
-plt.ylabel(&quot;# of Neurons&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">left</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+<span class="n">right</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+<span class="n">hemis</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">left</span><span class="p">),</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">right</span><span class="p">)}</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">hemis</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">hemis</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Neurons in each Hemisphere&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Hemisphere&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Neurons&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -463,14 +463,14 @@ INFO  : Cached data used. Use `pymaid.clear_cache()` to clear. (pymaid)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sensory = pymaid.get_skids_by_annotation(&quot;Sensory neuron&quot;)
-inter = pymaid.get_skids_by_annotation(&quot;interneuron&quot;)
-motor = pymaid.get_skids_by_annotation(&quot;motorneuron&quot;)
-types = {&quot;sensory&quot;: len(sensory), &quot;inter&quot;: len(inter), &quot;motor&quot;: len(motor)}
-plt.bar(types.keys(), types.values()) 
-plt.title(&quot;# of Neurons for Different Types&quot;)
-plt.xlabel(&quot;Type&quot;)
-plt.ylabel(&quot;# of Neurons&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sensory</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;Sensory neuron&quot;</span><span class="p">)</span>
+<span class="n">inter</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;interneuron&quot;</span><span class="p">)</span>
+<span class="n">motor</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;motorneuron&quot;</span><span class="p">)</span>
+<span class="n">types</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sensory&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">sensory</span><span class="p">),</span> <span class="s2">&quot;inter&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">inter</span><span class="p">),</span> <span class="s2">&quot;motor&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">motor</span><span class="p">)}</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">types</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Neurons for Different Types&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Neurons&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -488,15 +488,15 @@ INFO  : Cached data used. Use `pymaid.clear_cache()` to clear. (pymaid)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>segment0 = pymaid.get_skids_by_annotation(&quot;segment_0&quot;)
-segment1 = pymaid.get_skids_by_annotation(&quot;segment_1&quot;)
-segment2 = pymaid.get_skids_by_annotation(&quot;segment_2&quot;)
-segment3 = pymaid.get_skids_by_annotation(&quot;segment_3&quot;)
-segments = {&quot;0&quot;: len(segment0), &quot;1&quot;: len(segment1), &quot;2&quot;: len(segment2), &quot;3&quot;: len(segment3)}
-plt.bar(segments.keys(), segments.values()) 
-plt.title(&quot;# of Neurons in Each Segment&quot;)
-plt.xlabel(&quot;Segment&quot;)
-plt.ylabel(&quot;# of Neurons&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">segment0</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;segment_0&quot;</span><span class="p">)</span>
+<span class="n">segment1</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;segment_1&quot;</span><span class="p">)</span>
+<span class="n">segment2</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;segment_2&quot;</span><span class="p">)</span>
+<span class="n">segment3</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;segment_3&quot;</span><span class="p">)</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment0</span><span class="p">),</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment1</span><span class="p">),</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment2</span><span class="p">),</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment3</span><span class="p">)}</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">segments</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">segments</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Neurons in Each Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Neurons&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -515,15 +515,15 @@ INFO  : Cached data used. Use `pymaid.clear_cache()` to clear. (pymaid)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>segment0 = pymaid.get_skids_by_annotation(annotations=[&quot;segment_0&quot;, &quot;Sensory neuron&quot;], intersect=True)
-segment1 = pymaid.get_skids_by_annotation([&quot;segment_1&quot;, &quot;Sensory neuron&quot;], intersect=True)
-segment2 = pymaid.get_skids_by_annotation([&quot;segment_2&quot;, &quot;Sensory neuron&quot;], intersect=True)
-segment3 = pymaid.get_skids_by_annotation([&quot;segment_3&quot;, &quot;Sensory neuron&quot;], intersect=True)
-segments = {&quot;0&quot;: len(segment0), &quot;1&quot;: len(segment1), &quot;2&quot;: len(segment2), &quot;3&quot;: len(segment3)}
-plt.bar(segments.keys(), segments.values()) 
-plt.title(&quot;# of Sensory Neurons in Each Segment&quot;)
-plt.xlabel(&quot;Segment&quot;)
-plt.ylabel(&quot;# of Sensory Neurons&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">segment0</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="n">annotations</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;segment_0&quot;</span><span class="p">,</span> <span class="s2">&quot;Sensory neuron&quot;</span><span class="p">],</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">segment1</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">([</span><span class="s2">&quot;segment_1&quot;</span><span class="p">,</span> <span class="s2">&quot;Sensory neuron&quot;</span><span class="p">],</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">segment2</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">([</span><span class="s2">&quot;segment_2&quot;</span><span class="p">,</span> <span class="s2">&quot;Sensory neuron&quot;</span><span class="p">],</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">segment3</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">([</span><span class="s2">&quot;segment_3&quot;</span><span class="p">,</span> <span class="s2">&quot;Sensory neuron&quot;</span><span class="p">],</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment0</span><span class="p">),</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment1</span><span class="p">),</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment2</span><span class="p">),</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment3</span><span class="p">)}</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">segments</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">segments</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Sensory Neurons in Each Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Sensory Neurons&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -543,15 +543,15 @@ INFO  : Cached data used. Use `pymaid.clear_cache()` to clear. (pymaid)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>segment0 = pymaid.get_skids_by_annotation(annotations=[&quot;segment_0&quot;, &quot;interneuron&quot;], intersect=True)
-segment1 = pymaid.get_skids_by_annotation([&quot;segment_1&quot;, &quot;interneuron&quot;], intersect=True)
-segment2 = pymaid.get_skids_by_annotation([&quot;segment_2&quot;, &quot;interneuron&quot;], intersect=True)
-segment3 = pymaid.get_skids_by_annotation([&quot;segment_3&quot;, &quot;interneuron&quot;], intersect=True)
-segments = {&quot;0&quot;: len(segment0), &quot;1&quot;: len(segment1), &quot;2&quot;: len(segment2), &quot;3&quot;: len(segment3)}
-plt.bar(segments.keys(), segments.values()) 
-plt.title(&quot;# of Interneurons in Each Segment&quot;)
-plt.xlabel(&quot;Segment&quot;)
-plt.ylabel(&quot;# of Interneurons&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">segment0</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="n">annotations</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;segment_0&quot;</span><span class="p">,</span> <span class="s2">&quot;interneuron&quot;</span><span class="p">],</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">segment1</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">([</span><span class="s2">&quot;segment_1&quot;</span><span class="p">,</span> <span class="s2">&quot;interneuron&quot;</span><span class="p">],</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">segment2</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">([</span><span class="s2">&quot;segment_2&quot;</span><span class="p">,</span> <span class="s2">&quot;interneuron&quot;</span><span class="p">],</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">segment3</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">([</span><span class="s2">&quot;segment_3&quot;</span><span class="p">,</span> <span class="s2">&quot;interneuron&quot;</span><span class="p">],</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment0</span><span class="p">),</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment1</span><span class="p">),</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment2</span><span class="p">),</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment3</span><span class="p">)}</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">segments</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">segments</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Interneurons in Each Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Interneurons&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -570,15 +570,15 @@ INFO  : Cached data used. Use `pymaid.clear_cache()` to clear. (pymaid)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>segment0 = pymaid.get_skids_by_annotation(annotations=[&quot;segment_0&quot;, &quot;motorneuron&quot;], intersect=True)
-segment1 = pymaid.get_skids_by_annotation([&quot;segment_1&quot;, &quot;motorneuron&quot;], intersect=True)
-segment2 = pymaid.get_skids_by_annotation([&quot;segment_2&quot;, &quot;motorneuron&quot;], intersect=True)
-segment3 = pymaid.get_skids_by_annotation([&quot;segment_3&quot;, &quot;motorneuron&quot;], intersect=True)
-segments = {&quot;0&quot;: len(segment0), &quot;1&quot;: len(segment1), &quot;2&quot;: len(segment2), &quot;3&quot;: len(segment3)}
-plt.bar(segments.keys(), segments.values()) 
-plt.title(&quot;# of Motorneurons in Each Segment&quot;)
-plt.xlabel(&quot;Segment&quot;)
-plt.ylabel(&quot;# of Motorneurons&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">segment0</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="n">annotations</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;segment_0&quot;</span><span class="p">,</span> <span class="s2">&quot;motorneuron&quot;</span><span class="p">],</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">segment1</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">([</span><span class="s2">&quot;segment_1&quot;</span><span class="p">,</span> <span class="s2">&quot;motorneuron&quot;</span><span class="p">],</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">segment2</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">([</span><span class="s2">&quot;segment_2&quot;</span><span class="p">,</span> <span class="s2">&quot;motorneuron&quot;</span><span class="p">],</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">segment3</span> <span class="o">=</span> <span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">([</span><span class="s2">&quot;segment_3&quot;</span><span class="p">,</span> <span class="s2">&quot;motorneuron&quot;</span><span class="p">],</span> <span class="n">intersect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment0</span><span class="p">),</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment1</span><span class="p">),</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment2</span><span class="p">),</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment3</span><span class="p">)}</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">segments</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">segments</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Motorneurons in Each Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Motorneurons&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -597,16 +597,16 @@ INFO  : Cached data used. Use `pymaid.clear_cache()` to clear. (pymaid)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>celltypes = []
-num_neurons = []
-celltypes_count = {}
-for i, digit in enumerate(range(1, 181)):
-   celltypes.append(&quot;celltype{}&quot;.format(str(digit)))
-   num_neurons.append(len(pymaid.get_skids_by_annotation(celltypes[i])))
-   celltypes_count[celltypes[i]] = [num_neurons[i]]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">celltypes</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">num_neurons</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">celltypes_count</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">digit</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">181</span><span class="p">)):</span>
+   <span class="n">celltypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;celltype</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">digit</span><span class="p">)))</span>
+   <span class="n">num_neurons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="n">celltypes</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
+   <span class="n">celltypes_count</span><span class="p">[</span><span class="n">celltypes</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">num_neurons</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
 
-df = pd.DataFrame(celltypes_count, index=[&quot;# of neurons&quot;])
-print(df)
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">celltypes_count</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;# of neurons&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -992,16 +992,16 @@ INFO  : Cached data used. Use `pymaid.clear_cache()` to clear. (pymaid)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cellgroups = []
-num_neurons = []
-cellgroups_count = {}
-for i, digit in enumerate(range(1, 19)):
-   cellgroups.append(&quot;cellgroup{}&quot;.format(str(digit)))
-   num_neurons.append(len(pymaid.get_skids_by_annotation(cellgroups[i])))
-   cellgroups_count[cellgroups[i]] = [num_neurons[i]]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cellgroups</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">num_neurons</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">cellgroups_count</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">digit</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">19</span><span class="p">)):</span>
+   <span class="n">cellgroups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;cellgroup</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">digit</span><span class="p">)))</span>
+   <span class="n">num_neurons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="n">cellgroups</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
+   <span class="n">cellgroups_count</span><span class="p">[</span><span class="n">cellgroups</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">num_neurons</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
 
-df = pd.DataFrame(cellgroups_count, index=[&quot;# of neurons&quot;])
-print(df)
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cellgroups_count</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;# of neurons&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1060,16 +1060,16 @@ INFO  : Cached data used. Use `pymaid.clear_cache()` to clear. (pymaid)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>celltypes_non_neuronal = []
-num_neurons = []
-celltypes_non_neuronal_count = {}
-for i, digit in enumerate(range(1, 91)):
-   celltypes_non_neuronal.append(&quot;celltype_non_neuronal{}&quot;.format(str(digit)))
-   num_neurons.append(len(pymaid.get_skids_by_annotation(celltypes_non_neuronal[i])))
-   celltypes_non_neuronal_count[celltypes_non_neuronal[i]] = [num_neurons[i]]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">celltypes_non_neuronal</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">num_neurons</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">celltypes_non_neuronal_count</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">digit</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">91</span><span class="p">)):</span>
+   <span class="n">celltypes_non_neuronal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;celltype_non_neuronal</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">digit</span><span class="p">)))</span>
+   <span class="n">num_neurons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="n">celltypes_non_neuronal</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
+   <span class="n">celltypes_non_neuronal_count</span><span class="p">[</span><span class="n">celltypes_non_neuronal</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">num_neurons</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
 
-df = pd.DataFrame(celltypes_non_neuronal_count, index=[&quot;# of neurons&quot;])
-print(df)
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">celltypes_non_neuronal_count</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;# of neurons&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1293,8 +1293,8 @@ INFO  : Cached data used. Use `pymaid.clear_cache()` to clear. (pymaid)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(len(pymaid.get_skids_by_annotation(&quot;celltype_non_neuronal32&quot;)))
-print(len(pymaid.get_skids_by_annotation(&quot;celltype_non_neuronal90&quot;)))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;celltype_non_neuronal32&quot;</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pymaid</span><span class="o">.</span><span class="n">get_skids_by_annotation</span><span class="p">(</span><span class="s2">&quot;celltype_non_neuronal90&quot;</span><span class="p">)))</span>
 </pre></div>
 </div>
 </div>

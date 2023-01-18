@@ -383,13 +383,13 @@ title="Print to PDF"
 <p>In this notebook we will be generating two upsetplots: the first will plot counts of cells based on if they have an entry for the associated annotations, and the second will plot counts of cells based on their values for the associated annotations.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import logging
-import pandas as pd
-import numpy as np
-from itertools import chain, combinations
-from upsetplot import plot
-from matplotlib import pyplot as plt
-from pkg.platy import _get_folder, load_connectome_normal_lcc_annotations
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">upsetplot</span> <span class="kn">import</span> <span class="n">plot</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_connectome_normal_lcc_annotations</span>
 </pre></div>
 </div>
 </div>
@@ -397,10 +397,10 @@ from pkg.platy import _get_folder, load_connectome_normal_lcc_annotations
 <p>We import the folder to save our upsetplots and the table of annotations which will help us make our upsetplots</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>folder = _get_folder()
-annotations = load_connectome_normal_lcc_annotations()
-annotations.fillna(&quot;N/A&quot;, inplace=True)
-annotations
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folder</span> <span class="o">=</span> <span class="n">_get_folder</span><span class="p">()</span>
+<span class="n">annotations</span> <span class="o">=</span> <span class="n">load_connectome_normal_lcc_annotations</span><span class="p">()</span>
+<span class="n">annotations</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;N/A&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">annotations</span>
 </pre></div>
 </div>
 </div>
@@ -539,26 +539,26 @@ annotations
 <p>The following function returns a series where the indices are all the skids in the annotations table and the values are if they have a value for the category passed in</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#returns boolean pandas series: False if element is &quot;N/A&quot;, else True
-def has_category(annotations, category=&quot;side&quot;):
-    has_list = []
-    series_name = &quot;has_{}&quot;.format(category)
-    for val in annotations[category]:
-        if val != &quot;N/A&quot;:
-            has_list.append(True)
-        else:
-            has_list.append(False)
-    return pd.Series(index=annotations[&quot;skids&quot;], data=has_list, name=series_name)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#returns boolean pandas series: False if element is &quot;N/A&quot;, else True</span>
+<span class="k">def</span> <span class="nf">has_category</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;side&quot;</span><span class="p">):</span>
+    <span class="n">has_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">series_name</span> <span class="o">=</span> <span class="s2">&quot;has_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">category</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">[</span><span class="n">category</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">!=</span> <span class="s2">&quot;N/A&quot;</span><span class="p">:</span>
+            <span class="n">has_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">has_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">has_list</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">series_name</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#generate boolean pandas series for the different categories
-has_categs = {&quot;has_side&quot;: None, &quot;has_class&quot;: None, &quot;has_segment&quot;: None, &quot;has_type&quot;: None, &quot;has_group&quot;: None}
-for key in has_categs:
-    has_categs[key] = has_category(annotations, category=key.split(&quot;_&quot;)[1])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#generate boolean pandas series for the different categories</span>
+<span class="n">has_categs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;has_side&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_class&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_segment&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_type&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_group&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">has_categs</span><span class="p">:</span>
+    <span class="n">has_categs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">has_category</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -566,16 +566,16 @@ for key in has_categs:
 <p>With series of booleans for all our categories, we can concatenate our series to make a dataframe, and call <code class="docutils literal notranslate"><span class="pre">groupby</span></code> which will group the dataframe based on the number of cells for each subset of category values (ex: how many cells that have [“has_side”=False, “has_class”=False, “has_segment”=False, “has_type”=False, “has_group”=False] and so on).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>bool_ids = list(has_categs.values())
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bool_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">has_categs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
-#boolean dataframe from concatenating the boolean series
-annotations_bool = pd.concat(bool_ids, axis=1, ignore_index=False, names=&quot;ID&quot;).fillna(
-    &quot;N/A&quot;
-)
-#group the annotations dataframe by the categories and get the number of cells for each subset of category values
-bool_counts = annotations_bool.groupby(bool_ids).size()
-print(annotations_bool)
-print(bool_counts)
+<span class="c1">#boolean dataframe from concatenating the boolean series</span>
+<span class="n">annotations_bool</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">bool_ids</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="s2">&quot;ID&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span>
+    <span class="s2">&quot;N/A&quot;</span>
+<span class="p">)</span>
+<span class="c1">#group the annotations dataframe by the categories and get the number of cells for each subset of category values</span>
+<span class="n">bool_counts</span> <span class="o">=</span> <span class="n">annotations_bool</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">bool_ids</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">annotations_bool</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bool_counts</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -616,9 +616,9 @@ dtype: int64
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#generate the upsetplot of the grouped dataframe and save it
-plot(bool_counts)
-plt.savefig(folder / &quot;broad_categs_upsetplot.png&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#generate the upsetplot of the grouped dataframe and save it</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">bool_counts</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;broad_categs_upsetplot.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -629,16 +629,16 @@ plt.savefig(folder / &quot;broad_categs_upsetplot.png&quot;)
 <p>We start generating the second upsetplot by using the following function, which determines if all the skids have the particular <code class="docutils literal notranslate"><span class="pre">name</span></code> within the particular <code class="docutils literal notranslate"><span class="pre">category</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#returns boolean pandas series: True if element=name, else False
-def has_element(annotations, category=&quot;side&quot;, name=&quot;l&quot;):
-    has_element = []
-    series_name = &quot;{}_{}&quot;.format(category, name)
-    for val in annotations[category]:
-        if val == name:
-            has_element.append(True)
-        else:
-            has_element.append(False)
-    return pd.Series(index=annotations[&quot;skids&quot;], data=has_element, name=series_name)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#returns boolean pandas series: True if element=name, else False</span>
+<span class="k">def</span> <span class="nf">has_element</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;side&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;l&quot;</span><span class="p">):</span>
+    <span class="n">has_element</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">series_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">category</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">[</span><span class="n">category</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">has_element</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">has_element</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;skids&quot;</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">has_element</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">series_name</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -646,48 +646,48 @@ def has_element(annotations, category=&quot;side&quot;, name=&quot;l&quot;):
 <p>For this upsetplot, we just consider the values that can be passed by the categories <code class="docutils literal notranslate"><span class="pre">side</span></code>, <code class="docutils literal notranslate"><span class="pre">class</span></code> and <code class="docutils literal notranslate"><span class="pre">segment</span></code>, and splice the keys based on the category so we can retrieve the values we want to pass in</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#generate boolean pandas series for the different names within their respective category
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#generate boolean pandas series for the different names within their respective category</span>
 
-has_sides = {&quot;has_left&quot;: None, &quot;has_right&quot;: None, &quot;has_center&quot;: None}
-for key in has_sides:
-    has_sides[key] = has_element(annotations, category=&quot;side&quot;, name=key.split(&quot;_&quot;)[1][0])
+<span class="n">has_sides</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;has_left&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_right&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_center&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">has_sides</span><span class="p">:</span>
+    <span class="n">has_sides</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">has_element</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;side&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
 
-has_classes = {&quot;has_sensory&quot;: None, &quot;has_inter&quot;: None, &quot;has_motor&quot;: None}
-for key in has_classes:
-    has_classes[key] = has_element(annotations, category=&quot;class&quot;, name=key.split(&quot;_&quot;)[1][0])
+<span class="n">has_classes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;has_sensory&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_inter&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_motor&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">has_classes</span><span class="p">:</span>
+    <span class="n">has_classes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">has_element</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
 
-has_segments = {&quot;has_seg0&quot;: None, &quot;has_seg1&quot;: None, &quot;has_seg2&quot;: None, &quot;has_seg3&quot;: None}
-for key in has_segments:
-    has_segments[key] = has_element(annotations, category=&quot;segment&quot;, name=key[-1])
+<span class="n">has_segments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;has_seg0&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_seg1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_seg2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_seg3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">has_segments</span><span class="p">:</span>
+    <span class="n">has_segments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">has_element</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;segment&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
-has_hp = {&quot;has_head&quot;: None, &quot;has_pygidium&quot;: None}
-for key in has_hp:
-    has_hp[key]= has_element(annotations, category=&quot;segment&quot;, name=key.split(&quot;_&quot;)[1])
-has_all = has_sides | has_classes | has_segments | has_hp
+<span class="n">has_hp</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;has_head&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;has_pygidium&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">has_hp</span><span class="p">:</span>
+    <span class="n">has_hp</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span> <span class="n">has_element</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;segment&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">has_all</span> <span class="o">=</span> <span class="n">has_sides</span> <span class="o">|</span> <span class="n">has_classes</span> <span class="o">|</span> <span class="n">has_segments</span> <span class="o">|</span> <span class="n">has_hp</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>bool_ids = list(has_all.values())
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bool_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">has_all</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
-#boolean dataframe from concatenating the boolean series
-annotations_bool = pd.concat(bool_ids, axis=1, ignore_index=False, names=&quot;ID&quot;).fillna(
-    &quot;N/A&quot;
-)
+<span class="c1">#boolean dataframe from concatenating the boolean series</span>
+<span class="n">annotations_bool</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">bool_ids</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="s2">&quot;ID&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span>
+    <span class="s2">&quot;N/A&quot;</span>
+<span class="p">)</span>
 
-#group the annotations dataframe by the names and get the number of cells for each subset of names
-bool_counts = annotations_bool.groupby(bool_ids).size()
+<span class="c1">#group the annotations dataframe by the names and get the number of cells for each subset of names</span>
+<span class="n">bool_counts</span> <span class="o">=</span> <span class="n">annotations_bool</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">bool_ids</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#generate the upsetplot of the grouped dataframe
-plot(bool_counts)
-plt.savefig(folder / &quot;sub_categs_upsetplot.png&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#generate the upsetplot of the grouped dataframe</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">bool_counts</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;sub_categs_upsetplot.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

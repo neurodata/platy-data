@@ -383,20 +383,20 @@ title="Print to PDF"
 <p>In this notebook we will be replicating figure 1 of the paper <em>Whole-animal connectome and cell-type complement of the three-segmented Platynereis dumerilii larva</em>, which is a network plot of the neurons in the larva’s connectome</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import os
-import logging
-import pandas as pd
-import numpy as np
-import networkx as nx
-from itertools import chain, combinations
-from upsetplot import plot
-from matplotlib import pyplot as plt
-from networkx import from_numpy_array, number_of_nodes, number_of_edges, density
-from graspologic.embed import AdjacencySpectralEmbed
-from graspologic.layouts import layout_tsne, layout_umap
-from graspologic.plot.plot import networkplot
-from graspologic.utils import is_fully_connected, largest_connected_component, is_symmetric, symmetrize
-from pkg.platy import load_connectome_adj, _get_folder
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">upsetplot</span> <span class="kn">import</span> <span class="n">plot</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">networkx</span> <span class="kn">import</span> <span class="n">from_numpy_array</span><span class="p">,</span> <span class="n">number_of_nodes</span><span class="p">,</span> <span class="n">number_of_edges</span><span class="p">,</span> <span class="n">density</span>
+<span class="kn">from</span> <span class="nn">graspologic.embed</span> <span class="kn">import</span> <span class="n">AdjacencySpectralEmbed</span>
+<span class="kn">from</span> <span class="nn">graspologic.layouts</span> <span class="kn">import</span> <span class="n">layout_tsne</span><span class="p">,</span> <span class="n">layout_umap</span>
+<span class="kn">from</span> <span class="nn">graspologic.plot.plot</span> <span class="kn">import</span> <span class="n">networkplot</span>
+<span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">is_fully_connected</span><span class="p">,</span> <span class="n">largest_connected_component</span><span class="p">,</span> <span class="n">is_symmetric</span><span class="p">,</span> <span class="n">symmetrize</span>
+<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">load_connectome_adj</span><span class="p">,</span> <span class="n">_get_folder</span>
 </pre></div>
 </div>
 </div>
@@ -448,7 +448,7 @@ from pkg.platy import load_connectome_adj, _get_folder
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>folder = _get_folder()
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folder</span> <span class="o">=</span> <span class="n">_get_folder</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -456,9 +456,9 @@ from pkg.platy import load_connectome_adj, _get_folder
 <p>We import the adjacency matrix for the connection of connectome neurons and save its edgelist (note: we are working with a directed graph)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>adj = load_connectome_adj()
-g = nx.from_pandas_adjacency(adj, create_using=nx.DiGraph)
-nx.write_edgelist(g, folder / &quot;weighted_edgelist.csv&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adj</span> <span class="o">=</span> <span class="n">load_connectome_adj</span><span class="p">()</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_adjacency</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
+<span class="n">nx</span><span class="o">.</span><span class="n">write_edgelist</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;weighted_edgelist.csv&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -466,23 +466,23 @@ nx.write_edgelist(g, folder / &quot;weighted_edgelist.csv&quot;)
 <p>To be able to make a network plot of the connectome neurons, we need to extract the largest connected component of the neurons, as there are a few neurons that have a degree of 0 (no incident edges), which we cannot plot</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#numpy representation of original graph
-adj_numpy_orig = adj.to_numpy()
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#numpy representation of original graph</span>
+<span class="n">adj_numpy_orig</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 
-#numpy largest connected component
-adj_numpy_lcc, new_inds = largest_connected_component(adj_numpy_orig, return_inds=True)
+<span class="c1">#numpy largest connected component</span>
+<span class="n">adj_numpy_lcc</span><span class="p">,</span> <span class="n">new_inds</span> <span class="o">=</span> <span class="n">largest_connected_component</span><span class="p">(</span><span class="n">adj_numpy_orig</span><span class="p">,</span> <span class="n">return_inds</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#symmetrized version of numpy_lcc
-adj_numpy_sym_lcc = symmetrize(adj_numpy_lcc)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#symmetrized version of numpy_lcc</span>
+<span class="n">adj_numpy_sym_lcc</span> <span class="o">=</span> <span class="n">symmetrize</span><span class="p">(</span><span class="n">adj_numpy_lcc</span><span class="p">)</span>
 
-#networkx representation of symmetrized lcc graph
-adj_nx_sym_lcc = nx.from_numpy_array(adj_numpy_sym_lcc, create_using=nx.DiGraph)
-print(adj_nx_sym_lcc)
+<span class="c1">#networkx representation of symmetrized lcc graph</span>
+<span class="n">adj_nx_sym_lcc</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">adj_numpy_sym_lcc</span><span class="p">,</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">adj_nx_sym_lcc</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -494,22 +494,22 @@ print(adj_nx_sym_lcc)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#use layout_tsne to get 2d representation of graph
-X, node_pos = layout_tsne(adj_nx_sym_lcc, perplexity=100, n_iter=10000)
-x_pos = []
-y_pos = []
-node_comms = []
-for pos in node_pos:
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#use layout_tsne to get 2d representation of graph</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">node_pos</span> <span class="o">=</span> <span class="n">layout_tsne</span><span class="p">(</span><span class="n">adj_nx_sym_lcc</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="n">x_pos</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">y_pos</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">node_comms</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">node_pos</span><span class="p">:</span>
 
-    #save the assigned community of the node
-    node_comms.append(pos[4])
-    x_pos.append(pos[1])
-    y_pos.append(pos[2])
+    <span class="c1">#save the assigned community of the node</span>
+    <span class="n">node_comms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+    <span class="n">x_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">y_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 
-node_comms = np.array(node_comms)
-x_pos = np.array(x_pos)
-y_pos = np.array(y_pos)
-degrees = np.sum(adj_numpy_sym_lcc, axis=0)
+<span class="n">node_comms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_comms</span><span class="p">)</span>
+<span class="n">x_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_pos</span><span class="p">)</span>
+<span class="n">y_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_pos</span><span class="p">)</span>
+<span class="n">degrees</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">adj_numpy_sym_lcc</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -525,20 +525,20 @@ WARNING:graspologic.layouts.auto:Directed graph converted to undirected graph fo
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot = networkplot(
-    adjacency=adj_numpy_sym_lcc,
-    x=x_pos,
-    y=y_pos,
-    node_hue=node_comms,
-    palette=&quot;tab20&quot;,
-    node_size=degrees,
-    node_sizes=(20, 200),
-    edge_hue=&quot;source&quot;,
-    edge_alpha=0.5,
-    edge_linewidth=0.5,
-)
-plt.savefig(folder / &quot;tsne_connectome.png&quot;)
-plt.show()
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span> <span class="o">=</span> <span class="n">networkplot</span><span class="p">(</span>
+    <span class="n">adjacency</span><span class="o">=</span><span class="n">adj_numpy_sym_lcc</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">x_pos</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y_pos</span><span class="p">,</span>
+    <span class="n">node_hue</span><span class="o">=</span><span class="n">node_comms</span><span class="p">,</span>
+    <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;tab20&quot;</span><span class="p">,</span>
+    <span class="n">node_size</span><span class="o">=</span><span class="n">degrees</span><span class="p">,</span>
+    <span class="n">node_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span>
+    <span class="n">edge_hue</span><span class="o">=</span><span class="s2">&quot;source&quot;</span><span class="p">,</span>
+    <span class="n">edge_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">edge_linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;tsne_connectome.png&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -548,20 +548,20 @@ plt.show()
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#use layout_umap to get 2d representation of graph
-X, node_pos = layout_umap(adj_nx_sym_lcc)
-x_pos = []
-y_pos = []
-node_comms = []
-for pos in node_pos:
-    node_comms.append(pos[4])
-    x_pos.append(pos[1])
-    y_pos.append(pos[2])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#use layout_umap to get 2d representation of graph</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">node_pos</span> <span class="o">=</span> <span class="n">layout_umap</span><span class="p">(</span><span class="n">adj_nx_sym_lcc</span><span class="p">)</span>
+<span class="n">x_pos</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">y_pos</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">node_comms</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">node_pos</span><span class="p">:</span>
+    <span class="n">node_comms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+    <span class="n">x_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">y_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 
-node_comms = np.array(node_comms)
-x_pos = np.array(x_pos)
-y_pos = np.array(y_pos)
-degrees = np.sum(adj_numpy_sym_lcc, axis=0)
+<span class="n">node_comms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_comms</span><span class="p">)</span>
+<span class="n">x_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_pos</span><span class="p">)</span>
+<span class="n">y_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_pos</span><span class="p">)</span>
+<span class="n">degrees</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">adj_numpy_sym_lcc</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -573,20 +573,20 @@ degrees = np.sum(adj_numpy_sym_lcc, axis=0)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot = networkplot(
-    adjacency=adj_numpy_sym_lcc,
-    x=x_pos,
-    y=y_pos,
-    node_hue=node_comms,
-    palette=&quot;tab20&quot;,
-    node_size=degrees,
-    node_sizes=(20, 200),
-    edge_hue=&quot;source&quot;,
-    edge_alpha=0.5,
-    edge_linewidth=0.5,
-)
-plt.savefig(folder / &quot;umap_connectome.png&quot;)
-plt.show()
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span> <span class="o">=</span> <span class="n">networkplot</span><span class="p">(</span>
+    <span class="n">adjacency</span><span class="o">=</span><span class="n">adj_numpy_sym_lcc</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">x_pos</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y_pos</span><span class="p">,</span>
+    <span class="n">node_hue</span><span class="o">=</span><span class="n">node_comms</span><span class="p">,</span>
+    <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;tab20&quot;</span><span class="p">,</span>
+    <span class="n">node_size</span><span class="o">=</span><span class="n">degrees</span><span class="p">,</span>
+    <span class="n">node_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span>
+    <span class="n">edge_hue</span><span class="o">=</span><span class="s2">&quot;source&quot;</span><span class="p">,</span>
+    <span class="n">edge_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">edge_linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;umap_connectome.png&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -597,39 +597,39 @@ plt.show()
 <p>We are now interested in displaying the statistics from the graph we generated to that of the statistics given in table 1 of the paper, and we wish to make sure that our numbers are approximately the same</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#given the adjacency matrix and a partition of the nodes return the modularity score
-def modularity_from_adjacency(sym_adj, partition, resolution=1):
-    if isinstance(partition, dict):
-        partition_labels = np.vectorize(partition.__getitem__)(
-            np.arange(sym_adj.shape[0])
-        )
-    else:
-        partition_labels = partition
-    partition_labels = np.array(partition_labels)
-    in_comm_mask = partition_labels[:, None] == partition_labels[None, :]
-    degrees = np.squeeze(np.asarray(sym_adj.sum(axis=0)))
-    degree_prod_mat = np.outer(degrees, degrees) / sym_adj.sum()
-    mod_mat = sym_adj - resolution * degree_prod_mat
-    return mod_mat[in_comm_mask].sum() / sym_adj.sum()
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#given the adjacency matrix and a partition of the nodes return the modularity score</span>
+<span class="k">def</span> <span class="nf">modularity_from_adjacency</span><span class="p">(</span><span class="n">sym_adj</span><span class="p">,</span> <span class="n">partition</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">partition</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">partition_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">partition</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">)(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">sym_adj</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">partition_labels</span> <span class="o">=</span> <span class="n">partition</span>
+    <span class="n">partition_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">partition_labels</span><span class="p">)</span>
+    <span class="n">in_comm_mask</span> <span class="o">=</span> <span class="n">partition_labels</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">==</span> <span class="n">partition_labels</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">degrees</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">sym_adj</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+    <span class="n">degree_prod_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">degrees</span><span class="p">,</span> <span class="n">degrees</span><span class="p">)</span> <span class="o">/</span> <span class="n">sym_adj</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">mod_mat</span> <span class="o">=</span> <span class="n">sym_adj</span> <span class="o">-</span> <span class="n">resolution</span> <span class="o">*</span> <span class="n">degree_prod_mat</span>
+    <span class="k">return</span> <span class="n">mod_mat</span><span class="p">[</span><span class="n">in_comm_mask</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">sym_adj</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#get original networkx graph (not lcc)
-adj_nx_orig = nx.from_numpy_array(adj_numpy_orig, create_using=nx.DiGraph)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#get original networkx graph (not lcc)</span>
+<span class="n">adj_nx_orig</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">adj_numpy_orig</span><span class="p">,</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
 
-#stats on original graph
-n_nodes_orig = adj_nx_orig.number_of_nodes()
-n_edges_orig = adj_nx_orig.number_of_edges()
-dens_orig = density(adj_nx_orig)
+<span class="c1">#stats on original graph</span>
+<span class="n">n_nodes_orig</span> <span class="o">=</span> <span class="n">adj_nx_orig</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
+<span class="n">n_edges_orig</span> <span class="o">=</span> <span class="n">adj_nx_orig</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span>
+<span class="n">dens_orig</span> <span class="o">=</span> <span class="n">density</span><span class="p">(</span><span class="n">adj_nx_orig</span><span class="p">)</span>
 
-#cannot calc modularity because there are isolate nodes
-mod_score_orig = &quot;N/A&quot;
+<span class="c1">#cannot calc modularity because there are isolate nodes</span>
+<span class="n">mod_score_orig</span> <span class="o">=</span> <span class="s2">&quot;N/A&quot;</span>
 
-avg_degree_orig = np.average(np.count_nonzero(adj_numpy_orig, axis=0))
-avg_degree_orig
+<span class="n">avg_degree_orig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">adj_numpy_orig</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">avg_degree_orig</span>
 </pre></div>
 </div>
 </div>
@@ -641,41 +641,41 @@ avg_degree_orig
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#get non-symmetrized lcc networkx graph
-adj_nx_lcc = nx.from_numpy_array(adj_numpy_lcc, create_using=nx.DiGraph)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#get non-symmetrized lcc networkx graph</span>
+<span class="n">adj_nx_lcc</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">adj_numpy_lcc</span><span class="p">,</span> <span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
 
-#stats on lcc adj
-n_nodes_lcc = adj_nx_lcc.number_of_nodes()
-n_edges_lcc = adj_nx_lcc.number_of_edges()
-dens_lcc = density(adj_nx_lcc)
+<span class="c1">#stats on lcc adj</span>
+<span class="n">n_nodes_lcc</span> <span class="o">=</span> <span class="n">adj_nx_lcc</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
+<span class="n">n_edges_lcc</span> <span class="o">=</span> <span class="n">adj_nx_lcc</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span>
+<span class="n">dens_lcc</span> <span class="o">=</span> <span class="n">density</span><span class="p">(</span><span class="n">adj_nx_lcc</span><span class="p">)</span>
 
-#make symmetric when calc mod
-sym_adj_lcc = symmetrize(adj_numpy_lcc)
-mod_score_lcc = modularity_from_adjacency(sym_adj_lcc, node_comms)
+<span class="c1">#make symmetric when calc mod</span>
+<span class="n">sym_adj_lcc</span> <span class="o">=</span> <span class="n">symmetrize</span><span class="p">(</span><span class="n">adj_numpy_lcc</span><span class="p">)</span>
+<span class="n">mod_score_lcc</span> <span class="o">=</span> <span class="n">modularity_from_adjacency</span><span class="p">(</span><span class="n">sym_adj_lcc</span><span class="p">,</span> <span class="n">node_comms</span><span class="p">)</span>
 
-avg_degree_lcc = np.average(np.count_nonzero(adj_numpy_lcc, axis=0))
+<span class="n">avg_degree_lcc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">adj_numpy_lcc</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#paper stats
-n_nodes_paper = 2728
-n_edges_paper = 11437
-dens_paper = 0.0015
-mod_score_paper = 0.62
-avg_degree_paper = 4.1
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#paper stats</span>
+<span class="n">n_nodes_paper</span> <span class="o">=</span> <span class="mi">2728</span>
+<span class="n">n_edges_paper</span> <span class="o">=</span> <span class="mi">11437</span>
+<span class="n">dens_paper</span> <span class="o">=</span> <span class="mf">0.0015</span>
+<span class="n">mod_score_paper</span> <span class="o">=</span> <span class="mf">0.62</span>
+<span class="n">avg_degree_paper</span> <span class="o">=</span> <span class="mf">4.1</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>stats = {&quot;Number of nodes&quot;: [n_nodes_orig, n_nodes_lcc, n_nodes_paper], &quot;Number of edges&quot;: [n_edges_orig, n_edges_lcc, n_edges_paper], &quot;Graph density&quot;: [dens_orig, dens_lcc, dens_paper], &quot;Modularity&quot;: [mod_score_orig, mod_score_lcc, mod_score_paper], &quot;Avg. degree&quot;: [avg_degree_orig, avg_degree_lcc, avg_degree_paper]}
-stats_df = pd.DataFrame.from_dict(stats, orient=&quot;index&quot;, columns=[&quot;Orig adj&quot;, &quot;LCC adj&quot;, &quot;Paper&quot;])
-stats_df.to_csv(folder / &quot;fig_1_stats.csv&quot;)
-stats_df
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Number of nodes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">n_nodes_orig</span><span class="p">,</span> <span class="n">n_nodes_lcc</span><span class="p">,</span> <span class="n">n_nodes_paper</span><span class="p">],</span> <span class="s2">&quot;Number of edges&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">n_edges_orig</span><span class="p">,</span> <span class="n">n_edges_lcc</span><span class="p">,</span> <span class="n">n_edges_paper</span><span class="p">],</span> <span class="s2">&quot;Graph density&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">dens_orig</span><span class="p">,</span> <span class="n">dens_lcc</span><span class="p">,</span> <span class="n">dens_paper</span><span class="p">],</span> <span class="s2">&quot;Modularity&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">mod_score_orig</span><span class="p">,</span> <span class="n">mod_score_lcc</span><span class="p">,</span> <span class="n">mod_score_paper</span><span class="p">],</span> <span class="s2">&quot;Avg. degree&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">avg_degree_orig</span><span class="p">,</span> <span class="n">avg_degree_lcc</span><span class="p">,</span> <span class="n">avg_degree_paper</span><span class="p">]}</span>
+<span class="n">stats_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Orig adj&quot;</span><span class="p">,</span> <span class="s2">&quot;LCC adj&quot;</span><span class="p">,</span> <span class="s2">&quot;Paper&quot;</span><span class="p">])</span>
+<span class="n">stats_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;fig_1_stats.csv&quot;</span><span class="p">)</span>
+<span class="n">stats_df</span>
 </pre></div>
 </div>
 </div>

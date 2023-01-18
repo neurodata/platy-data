@@ -383,14 +383,14 @@ title="Print to PDF"
 <p>In this notebook we seek to extract data from the Platynereis Larva Dumerilii Connectome and categorize the data in a way that will allow us to easily plot meaningful statistics of the dataset</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
-import logging
-import collections
-from itertools import chain, combinations
-from pkg.platy import _get_folder, load_connectome_normal_lcc_annotations
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">pkg.platy</span> <span class="kn">import</span> <span class="n">_get_folder</span><span class="p">,</span> <span class="n">load_connectome_normal_lcc_annotations</span>
 </pre></div>
 </div>
 </div>
@@ -398,10 +398,10 @@ from pkg.platy import _get_folder, load_connectome_normal_lcc_annotations
 <p>We retrieve the table of annotations, where the indices are the skids and the columns are the types of annotations associated with these skids</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>folder = _get_folder()
-annotations = load_connectome_normal_lcc_annotations()
-annotations = annotations.fillna(&quot;N/A&quot;)
-annotations
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folder</span> <span class="o">=</span> <span class="n">_get_folder</span><span class="p">()</span>
+<span class="n">annotations</span> <span class="o">=</span> <span class="n">load_connectome_normal_lcc_annotations</span><span class="p">()</span>
+<span class="n">annotations</span> <span class="o">=</span> <span class="n">annotations</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;N/A&quot;</span><span class="p">)</span>
+<span class="n">annotations</span>
 </pre></div>
 </div>
 </div>
@@ -540,23 +540,23 @@ annotations
 <p>With this table of annotations, we can make barplots to plot the number of neurons for certain categories</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#print number of neurons in each hemisphere
-hemis = {}
-hemi_list = list(annotations[&quot;side&quot;])
-for i in range(len(hemi_list)):
-    if hemi_list[i] == &quot;N/A&quot;:
-        continue
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#print number of neurons in each hemisphere</span>
+<span class="n">hemis</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">hemi_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;side&quot;</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hemi_list</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">hemi_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;N/A&quot;</span><span class="p">:</span>
+        <span class="k">continue</span>
     
-    if hemi_list[i] not in hemis:
-        hemis[hemi_list[i]] = 1
+    <span class="k">if</span> <span class="n">hemi_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hemis</span><span class="p">:</span>
+        <span class="n">hemis</span><span class="p">[</span><span class="n">hemi_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
     
-    else:
-        hemis[hemi_list[i]] += 1
-sns.barplot(x=list(hemis.keys()), y=list(hemis.values())) 
-plt.title(&quot;# of Neurons in each Hemisphere&quot;)
-plt.xlabel(&quot;Hemisphere&quot;)
-plt.ylabel(&quot;# of Neurons&quot;)
-plt.savefig(folder / &quot;neuron_count_hems&quot;)
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">hemis</span><span class="p">[</span><span class="n">hemi_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">hemis</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">y</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">hemis</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Neurons in each Hemisphere&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Hemisphere&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Neurons&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;neuron_count_hems&quot;</span><span class="p">)</span>
     
 </pre></div>
 </div>
@@ -567,25 +567,25 @@ plt.savefig(folder / &quot;neuron_count_hems&quot;)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#print number of neurons for different types
-classes = {}
-class_list = list(annotations[&quot;class&quot;])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#print number of neurons for different types</span>
+<span class="n">classes</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">class_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">])</span>
 
-for i in range(len(class_list)):
-    if class_list[i] == &quot;N/A&quot;:
-        continue
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">class_list</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">class_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;N/A&quot;</span><span class="p">:</span>
+        <span class="k">continue</span>
     
-    if class_list[i] not in classes:
-        classes[class_list[i]] = 1
+    <span class="k">if</span> <span class="n">class_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+        <span class="n">classes</span><span class="p">[</span><span class="n">class_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
     
-    else:
-        classes[class_list[i]] += 1
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">classes</span><span class="p">[</span><span class="n">class_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
 
-sns.barplot(x=list(classes.keys()), y=list(classes.values())) 
-plt.title(&quot;# of Neurons for Different Classes&quot;)
-plt.xlabel(&quot;Type&quot;)
-plt.ylabel(&quot;# of Neurons&quot;)
-plt.savefig(folder / &quot;neuron_count_classes&quot;)
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">classes</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">y</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">classes</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Neurons for Different Classes&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Neurons&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;neuron_count_classes&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -595,25 +595,25 @@ plt.savefig(folder / &quot;neuron_count_classes&quot;)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#print number of neurons in different segments
-segments = {}
-segment_list = list(annotations[&quot;segment&quot;])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#print number of neurons in different segments</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">segment_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;segment&quot;</span><span class="p">])</span>
 
-for i in range(len(segment_list)):
-    if segment_list[i] == &quot;N/A&quot;:
-        continue
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">segment_list</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;N/A&quot;</span><span class="p">:</span>
+        <span class="k">continue</span>
     
-    if segment_list[i] not in segments:
-        segments[segment_list[i]] = 1
+    <span class="k">if</span> <span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">:</span>
+        <span class="n">segments</span><span class="p">[</span><span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
     
-    else:
-        segments[segment_list[i]] += 1
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">segments</span><span class="p">[</span><span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
 
-sns.barplot(x=list(segments.keys()), y=list(segments.values())) 
-plt.title(&quot;# of Neurons in Each Segment&quot;)
-plt.xlabel(&quot;Segment&quot;)
-plt.ylabel(&quot;# of Neurons&quot;)
-plt.savefig(folder / &quot;neuron_count_segments&quot;)
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">segments</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">y</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">segments</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Neurons in Each Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Neurons&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;neuron_count_segments&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -623,29 +623,29 @@ plt.savefig(folder / &quot;neuron_count_segments&quot;)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#print number of sensory neurons in each segment
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#print number of sensory neurons in each segment</span>
 
-indices = []
-segment_sensory = {}
-for i in range(len(class_list)):
-    if(class_list[i] == &quot;s&quot;):
-        indices.append(i)
+<span class="n">indices</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">segment_sensory</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">class_list</span><span class="p">)):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">class_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;s&quot;</span><span class="p">):</span>
+        <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
-for i in indices:
-    if segment_list[i] == &quot;N/A&quot;:
-        continue
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;N/A&quot;</span><span class="p">:</span>
+        <span class="k">continue</span>
     
-    if segment_list[i] not in segment_sensory:
-        segment_sensory[segment_list[i]] = 1
+    <span class="k">if</span> <span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">segment_sensory</span><span class="p">:</span>
+        <span class="n">segment_sensory</span><span class="p">[</span><span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
     
-    else:
-        segment_sensory[segment_list[i]] += 1
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">segment_sensory</span><span class="p">[</span><span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
 
-sns.barplot(x=list(segment_sensory.keys()), y=list(segment_sensory.values())) 
-plt.title(&quot;# of Sensory Neurons in Each Segment&quot;)
-plt.xlabel(&quot;Segment&quot;)
-plt.ylabel(&quot;# of Sensory Neurons&quot;)
-plt.savefig(folder / &quot;neuron_count_sensory_in_segments&quot;)
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">segment_sensory</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">y</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">segment_sensory</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Sensory Neurons in Each Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Sensory Neurons&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;neuron_count_sensory_in_segments&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -655,29 +655,29 @@ plt.savefig(folder / &quot;neuron_count_sensory_in_segments&quot;)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#print number of interneurons in each segment
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#print number of interneurons in each segment</span>
 
-indices = []
-segment_inter = {}
-for i in range(len(class_list)):
-    if(class_list[i] == &quot;i&quot;):
-        indices.append(i)
+<span class="n">indices</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">segment_inter</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">class_list</span><span class="p">)):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">class_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;i&quot;</span><span class="p">):</span>
+        <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
-for i in indices:
-    if segment_list[i] == &quot;N/A&quot;:
-        continue
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;N/A&quot;</span><span class="p">:</span>
+        <span class="k">continue</span>
     
-    if segment_list[i] not in segment_inter:
-        segment_inter[segment_list[i]] = 1
+    <span class="k">if</span> <span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">segment_inter</span><span class="p">:</span>
+        <span class="n">segment_inter</span><span class="p">[</span><span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
     
-    else:
-        segment_inter[segment_list[i]] += 1
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">segment_inter</span><span class="p">[</span><span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
 
-sns.barplot(x=list(segment_inter.keys()), y=list(segment_inter.values())) 
-plt.title(&quot;# of Interneurons in Each Segment&quot;)
-plt.xlabel(&quot;Segment&quot;)
-plt.ylabel(&quot;# of Interneurons&quot;)
-plt.savefig(folder / &quot;neuron_count_inter_in_segments&quot;)
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">segment_inter</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">y</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">segment_inter</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Interneurons in Each Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Interneurons&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;neuron_count_inter_in_segments&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -687,29 +687,29 @@ plt.savefig(folder / &quot;neuron_count_inter_in_segments&quot;)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#print number of motorneurons in each segment
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#print number of motorneurons in each segment</span>
 
-indices = []
-segment_motor = {}
-for i in range(len(class_list)):
-    if(class_list[i] == &quot;m&quot;):
-        indices.append(i)
+<span class="n">indices</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">segment_motor</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">class_list</span><span class="p">)):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">class_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;m&quot;</span><span class="p">):</span>
+        <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
-for i in indices:
-    if segment_list[i] == &quot;N/A&quot;:
-        continue
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;N/A&quot;</span><span class="p">:</span>
+        <span class="k">continue</span>
     
-    if segment_list[i] not in segment_motor:
-        segment_motor[segment_list[i]] = 1
+    <span class="k">if</span> <span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">segment_motor</span><span class="p">:</span>
+        <span class="n">segment_motor</span><span class="p">[</span><span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
     
-    else:
-        segment_motor[segment_list[i]] += 1
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">segment_motor</span><span class="p">[</span><span class="n">segment_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
         
-sns.barplot(x=list(segment_motor.keys()), y=list(segment_motor.values())) 
-plt.title(&quot;# of Motorneurons in Each Segment&quot;)
-plt.xlabel(&quot;Segment&quot;)
-plt.ylabel(&quot;# of Motorneurons&quot;)
-plt.savefig(folder / &quot;neuron_count_motor_in_segments&quot;)
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">segment_motor</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">y</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">segment_motor</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;# of Motorneurons in Each Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Segment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# of Motorneurons&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;neuron_count_motor_in_segments&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -719,25 +719,25 @@ plt.savefig(folder / &quot;neuron_count_motor_in_segments&quot;)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#number of neurons in each celltype (specified by paper)
-annotations.fillna(&quot;N/A&quot;)
-celltype_count = {}
-celltype_list = list(annotations[&quot;type&quot;])
-for i in range(len(celltype_list)):
-    if celltype_list[i] == &quot;N/A&quot;:
-        continue
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#number of neurons in each celltype (specified by paper)</span>
+<span class="n">annotations</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;N/A&quot;</span><span class="p">)</span>
+<span class="n">celltype_count</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">celltype_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">celltype_list</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">celltype_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;N/A&quot;</span><span class="p">:</span>
+        <span class="k">continue</span>
     
-    if celltype_list[i] not in celltype_count:
-        celltype_count[celltype_list[i]] = 1
+    <span class="k">if</span> <span class="n">celltype_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">celltype_count</span><span class="p">:</span>
+        <span class="n">celltype_count</span><span class="p">[</span><span class="n">celltype_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
     
-    else:
-        celltype_count[celltype_list[i]] += 1
-celltype_count = {int(k):v for k,v in celltype_count.items()}
-celltype_count = dict(sorted(celltype_count.items()))
-df = pd.DataFrame.from_dict(celltype_count, orient=&quot;index&quot;, columns=[&quot;count&quot;])
-df = df.rename_axis(&#39;celltype&#39;, axis=1)
-df.to_csv(folder / &quot;neuron_count_neuronal_types.csv&quot;)
-df
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">celltype_count</span><span class="p">[</span><span class="n">celltype_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="n">celltype_count</span> <span class="o">=</span> <span class="p">{</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">):</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">celltype_count</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="n">celltype_count</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">celltype_count</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">celltype_count</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">(</span><span class="s1">&#39;celltype&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;neuron_count_neuronal_types.csv&quot;</span><span class="p">)</span>
+<span class="n">df</span>
 </pre></div>
 </div>
 </div>
@@ -815,23 +815,23 @@ df
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#number of neurons in each cellgroup (specified by paper)
-cellgroup_count = {}
-cellgroup_list = list(annotations[&quot;group&quot;])
-for i in range(len(cellgroup_list)):
-    if cellgroup_list[i] == &quot;N/A&quot;:
-        continue
-    if cellgroup_list[i] not in cellgroup_count:
-        cellgroup_count[cellgroup_list[i]] = 1
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#number of neurons in each cellgroup (specified by paper)</span>
+<span class="n">cellgroup_count</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">cellgroup_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;group&quot;</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cellgroup_list</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">cellgroup_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;N/A&quot;</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">if</span> <span class="n">cellgroup_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cellgroup_count</span><span class="p">:</span>
+        <span class="n">cellgroup_count</span><span class="p">[</span><span class="n">cellgroup_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
     
-    else:
-        cellgroup_count[cellgroup_list[i]] += 1
-cellgroup_count = {int(k):v for k,v in cellgroup_count.items()}
-cellgroup_count = dict(sorted(cellgroup_count.items()))
-df = pd.DataFrame.from_dict(cellgroup_count, orient=&quot;index&quot;, columns=[&quot;count&quot;])
-df = df.rename_axis(&#39;cellgroup&#39;, axis=1)
-df.to_csv(folder / &quot;neuron_count_groups.csv&quot;)
-df
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cellgroup_count</span><span class="p">[</span><span class="n">cellgroup_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="n">cellgroup_count</span> <span class="o">=</span> <span class="p">{</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">):</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">cellgroup_count</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="n">cellgroup_count</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">cellgroup_count</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">cellgroup_count</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">(</span><span class="s1">&#39;cellgroup&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">&quot;neuron_count_groups.csv&quot;</span><span class="p">)</span>
+<span class="n">df</span>
 </pre></div>
 </div>
 </div>
@@ -932,18 +932,18 @@ df
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># #number of cells in each non-neuronal celltype (TODO: make this a category in annotations?)
-# celltypes_non_neuronal = []
-# num_neurons = []
-# celltypes_non_neuronal_count = {}
-# for i, digit in enumerate(range(1, 91)):
-#    celltypes_non_neuronal.append(&quot;celltype_non_neuronal{}&quot;.format(str(digit)))
-#    num_neurons.append(len(pymaid.get_skids_by_annotation(celltypes_non_neuronal[i])))
-#    celltypes_non_neuronal_count[celltypes_non_neuronal[i]] = [num_neurons[i]]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># #number of cells in each non-neuronal celltype (TODO: make this a category in annotations?)</span>
+<span class="c1"># celltypes_non_neuronal = []</span>
+<span class="c1"># num_neurons = []</span>
+<span class="c1"># celltypes_non_neuronal_count = {}</span>
+<span class="c1"># for i, digit in enumerate(range(1, 91)):</span>
+<span class="c1">#    celltypes_non_neuronal.append(&quot;celltype_non_neuronal{}&quot;.format(str(digit)))</span>
+<span class="c1">#    num_neurons.append(len(pymaid.get_skids_by_annotation(celltypes_non_neuronal[i])))</span>
+<span class="c1">#    celltypes_non_neuronal_count[celltypes_non_neuronal[i]] = [num_neurons[i]]</span>
 
-# df = pd.DataFrame.from_dict(celltypes_non_neuronal_count, orient=&quot;index&quot;, columns=[&quot;count&quot;])
-# df.to_csv(folder / &quot;neuron_count_non_neuronal_types&quot;)
-# print(df)
+<span class="c1"># df = pd.DataFrame.from_dict(celltypes_non_neuronal_count, orient=&quot;index&quot;, columns=[&quot;count&quot;])</span>
+<span class="c1"># df.to_csv(folder / &quot;neuron_count_non_neuronal_types&quot;)</span>
+<span class="c1"># print(df)</span>
 </pre></div>
 </div>
 </div>

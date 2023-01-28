@@ -145,7 +145,7 @@ def load_3_adj():
 
 
 def load_left_adj_labels_with_class():
-    dir1 = DATA_PATH / "adj_left_normal_lcc_with_class.csv"
+    dir1 = DATA_PATH / "adj_left_with_class.csv"
     left_adj = pd.read_csv(dir1)
     left_adj = left_adj.set_axis(list(left_adj), axis="index")
 
@@ -158,7 +158,7 @@ def load_left_adj_labels_with_class():
 
 
 def load_right_adj_labels_with_class():
-    dir1 = DATA_PATH / "adj_right_normal_lcc_with_class.csv"
+    dir1 = DATA_PATH / "adj_right_with_class.csv"
     right_adj = pd.read_csv(dir1)
     right_adj = right_adj.set_axis(list(right_adj), axis="index")
 
@@ -171,7 +171,7 @@ def load_right_adj_labels_with_class():
 
 
 def load_head_adj_labels_with_class():
-    dir1 = DATA_PATH / "adj_head_normal_lcc_with_class.csv"
+    dir1 = DATA_PATH / "adj_head_with_class.csv"
     head_adj = pd.read_csv(dir1)
     head_adj = head_adj.set_axis(list(head_adj), axis="index")
 
@@ -184,7 +184,7 @@ def load_head_adj_labels_with_class():
 
 
 def load_pygidium_adj_labels_with_class():
-    dir1 = DATA_PATH / "adj_pygidium_normal_lcc_with_class.csv"
+    dir1 = DATA_PATH / "adj_pygidium_with_class.csv"
     pyg_adj = pd.read_csv(dir1)
     pyg_adj = pyg_adj.set_axis(list(pyg_adj), axis="index")
 
@@ -197,7 +197,7 @@ def load_pygidium_adj_labels_with_class():
 
 
 def load_0_adj_labels_with_class():
-    dir1 = DATA_PATH / "adj_0_normal_lcc_with_class.csv"
+    dir1 = DATA_PATH / "adj_0_with_class.csv"
     adj_0 = pd.read_csv(dir1)
     adj_0 = adj_0.set_axis(list(adj_0), axis="index")
 
@@ -210,7 +210,7 @@ def load_0_adj_labels_with_class():
 
 
 def load_1_adj_labels_with_class():
-    dir1 = DATA_PATH / "adj_1_normal_lcc_with_class.csv"
+    dir1 = DATA_PATH / "adj_1_with_class.csv"
     adj_1 = pd.read_csv(dir1)
     adj_1 = adj_1.set_axis(list(adj_1), axis="index")
 
@@ -223,7 +223,7 @@ def load_1_adj_labels_with_class():
 
 
 def load_2_adj_labels_with_class():
-    dir1 = DATA_PATH / "adj_2_normal_lcc_with_class.csv"
+    dir1 = DATA_PATH / "adj_2_with_class.csv"
     adj_2 = pd.read_csv(dir1)
     adj_2 = adj_2.set_axis(list(adj_2), axis="index")
 
@@ -236,7 +236,7 @@ def load_2_adj_labels_with_class():
 
 
 def load_3_adj_labels_with_class():
-    dir1 = DATA_PATH / "adj_3_normal_lcc_with_class.csv"
+    dir1 = DATA_PATH / "adj_3_with_class.csv"
     adj_3 = pd.read_csv(dir1)
     adj_3 = adj_3.set_axis(list(adj_3), axis="index")
 

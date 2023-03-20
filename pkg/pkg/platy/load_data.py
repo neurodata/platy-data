@@ -44,6 +44,12 @@ def load_connectome_normal_lcc_annotations():
     return connec_lcc_normal_annots
 
 
+def load_connectome_normal_lcc_annotations_v2():
+    dir = DATA_PATH / "connec_lcc_normal_annotations_v2.csv"
+    connec_lcc_normal_annots = pd.read_csv(dir)
+    return connec_lcc_normal_annots
+
+
 def load_connectome_adj():
     dir = DATA_PATH / "adj_connectome.csv"
     adj_connec = pd.read_csv(dir)
@@ -78,6 +84,70 @@ def load_weird_annotations():
     dir = DATA_PATH / "weird_annotations.csv"
     weird_annotations = pd.read_csv(dir)
     return weird_annotations
+
+
+def load_left_adj_orig():
+    dir1 = DATA_PATH / "adj_left.csv"
+    left_adj = pd.read_csv(dir1)
+    left_adj = left_adj.set_axis(list(left_adj), axis="index")
+
+    return left_adj
+
+
+def load_right_adj_orig():
+    dir1 = DATA_PATH / "adj_right.csv"
+    right_adj = pd.read_csv(dir1)
+    right_adj = right_adj.set_axis(list(right_adj), axis="index")
+
+    return right_adj
+
+
+def load_head_adj_orig():
+    dir1 = DATA_PATH / "adj_head.csv"
+    head_adj = pd.read_csv(dir1)
+    head_adj = head_adj.set_axis(list(head_adj), axis="index")
+
+    return head_adj
+
+
+def load_pygidium_adj_orig():
+    dir1 = DATA_PATH / "adj_pygidium.csv"
+    pyg_adj = pd.read_csv(dir1)
+    pyg_adj = pyg_adj.set_axis(list(pyg_adj), axis="index")
+
+    return pyg_adj
+
+
+def load_0_adj_orig():
+    dir1 = DATA_PATH / "adj_0.csv"
+    adj_0 = pd.read_csv(dir1)
+    adj_0 = adj_0.set_axis(list(adj_0), axis="index")
+
+    return adj_0
+
+
+def load_1_adj_orig():
+    dir1 = DATA_PATH / "adj_1.csv"
+    adj_1 = pd.read_csv(dir1)
+    adj_1 = adj_1.set_axis(list(adj_1), axis="index")
+
+    return adj_1
+
+
+def load_2_adj_orig():
+    dir1 = DATA_PATH / "adj_2.csv"
+    adj_2 = pd.read_csv(dir1)
+    adj_2 = adj_2.set_axis(list(adj_2), axis="index")
+
+    return adj_2
+
+
+def load_3_adj_orig():
+    dir1 = DATA_PATH / "adj_3.csv"
+    adj_3 = pd.read_csv(dir1)
+    adj_3 = adj_3.set_axis(list(adj_3), axis="index")
+
+    return adj_3
 
 
 def load_left_adj():
@@ -248,10 +318,26 @@ def load_3_adj_labels_with_class():
     return adj_3, labels_3
 
 
-print(load_left_adj_labels_with_class())
-print(load_right_adj_labels_with_class())
-print(load_head_adj_labels_with_class())
-print(load_pygidium_adj_labels_with_class())
-print(load_1_adj_labels_with_class())
-print(load_2_adj_labels_with_class())
-print(load_3_adj_labels_with_class())
+"""
+print(len(load_left_adj_labels_with_class()[0]))
+print(len(load_right_adj_labels_with_class()[0]))
+print(len(load_head_adj_labels_with_class()[0]))
+print(len(load_pygidium_adj_labels_with_class()[0]))
+print(len(load_1_adj_labels_with_class()[0]))
+print(len(load_2_adj_labels_with_class()[0]))
+print(len(load_3_adj_labels_with_class()[0]))
+print(len(load_left_adj()))
+print(len(load_right_adj()))
+print(len(load_head_adj()))
+print(len(load_pygidium_adj()))
+print(len(load_1_adj()))
+print(len(load_2_adj()))
+print(len(load_3_adj()))
+
+L = load_left_adj_labels_with_class()[0]
+L = L.to_numpy()
+print(is_fully_connected(L))
+"""
+# print(load_connectome_annotations())
+# print(len(load_connectome_annotations()))
+print((load_connectome_annotations()))

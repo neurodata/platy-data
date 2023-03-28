@@ -33,6 +33,14 @@ from .load_data import (
     load_1_adj_labels_with_class,
     load_2_adj_labels_with_class,
     load_3_adj_labels_with_class,
+    load_left_adj_labels_with_class_v2,
+    load_right_adj_labels_with_class_v2,
+    load_head_adj_labels_with_class_v2,
+    load_pygidium_adj_labels_with_class_v2,
+    load_0_adj_labels_with_class_v2,
+    load_1_adj_labels_with_class_v2,
+    load_2_adj_labels_with_class_v2,
+    load_3_adj_labels_with_class_v2,
 )
 
 
@@ -71,4 +79,12 @@ __all__ = [
     "load_1_adj_labels_with_class",
     "load_2_adj_labels_with_class",
     "load_3_adj_labels_with_class",
+    "load_left_adj_labels_with_class_v2",
+    "load_right_adj_labels_with_class_v2",
+    "load_head_adj_labels_with_class_v2",
+    "load_pygidium_adj_labels_with_class_v2",
+    "load_0_adj_labels_with_class_v2",
+    "load_1_adj_labels_with_class_v2",
+    "load_2_adj_labels_with_class_v2",
+    "load_3_adj_labels_with_class_v2",
 ]

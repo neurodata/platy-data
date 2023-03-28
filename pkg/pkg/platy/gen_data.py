@@ -571,7 +571,7 @@ def gen_right_adj_with_class():
 
     right_connec_normal_adj = pymaid.adjacency_matrix(skids_right)
     
-    right_connec_normal_adj.to_csv(path + "/adj_right_with_class.csv", index=False)
+    #right_connec_normal_adj.to_csv(path + "/adj_right_with_class.csv", index=False)
     return right_connec_normal_adj
 
 def gen_head_adj_with_class():
@@ -640,4 +640,98 @@ def gen_3_adj_with_class():
     #connec_3_normal_adj.to_csv(path + "/adj_3_with_class.csv", index=False)
     return connec_3_normal_adj
 
-print(gen_normal_connectome_lcc_annotations_v2())
+def gen_left_adj_with_class_v2():
+    skids_hemis = pd.read_csv(path + "/skids_hemis_classes_v2.csv")
+    skids_left = list(skids_hemis["left"])
+    skids_left = [x for x in skids_left if str(x) != 'nan']
+    skids_left = [int(i) for i in skids_left]
+
+    left_connec_normal_adj = pymaid.adjacency_matrix(skids_left)
+    
+    #left_connec_normal_adj.to_csv(path + "/adj_left_with_class_v2.csv", index=False)
+    return left_connec_normal_adj
+
+def gen_right_adj_with_class_v2():
+    skids_hemis = pd.read_csv(path + "/skids_hemis_classes_v2.csv")
+    skids_right = list(skids_hemis["right"])
+    skids_right = [x for x in skids_right if str(x) != 'nan']
+    skids_right = [int(i) for i in skids_right]
+
+    right_connec_normal_adj = pymaid.adjacency_matrix(skids_right)
+    
+    #right_connec_normal_adj.to_csv(path + "/adj_right_with_class_v2.csv", index=False)
+    return right_connec_normal_adj
+
+def gen_head_adj_with_class_v2():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes_v2.csv")
+    skids_head = list(skids_segs["head"])
+    skids_head = [x for x in skids_head if str(x) != 'nan']
+    skids_head = [int(i) for i in skids_head]
+
+    head_connec_normal_adj = pymaid.adjacency_matrix(skids_head)
+    
+    #head_connec_normal_adj.to_csv(path + "/adj_head_with_class_v2.csv", index=False)
+    return head_connec_normal_adj
+
+def gen_pygidium_adj_with_class_v2():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes_v2.csv")
+    skids_pyg = list(skids_segs["pygidium"])
+    skids_pyg = [x for x in skids_pyg if str(x) != 'nan']
+    skids_pyg = [int(i) for i in skids_pyg]
+
+    pyg_connec_normal_adj = pymaid.adjacency_matrix(skids_pyg)
+    
+    #pyg_connec_normal_adj.to_csv(path + "/adj_pygidium_with_class_v2.csv", index=False)
+    return pyg_connec_normal_adj
+
+def gen_0_adj_with_class_v2():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes_v2.csv")
+    skids_0 = list(skids_segs["0"])
+    skids_0 = [x for x in skids_0 if str(x) != 'nan']
+    skids_0 = [int(i) for i in skids_0]
+
+    connec_0_normal_adj = pymaid.adjacency_matrix(skids_0)
+    
+    #connec_0_normal_adj.to_csv(path + "/adj_0_with_class.csv_v2", index=False)
+    return connec_0_normal_adj
+
+def gen_1_adj_with_class_v2():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes_v2.csv")
+    skids_1 = list(skids_segs["1"])
+    skids_1 = [x for x in skids_1 if str(x) != 'nan']
+    skids_1 = [int(i) for i in skids_1]
+
+    connec_1_normal_adj = pymaid.adjacency_matrix(skids_1)
+    
+    #connec_1_normal_adj.to_csv(path + "/adj_1_with_class.csv_v2", index=False)
+    return connec_1_normal_adj
+
+def gen_2_adj_with_class_v2():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes_v2.csv")
+    skids_2 = list(skids_segs["2"])
+    skids_2 = [x for x in skids_2 if str(x) != 'nan']
+    skids_2 = [int(i) for i in skids_2]
+
+    connec_2_normal_adj = pymaid.adjacency_matrix(skids_2)
+    
+    #connec_2_normal_adj.to_csv(path + "/adj_2_with_class_v2.csv", index=False)
+    return connec_2_normal_adj
+
+def gen_3_adj_with_class_v2():
+    skids_segs = pd.read_csv(path + "/skids_segs_classes_v2.csv")
+    skids_3 = list(skids_segs["3"])
+    skids_3 = [x for x in skids_3 if str(x) != 'nan']
+    skids_3 = [int(i) for i in skids_3]
+
+    connec_3_normal_adj = pymaid.adjacency_matrix(skids_3)
+    
+    #connec_3_normal_adj.to_csv(path + "/adj_3_with_class_v2.csv", index=False)
+    return connec_3_normal_adj
+
+print(gen_left_adj_with_class_v2())
+print(gen_right_adj_with_class_v2())
+print(gen_head_adj_with_class_v2())
+print(gen_pygidium_adj_with_class_v2())
+print(gen_1_adj_with_class_v2())
+print(gen_2_adj_with_class_v2())
+print(gen_3_adj_with_class_v2())

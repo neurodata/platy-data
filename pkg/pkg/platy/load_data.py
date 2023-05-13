@@ -9,8 +9,9 @@ from upsetplot import plot
 from matplotlib import pyplot as plt
 from graspologic.utils import is_fully_connected
 
+date = "5_11_23"
 DATA_PATH = Path(__file__).parent.parent.parent.parent
-DATA_PATH = DATA_PATH / "docs" / "outputs"
+DATA_PATH = DATA_PATH / "docs" / "outputs" / f"{date}"
 
 
 def _get_folder(path=None):
@@ -38,6 +39,13 @@ def load_connectome_lcc_annotations():
     return connec_lcc_annots
 
 
+def load_connectome_lcc_annotations_v2():
+    dir = DATA_PATH / "connec_lcc_annotations_v2.csv"
+    connec_lcc_annots = pd.read_csv(dir)
+    connec_lcc_annots.pop(connec_lcc_annots.columns[0])
+    return connec_lcc_annots
+
+
 def load_connectome_normal_lcc_annotations():
     dir = DATA_PATH / "connec_lcc_normal_annotations.csv"
     connec_lcc_normal_annots = pd.read_csv(dir)
@@ -46,6 +54,13 @@ def load_connectome_normal_lcc_annotations():
 
 def load_connectome_normal_lcc_annotations_v2():
     dir = DATA_PATH / "connec_lcc_normal_annotations_v2.csv"
+    connec_lcc_normal_annots = pd.read_csv(dir)
+    connec_lcc_normal_annots.pop(connec_lcc_normal_annots.columns[0])
+    return connec_lcc_normal_annots
+
+
+def load_connectome_normal_lcc_annotations_v3():
+    dir = DATA_PATH / "connec_lcc_normal_annotations_v3.csv"
     connec_lcc_normal_annots = pd.read_csv(dir)
     connec_lcc_normal_annots.pop(connec_lcc_normal_annots.columns[0])
     return connec_lcc_normal_annots
@@ -421,3 +436,24 @@ def load_3_adj_labels_with_class_v2():
     labels_3 = [x for x in labels_3 if str(x) != "nan"]
 
     return adj_3, labels_3
+
+
+adj, labels = load_left_adj_labels_with_class_v2()
+print(len(adj))
+print(len(labels))
+"""
+print(len(load_left_adj_labels_with_class_v2()[0]))
+print(len(load_left_adj_orig()))
+print(len(load_right_adj_labels_with_class_v2()[0]))
+print(len(load_right_adj_orig()))
+print(len(load_head_adj_labels_with_class_v2()[0]))
+print(len(load_head_adj_orig()))
+print(len(load_pygidium_adj_labels_with_class_v2()[0]))
+print(len(load_pygidium_adj_orig()))
+print(len(load_1_adj_labels_with_class_v2()[0]))
+print(len(load_1_adj_orig()))
+print(len(load_2_adj_labels_with_class_v2()[0]))
+print(len(load_2_adj_orig()))
+print(len(load_3_adj_labels_with_class_v2()[0]))
+print(len(load_3_adj_orig()))
+"""

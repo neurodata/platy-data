@@ -9,10 +9,10 @@ from upsetplot import plot
 from matplotlib import pyplot as plt
 from graspologic.utils import is_fully_connected
 
-# date = "5_11_23"
+date = "7_24_23"
 DATA_PATH = Path(__file__).parent.parent.parent.parent
-DATA_PATH = DATA_PATH / "docs" / "outputs"
-# DATA_PATH = DATA_PATH / "docs" / "outputs" / f"{date}"
+# DATA_PATH = DATA_PATH / "docs" / "outputs"
+DATA_PATH = DATA_PATH / "docs" / "outputs" / f"{date}"
 
 
 def _get_folder(path=None):
@@ -439,6 +439,8 @@ def load_3_adj_labels_with_class_v2():
     return adj_3, labels_3
 
 
+annot = load_connectome_normal_lcc_annotations_v3()
+print(annot.loc[annot.skids == 25010])
 # adj, labels = load_left_adj_labels_with_class_v2()
 # print(len(adj))
 # print(len(labels))

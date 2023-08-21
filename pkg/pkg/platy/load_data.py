@@ -439,24 +439,201 @@ def load_3_adj_labels_with_class_v2():
     return adj_3, labels_3
 
 
-annot = load_connectome_normal_lcc_annotations_v3()
-print(annot.loc[annot.skids == 25010])
+def load_left_adj_labels_with_class_v3():
+    dir1 = DATA_PATH / "adj_left_with_class_v3.csv"
+    left_adj = pd.read_csv(dir1)
+    left_adj = left_adj.set_axis(list(left_adj), axis="index")
+
+    dir2 = DATA_PATH / "labels_hemis_classes_v3.csv"
+    hemi_labels = pd.read_csv(dir2)
+    left_labels = hemi_labels["left"]
+    left_labels = [x for x in left_labels if str(x) != "nan"]
+
+    return left_adj, left_labels
+
+
+def load_right_adj_labels_with_class_v3():
+    dir1 = DATA_PATH / "adj_right_with_class_v3.csv"
+    right_adj = pd.read_csv(dir1)
+    right_adj = right_adj.set_axis(list(right_adj), axis="index")
+
+    dir2 = DATA_PATH / "labels_hemis_classes_v3.csv"
+    hemi_labels = pd.read_csv(dir2)
+    right_labels = hemi_labels["right"]
+    right_labels = [x for x in right_labels if str(x) != "nan"]
+
+    return right_adj, right_labels
+
+
+def load_head_adj_labels_with_class_v3():
+    dir1 = DATA_PATH / "adj_head_with_class_v3.csv"
+    head_adj = pd.read_csv(dir1)
+    head_adj = head_adj.set_axis(list(head_adj), axis="index")
+
+    dir2 = DATA_PATH / "labels_segs_classes_v3.csv"
+    segs_labels = pd.read_csv(dir2)
+    head_labels = segs_labels["head"]
+    head_labels = [x for x in head_labels if str(x) != "nan"]
+
+    return head_adj, head_labels
+
+
+def load_pygidium_adj_labels_with_class_v3():
+    dir1 = DATA_PATH / "adj_pygidium_with_class_v3.csv"
+    pyg_adj = pd.read_csv(dir1)
+    pyg_adj = pyg_adj.set_axis(list(pyg_adj), axis="index")
+
+    dir2 = DATA_PATH / "labels_segs_classes_v3.csv"
+    segs_labels = pd.read_csv(dir2)
+    pyg_labels = segs_labels["pygidium"]
+    pyg_labels = [x for x in pyg_labels if str(x) != "nan"]
+
+    return pyg_adj, pyg_labels
+
+
+def load_0_adj_labels_with_class_v3():
+    dir1 = DATA_PATH / "adj_0_with_class_v3.csv"
+    adj_0 = pd.read_csv(dir1)
+    adj_0 = adj_0.set_axis(list(adj_0), axis="index")
+
+    dir2 = DATA_PATH / "labels_segs_classes_v3.csv"
+    segs_labels = pd.read_csv(dir2)
+    labels_0 = segs_labels["0"]
+    labels_0 = [x for x in labels_0 if str(x) != "nan"]
+
+    return adj_0, labels_0
+
+
+def load_1_adj_labels_with_class_v3():
+    dir1 = DATA_PATH / "adj_1_with_class_v3.csv"
+    adj_1 = pd.read_csv(dir1)
+    adj_1 = adj_1.set_axis(list(adj_1), axis="index")
+
+    dir2 = DATA_PATH / "labels_segs_classes_v3.csv"
+    segs_labels = pd.read_csv(dir2)
+    labels_1 = segs_labels["1"]
+    labels_1 = [x for x in labels_1 if str(x) != "nan"]
+
+    return adj_1, labels_1
+
+
+def load_2_adj_labels_with_class_v3():
+    dir1 = DATA_PATH / "adj_2_with_class_v3.csv"
+    adj_2 = pd.read_csv(dir1)
+    adj_2 = adj_2.set_axis(list(adj_2), axis="index")
+
+    dir2 = DATA_PATH / "labels_segs_classes_v3.csv"
+    segs_labels = pd.read_csv(dir2)
+    labels_2 = segs_labels["2"]
+    labels_2 = [x for x in labels_2 if str(x) != "nan"]
+
+    return adj_2, labels_2
+
+
+def load_3_adj_labels_with_class_v3():
+    dir1 = DATA_PATH / "adj_3_with_class_v3.csv"
+    adj_3 = pd.read_csv(dir1)
+    adj_3 = adj_3.set_axis(list(adj_3), axis="index")
+
+    dir2 = DATA_PATH / "labels_segs_classes_v3.csv"
+    segs_labels = pd.read_csv(dir2)
+    labels_3 = segs_labels["3"]
+    labels_3 = [x for x in labels_3 if str(x) != "nan"]
+
+    return adj_3, labels_3
+
+
+def load_graph_match_df():
+    dir = DATA_PATH / "graph_match_df.csv"
+    df = pd.read_csv(dir)
+    return df
+
+
+def load_graph_match_whole_df():
+    dir = DATA_PATH / "graph_match_whole_df.csv"
+    df = pd.read_csv(dir)
+    return df
+
+
+def load_graph_match_sub_df():
+    dir = DATA_PATH / "graph_match_sub_df.csv"
+    df = pd.read_csv(dir)
+    return df
+
+
+def load_best_left_adj_with_class():
+    dir1 = DATA_PATH / "whole_best_left_adj.csv"
+    left_adj = pd.read_csv(dir1)
+    left_adj = left_adj.set_axis(list(left_adj), axis="index")
+
+    dir2 = DATA_PATH / "whole_best_left_labels.csv"
+    labels_left = pd.read_csv(dir2)
+    left_labels = labels_left["0"].tolist()
+
+    return left_adj, left_labels
+
+
+def load_best_right_adj_with_class():
+    dir1 = DATA_PATH / "whole_best_right_adj.csv"
+    right_adj = pd.read_csv(dir1)
+    right_adj = right_adj.set_axis(list(right_adj), axis="index")
+
+    dir2 = DATA_PATH / "whole_best_right_labels.csv"
+    labels_right = pd.read_csv(dir2)
+    right_labels = labels_right["0"].tolist()
+
+    return right_adj, right_labels
+
+
+def load_best_left_adj_with_class_align():
+    dir1 = DATA_PATH / "whole_best_left_adj_align.csv"
+    left_adj = pd.read_csv(dir1)
+    left_adj = left_adj.set_axis(list(left_adj), axis="index")
+
+    dir2 = DATA_PATH / "whole_best_left_labels_align.csv"
+    labels_left = pd.read_csv(dir2)
+    left_labels = labels_left["0"].tolist()
+
+    return left_adj, left_labels
+
+
+def load_best_right_adj_with_class_align():
+    dir1 = DATA_PATH / "whole_best_right_adj_align.csv"
+    right_adj = pd.read_csv(dir1)
+    right_adj = right_adj.set_axis(list(right_adj), axis="index")
+
+    dir2 = DATA_PATH / "whole_best_right_labels_align.csv"
+    labels_right = pd.read_csv(dir2)
+    right_labels = labels_right["0"].tolist()
+
+    return right_adj, right_labels
+
+
+df = load_graph_match_whole_df()
+print(df)
+# annot = load_connectome_normal_lcc_annotations_v3()
+# print(annot)
+# annot_v2 = load_connectome_normal_lcc_annotations_v2()
+# print(annot_v2)
 # adj, labels = load_left_adj_labels_with_class_v2()
 # print(len(adj))
 # print(len(labels))
 """
-print(len(load_left_adj_labels_with_class_v2()[0]))
-print(len(load_left_adj_orig()))
-print(len(load_right_adj_labels_with_class_v2()[0]))
-print(len(load_right_adj_orig()))
-print(len(load_head_adj_labels_with_class_v2()[0]))
-print(len(load_head_adj_orig()))
-print(len(load_pygidium_adj_labels_with_class_v2()[0]))
-print(len(load_pygidium_adj_orig()))
-print(len(load_1_adj_labels_with_class_v2()[0]))
-print(len(load_1_adj_orig()))
-print(len(load_2_adj_labels_with_class_v2()[0]))
-print(len(load_2_adj_orig()))
-print(len(load_3_adj_labels_with_class_v2()[0]))
-print(len(load_3_adj_orig()))
+print(len(load_left_adj_labels_with_class_v3()[0]))
+print(len(load_left_adj_labels_with_class_v3()[1]))
+print(len(load_right_adj_labels_with_class_v3()[0]))
+print(len(load_right_adj_labels_with_class_v3()[1]))
+print(len(load_head_adj_labels_with_class_v3()[0]))
+print(len(load_head_adj_labels_with_class_v3()[1]))
+print(len(load_pygidium_adj_labels_with_class_v3()[0]))
+print(len(load_pygidium_adj_labels_with_class_v3()[1]))
+print(len(load_1_adj_labels_with_class_v3()[0]))
+print(len(load_1_adj_labels_with_class_v3()[1]))
+print(len(load_2_adj_labels_with_class_v3()[0]))
+print(len(load_2_adj_labels_with_class_v3()[1]))
+print(len(load_3_adj_labels_with_class_v3()[0]))
+print(len(load_3_adj_labels_with_class_v3()[1]))
+print(load_connectome_normal_lcc_annotations_v3())
 """
+# print(len(load_left_adj_labels_with_class_v2()[0]))
+# print(load_right_adj_labels_with_class_v3()[0])

@@ -3,11 +3,14 @@ from collections import namedtuple
 import numpy as np
 import pandas as pd
 from graspologic.utils import remove_loops
+from scipy.stats import combine_pvalues
 from statsmodels.stats.multitest import multipletests
 
 from .binomial import binom_2samp, binom_2samp_paired
-from .combine import combine_pvalues
-from .utils import compute_density_adjustment
+from .utils import compute_density
+
+# from .combine import combine_pvalues # old, was bug before scipy 1.9.0
+
 
 SBMResult = namedtuple(
     "sbm_result", ["probabilities", "observed", "possible", "group_counts"]
@@ -78,12 +81,11 @@ def stochastic_block_test(
     labels1,
     labels2,
     density_adjustment=False,
-    method="fisher",
+    method="score",
     combine_method="tippett",
     correct_method="holm",
     alpha=0.05,
 ):
-
     B1, n_observed1, n_possible1, group_counts1 = fit_sbm(A1, labels1)
     B2, n_observed2, n_possible2, group_counts2 = fit_sbm(A2, labels2)
 
@@ -105,23 +107,58 @@ def stochastic_block_test(
     stats = np.empty((K, K), dtype=float)
     stats = _make_adjacency_dataframe(stats, index)
 
-    if density_adjustment:
-        adjustment_factor = compute_density_adjustment(A1, A2)
-    else:
+    if isinstance(density_adjustment, bool) and density_adjustment:
+        # adjustment_factor = compute_density_adjustment(A1, A2)
+        density1 = compute_density(A1)
+        density2 = compute_density(A2)
+        adjustment_factor = density1 / density2
+    elif isinstance(density_adjustment, bool) and not density_adjustment:
         adjustment_factor = 1.0
+    elif isinstance(density_adjustment, (float, int)):
+        adjustment_factor = density_adjustment
+    else:
+        raise ValueError('wrong type for "density_adjustment"')
 
-    for i in index:
-        for j in index:
-            curr_stat, curr_pvalue = binom_2samp(
-                n_observed1.loc[i, j],
-                n_possible1.loc[i, j],
-                n_observed2.loc[i, j],
-                n_possible2.loc[i, j],
-                method=method,
-                null_ratio=adjustment_factor,
-            )
-            uncorrected_pvalues.loc[i, j] = curr_pvalue
-            stats.loc[i, j] = curr_stat
+    if method == "cmh":
+        tables = []
+        for i in index:
+            for j in index:
+                if n_observed1.loc[i, j] != 0 and n_observed2.loc[i, j] != 0:
+                    table = np.array(
+                        [
+                            [
+                                n_observed1.loc[i, j],
+                                n_possible1.loc[i, j] - n_observed1.loc[i, j],
+                            ],
+                            [
+                                n_observed2.loc[i, j],
+                                n_possible2.loc[i, j] - n_observed2.loc[i, j],
+                            ],
+                        ]
+                    )
+                    tables.append(table)
+
+        from statsmodels.stats.contingency_tables import StratifiedTable
+
+        st = StratifiedTable(tables)
+        out = st.test_null_odds()
+        stat = out.statistic
+        pvalue = out.pvalue
+        return stat, pvalue, {}
+
+    else:
+        for i in index:
+            for j in index:
+                curr_stat, curr_pvalue = binom_2samp(
+                    n_observed1.loc[i, j],
+                    n_possible1.loc[i, j],
+                    n_observed2.loc[i, j],
+                    n_possible2.loc[i, j],
+                    method=method,
+                    null_ratio=adjustment_factor,
+                )
+                uncorrected_pvalues.loc[i, j] = curr_pvalue
+                stats.loc[i, j] = curr_stat
 
     misc = {}
     misc["uncorrected_pvalues"] = uncorrected_pvalues
@@ -182,6 +219,8 @@ def stochastic_block_test_paired(
     A1,
     A2,
     labels,
+    alpha=0.05,
+    correct_method="holm",
 ):
     index, group_indices, group_counts = np.unique(
         labels, return_counts=True, return_inverse=True
@@ -230,8 +269,33 @@ def stochastic_block_test_paired(
     misc["uncorrected_pvalues"] = uncorrected_pvalues
 
     run_pvalues = uncorrected_pvalues.values
-    run_pvalues = run_pvalues[~np.isnan(run_pvalues)]
-    stat, pvalue = combine_pvalues(run_pvalues, method="tippett")
+    indices = np.nonzero(~np.isnan(run_pvalues))
+    run_pvalues = run_pvalues[indices]
     n_tests = len(run_pvalues)
     misc["n_tests"] = n_tests
+
+    stat, pvalue = combine_pvalues(run_pvalues, method="tippett")
+
+    # correct for multiple comparisons
+    rejections_flat, corrected_pvalues_flat, _, _ = multipletests(
+        run_pvalues,
+        alpha,
+        method=correct_method,
+        is_sorted=False,
+        returnsorted=False,
+    )
+    rejections = np.full((K, K), False, dtype=bool)
+    rejections[indices] = rejections_flat
+    rejections = _make_adjacency_dataframe(rejections, index)
+    misc["rejections"] = rejections
+
+    corrected_pvalues = np.full((K, K), np.nan, dtype=float)
+    corrected_pvalues[indices] = corrected_pvalues_flat
+    corrected_pvalues = _make_adjacency_dataframe(corrected_pvalues, index)
+    misc["corrected_pvalues"] = corrected_pvalues
+
+    _, _, unpaired_misc = stochastic_block_test(A1, A2, labels, labels)
+    misc["probabilities1"] = unpaired_misc["probabilities1"]
+    misc["probabilities2"] = unpaired_misc["probabilities2"]
+
     return stat, pvalue, misc

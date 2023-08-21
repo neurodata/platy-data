@@ -7,7 +7,7 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.10"
-numpy = "^1.23.3"
+numpy = "1.23.3"
 pandas = "^1.4.4"
 UpSetPlot = "^0.6.1"
 pyplot-themes = "^0.2.2"
@@ -23,6 +23,9 @@ ipykernel = "^6.15.3"
 matplotlib = "3.5.3"
 importlib-metadata = "^4.12.0"
 scipy = "^1.10.0"
+jupyter = "^1.0.0"
+ipywidgets = "^8.0.6"
+shap = "^0.42.1"
 
 [tool.poetry.dev-dependencies]
 

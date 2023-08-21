@@ -10,7 +10,7 @@ from matplotlib import pyplot as plt
 from graspologic.utils import is_fully_connected
 
 date = "7_24_23"
-DATA_PATH = Path(__file__).parent.parent.parent.parent
+DATA_PATH = Path(__file__).parent.parent.parent
 # DATA_PATH = DATA_PATH / "docs" / "outputs"
 DATA_PATH = DATA_PATH / "docs" / "outputs" / f"{date}"
 
